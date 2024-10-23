@@ -11,8 +11,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
+	// 프리텐다드 폰트를 불러옵니다.
 	const [loaded] = useFonts({
-		SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+		PretendardBold: require('../assets/fonts/Pretendard-Bold.ttf'),
+		PretendardMedium: require('../assets/fonts/Pretendard-Medium.ttf'),
+		PretendardSemiBold: require('../assets/fonts/Pretendard-SemiBold.ttf'),
 	});
 
 	useEffect(() => {
