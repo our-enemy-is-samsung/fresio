@@ -2,21 +2,31 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import {useEffect} from 'react';
-import 'react-native-reanimated';
+import React, {useEffect} from 'react';
 import {useColorScheme} from "react-native";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {Colors} from "@/shared/constants/Color";
+import PageBluetoothRequired from "@/app/(tabs)/(connect)/bluetoothRequired";
+
+export {
+	// Catch any errors thrown by the Layout component.
+	ErrorBoundary,
+} from 'expo-router';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-	const colorScheme = useColorScheme();
-	// 프리텐다드 폰트를 불러옵니다.
-	const [loaded] = useFonts({
-		PretendardBold: require('../assets/fonts/Pretendard-Bold.ttf'),
-		PretendardMedium: require('../assets/fonts/Pretendard-Medium.ttf'),
-		PretendardSemiBold: require('../assets/fonts/Pretendard-SemiBold.ttf'),
+	const [loaded, error] = useFonts({
+		PretendardBold: require('../assets/fonts/Pretendard-Bold.otf'),
+		PretendardRegular: require('../assets/fonts/Pretendard-Medium.otf'),
+		PretendardSemiBold: require('../assets/fonts/Pretendard-SemiBold.otf'),
 	});
+
+	// Expo Router uses Error Boundaries to catch errors in the navigation tree.
+	useEffect(() => {
+		if (error) throw error;
+	}, [error]);
 
 	useEffect(() => {
 		if (loaded) {
@@ -28,12 +38,41 @@ export default function RootLayout() {
 		return null;
 	}
 
+	return <RootLayoutNav/>;
+}
+
+const MyDefaultTheme = {
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: Colors['light']['grayScale5'],
+	}
+};
+
+const MyDarkTheme = {
+	...DarkTheme,
+	colors: {
+		...DarkTheme.colors,
+		background: Colors['dark']['grayScale5'],
+	},
+};
+
+function RootLayoutNav() {
+	const colorScheme = useColorScheme();
+
 	return (
-		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-			<Stack>
-				<Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-				<Stack.Screen name="+not-found"/>
-			</Stack>
-		</ThemeProvider>
+		<GestureHandlerRootView style={{flex: 1}}>
+			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
+				<Stack
+					initialRouteName="(tabs)/(connect)/bluetoothRequired"
+					screenOptions={{
+						headerShown: false,
+					}}
+				>
+					<Stack.Screen name="(tabs)/index"/>
+					<Stack.Screen name="(tabs)/(connect)/bluetoothRequired"/>
+				</Stack>
+			</ThemeProvider>
+		</GestureHandlerRootView>
 	);
 }
