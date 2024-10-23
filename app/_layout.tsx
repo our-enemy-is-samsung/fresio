@@ -64,7 +64,7 @@ function RootLayoutNav() {
 		<GestureHandlerRootView style={{flex: 1}}>
 			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
 				<Stack
-					initialRouteName="(tabs)/(connect)/findingDevice"
+					initialRouteName="(tabs)/(connect)/wifiList"
 					screenOptions={{
 						headerShown: false,
 					}}
@@ -72,6 +72,7 @@ function RootLayoutNav() {
 					<Stack.Screen name="(tabs)/index"/>
 					<Stack.Screen name="(tabs)/(connect)/bluetoothRequired"/>
 					<Stack.Screen name="(tabs)/(connect)/findingDevice"/>
+					<Stack.Screen name="(tabs)/(connect)/wifiList"/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
