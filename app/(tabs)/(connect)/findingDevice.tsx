@@ -3,28 +3,22 @@ import {TextSize} from "@/shared/enums/TextSize";
 import {Dimensions, SafeAreaView, StyleSheet} from "react-native";
 import LottieView from "lottie-react-native";
 import ListLoading from '@/assets/lottie/listLoading.json';
+import CheckAnimation from '@/assets/lottie/check.json';
 import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {useEffect, useState} from "react";
-import BlutoothDevice from "@/feature/connect/ui/BlutoothDevice";
 
 const PageFindingDevice = () => {
-	const [findingDevice, setFindingDevice] = useState<Array<{ name: string, id: string }>>([]);
+	const [findingDevice, setFindingDevice] = useState<{ name: string, id: string } | undefined>(undefined);
 
 	useEffect(() => {
 		setTimeout(() => {
-			setFindingDevice([
-				{
-					name: 'FresioSmartFridge_V1',
-					id: 'mkmlmko-1234-1234-1234-1234',
-				},
-				{
-					name: 'FresioSmartFridge_V1',
-					id: 'mkmlmko-1234-1234-1234-1234',
-				}
-			])
+			setFindingDevice({
+				name: 'FresioSmartFridge_V1',
+				id: 'mkmlmko-1234-1234-1234-1234',
+			})
 		}, 2000)
 	})
 
@@ -34,19 +28,16 @@ const PageFindingDevice = () => {
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
 					<Text size={TextSize.TitleSmall} color={'grayScale100'}>
-						{findingDevice.length > 0 ? `${findingDevice.length}개의 스마트 기기를 찾았어요` : '기기 찾는 중...'}
+						{findingDevice ? `Fresio 제품을 찾았어요` : '기기 찾는 중...'}
 					</Text>
+					{findingDevice && (
+						<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
+							{findingDevice.name}을(를) 등록 하시겠습니까?
+						</Text>
+					)}
 				</View>
 
-				{findingDevice && (
-					<View style={styles.findingDeviceContainer}>
-						{findingDevice.map((device, index) => (
-							<BlutoothDevice key={index} deviceName={device.name} onClick={() => {
-							}}/>
-						))}
-					</View>
-				)}
-				{findingDevice.length === 0 && (
+				{!findingDevice ? (
 					<LottieView
 						autoPlay
 						style={{
@@ -59,6 +50,24 @@ const PageFindingDevice = () => {
 						speed={0.7}
 						source={ListLoading}
 					/>
+				) : (
+					<View style={{
+						width: Dimensions.get('window').width,
+						height: Dimensions.get('window').width,
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						<LottieView
+							autoPlay
+							loop={false}
+							style={{
+								width: 120,
+								height: 120,
+							}}
+							speed={0.5}
+							source={CheckAnimation}
+						/>
+					</View>
 				)}
 			</View>
 			<View style={styles.buttonContainer}>
