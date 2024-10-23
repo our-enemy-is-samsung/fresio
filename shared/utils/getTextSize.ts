@@ -13,7 +13,7 @@ export const getSizeStyle = (size: TextSize): TextStyle => {
 		'TitleMedium': {fontSize: TextSize.TitleMedium, lineHeight: 32, fontFamily: semiBold},
 		'TitleSmall': {fontSize: TextSize.TitleSmall, lineHeight: 32, fontFamily: semiBold},
 		'HeadingLarge': {fontSize: TextSize.HeadingLarge, lineHeight: 28, fontFamily: semiBold},
-		'HeadingSmall': {fontSize: TextSize.HeadingSmall, lineHeight: 24, fontFamily: semiBold},
+		'HeadingSmall': {fontSize: TextSize.HeadingSmall, lineHeight: 24, fontFamily: medium},
 		'BodyLarge': {fontSize: TextSize.BodyLarge, lineHeight: 20, fontFamily: medium},
 		'BodySmall': {fontSize: TextSize.BodySmall, lineHeight: 18, fontFamily: medium},
 		'LabelLarge': {fontSize: TextSize.LabelLarge, lineHeight: 16, fontFamily: medium},
