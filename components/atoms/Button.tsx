@@ -20,6 +20,7 @@ interface ButtonProps {
 
 interface ButtonStyleType extends ViewStyle, TextStyle {
 	color: keyof typeof Colors.light & keyof typeof Colors.dark;
+	fontWeight: 'bold';
 }
 
 const StyledButton = ({
@@ -64,13 +65,12 @@ const StyledButton = ({
 			testID={'button_view'}
 			style={{
 				...buttonStyle,
-
 			}}
 			activeOpacity={0.7}
 			onPress={onPress}
 			disabled={disabled}
 		>
-			<StyledText color={getButtonColor(style, colorScheme).color} size={TextSize.BodyLarge}
+			<StyledText color={getButtonColor(style, colorScheme).color} size={TextSize.BodySmall}
 			            style={{fontSize: buttonStyle.fontSize}}>{children}</StyledText>
 		</TouchableOpacity>
 	);

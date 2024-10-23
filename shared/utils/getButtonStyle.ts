@@ -11,16 +11,17 @@ export function getButtonSize(size: ButtonSize) {
 			};
 		case ButtonSize.Medium:
 			return {
-				height: 52,
+				height: 48,
 				paddingHorizontal: 16,
 				borderRadius: 12,
+				fontSize: 17
 			};
 		case ButtonSize.Small:
 			return {
-				height: 40,
+				height: 44,
 				paddingHorizontal: 14,
 				borderRadius: 10,
-				fontSize: 14,
+				fontSize: 16,
 			};
 		default:
 			return {
@@ -40,7 +41,7 @@ export function getButtonColor(style: ButtonStyle, colorScheme: 'light' | 'dark'
 		case ButtonStyle.Primary:
 			return {
 				backgroundColor: Colors[colorScheme]['brand50'],
-				color: 'grayScale100',
+				color: 'grayScale5',
 			};
 		case ButtonStyle.Secondary:
 			return {
