@@ -6,7 +6,7 @@ import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 
-const PageBluetoothRequired = () => {
+const PageAttageToFridge = () => {
 	return (
 		<SafeAreaView style={{flex: 1}}>
 			<ConnectHeader/>
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default PageBluetoothRequired;
+export default PageAttageToFridge;
