@@ -6,7 +6,6 @@ import React, {useEffect} from 'react';
 import {useColorScheme} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/shared/constants/Color";
-import PageBluetoothRequired from "@/app/(tabs)/(connect)/bluetoothRequired";
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -64,7 +63,7 @@ function RootLayoutNav() {
 		<GestureHandlerRootView style={{flex: 1}}>
 			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
 				<Stack
-					initialRouteName="(tabs)/(connect)/wifiList"
+					initialRouteName="(tabs)/(connect)/attachToFridge"
 					screenOptions={{
 						headerShown: false,
 					}}
@@ -73,6 +72,7 @@ function RootLayoutNav() {
 					<Stack.Screen name="(tabs)/(connect)/bluetoothRequired"/>
 					<Stack.Screen name="(tabs)/(connect)/findingDevice"/>
 					<Stack.Screen name="(tabs)/(connect)/wifiList"/>
+					<Stack.Screen name="(tabs)/(connect)/attachToFridge"/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
