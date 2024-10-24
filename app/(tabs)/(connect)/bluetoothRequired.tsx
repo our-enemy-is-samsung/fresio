@@ -1,16 +1,32 @@
 import Text from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
 import {Dimensions, SafeAreaView, StyleSheet} from "react-native";
-import LottieView from "lottie-react-native";
-import BluetoothJson from '@/assets/lottie/bluetooth.json';
 import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {useRouter} from "expo-router";
+import {BluetoothAnimation} from "@/feature/connect/ui/bluetooth/BluetoothAnimation";
 
+/**
+ * 블루투스 권한 요청 페이지 컴포넌트
+ *
+ * @component
+ * @description
+ * 사용자에게 블루투스 권한을 요청하는 페이지를 렌더링합니다.
+ * 블루투스 관련 애니메이션과 함께 권한 요청 설명을 표시하고,
+ * 사용자가 수락/거절할 수 있는 버튼을 제공합니다.
+ *
+ * @example
+ * ```tsx
+ * <PageBluetoothRequired />
+ * ```
+ */
 const PageBluetoothRequired = () => {
 	const router = useRouter();
+
+	const handleNext = () => router.push('/(connect)/findingDevice');
+	const handleCancel = () => {/* 취소 로직 */};
 
 	return (
 		<SafeAreaView style={{flex: 1}}>
@@ -22,14 +38,7 @@ const PageBluetoothRequired = () => {
 						근처 블루투스 기기를 감지하고 연결하려면 {'\n'}블루투스를 사용해야 합니다
 					</Text>
 				</View>
-				<LottieView
-					autoPlay
-					style={{
-						width: Dimensions.get('window').width,
-						height: Dimensions.get('window').width,
-					}}
-					source={BluetoothJson}
-				/>
+				<BluetoothAnimation width={Dimensions.get('window').width} />
 			</View>
 			<View style={styles.buttonContainer}>
 				<Button
@@ -37,13 +46,14 @@ const PageBluetoothRequired = () => {
 					style={ButtonStyle.Secondary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
+					onPress={handleCancel}
 				>취소</Button>
 				<Button
 					radius={9999}
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
-					onPress={() => router.push('/(connect)/findingDevice')}
+					onPress={handleNext}
 				>
 					다음
 				</Button>
