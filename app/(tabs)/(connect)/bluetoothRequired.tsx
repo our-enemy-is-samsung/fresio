@@ -15,7 +15,7 @@ const PageBluetoothRequired = () => {
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
 					<Text size={TextSize.TitleSmall} color={'grayScale100'}>블루투스 허용</Text>
-					<Text size={TextSize.HeadingSmall} color={'grayScale60'} textAlign={'center'}>
+					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
 						근처 블루투스 기기를 감지하고 연결하려면 {'\n'}블루투스를 사용해야 합니다
 					</Text>
 				</View>

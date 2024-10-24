@@ -14,7 +14,7 @@ const PageTestingCamera = () => {
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
 					<Text size={TextSize.TitleSmall} color={'grayScale100'}>기기 카메라 테스트</Text>
-					<Text size={TextSize.HeadingSmall} color={'grayScale60'} textAlign={'center'}>
+					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
 						카메라가 제대로 작동하는지 확인해주세요
 					</Text>
 				</View>
