@@ -6,6 +6,7 @@ import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {Image} from "expo-image";
+import {router} from "expo-router";
 
 const PageTestingCamera = () => {
 	return (
@@ -37,6 +38,7 @@ const PageTestingCamera = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
+					onPress={() => router.push('/(connect)/finishConnect')}
 				>제대로 보입니다</Button>
 			</View>
 		</SafeAreaView>
