@@ -85,14 +85,6 @@ const PageWiFiList = () => {
 			</View>
 
 			<View style={styles.buttonContainer}>
-				<Button
-					radius={9999}
-					style={ButtonStyle.Secondary}
-					size={ButtonSize.Small}
-					buttonStyles={{paddingHorizontal: 36}}
-				>
-					이전
-				</Button>
 				{selectedSSID && (
 					<Button
 						radius={9999}
@@ -212,7 +204,6 @@ const styles = StyleSheet.create({
 
 		paddingTop: 12,
 		paddingHorizontal: 20,
-		paddingBottom: 20,
 
 		backgroundColor: 'white',
 	},
