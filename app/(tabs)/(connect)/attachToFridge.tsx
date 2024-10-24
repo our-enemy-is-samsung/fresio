@@ -24,7 +24,7 @@ const PageAttageToFridge = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
-				>다음</Button>
+				>확인 했습니다</Button>
 			</View>
 		</SafeAreaView>
 	)
