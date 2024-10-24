@@ -13,7 +13,9 @@ const PageAttageToFridge = () => {
 			<ConnectHeader/>
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
-					<Text size={TextSize.TitleSmall} color={'grayScale100'}>거의 다 되었습니다...</Text>
+					<Text size={TextSize.TitleSmall} color={'grayScale100'}>
+						기기 설치
+					</Text>
 					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
 						Fresio 기기를 냉장고에 부착해주세요
 					</Text>
