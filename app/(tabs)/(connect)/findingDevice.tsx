@@ -163,13 +163,15 @@ const PageFindingDevice = () => {
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
 				>취소</Button>
-				<Button
-					radius={9999}
-					style={ButtonStyle.Primary}
-					size={ButtonSize.Small}
-					buttonStyles={{paddingHorizontal: 36}}
-					onPress={() => router.push('/(connect)/attachToFridge')}
-				>다음</Button>
+				{findingDevice && (
+					<Button
+						radius={9999}
+						style={ButtonStyle.Primary}
+						size={ButtonSize.Small}
+						buttonStyles={{paddingHorizontal: 36}}
+						onPress={() => router.push('/(connect)/wifiList')}
+					>다음</Button>
+				)}
 			</View>
 		</SafeAreaView>
 	);

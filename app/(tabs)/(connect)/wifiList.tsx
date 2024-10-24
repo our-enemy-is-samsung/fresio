@@ -11,6 +11,7 @@ import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {useEffect, useRef, useState} from "react";
 import {Colors} from "@/shared/constants/Color";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {router} from "expo-router";
 
 const PageWiFiList = () => {
 	const [wifiList, setWifiList] = useState<Array<{ ssid: string, strength: number }>>([]);
@@ -98,6 +99,7 @@ const PageWiFiList = () => {
 						style={ButtonStyle.Primary}
 						size={ButtonSize.Small}
 						buttonStyles={{paddingHorizontal: 36}}
+						onPress={() => router.push('/(connect)/attachToFridge')}
 					>
 						다음
 					</Button>
