@@ -5,6 +5,7 @@ import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
+import {router} from "expo-router";
 
 const PageAttageToFridge = () => {
 	return (
@@ -24,6 +25,7 @@ const PageAttageToFridge = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
+					onPress={() => router.push('/(connect)/testingCamera')}
 				>확인 했습니다</Button>
 			</View>
 		</SafeAreaView>

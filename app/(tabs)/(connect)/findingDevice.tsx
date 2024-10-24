@@ -11,6 +11,7 @@ import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {useEffect, useState} from "react";
 import {Colors} from "@/shared/constants/Color";
+import {useRouter} from "expo-router";
 
 const PageFindingDevice = () => {
 	const [findingDevice, setFindingDevice] = useState<{ name: string, id: string } | undefined>(undefined);
@@ -18,6 +19,7 @@ const PageFindingDevice = () => {
 	const titleTranslateY = useSharedValue(20);
 	const descOpacity = useSharedValue(0);
 	const descTranslateY = useSharedValue(20);
+	const router = useRouter();
 	const colorScheme = useColorScheme() ?? 'light';
 
 	const lightVibration = () => {
@@ -166,6 +168,7 @@ const PageFindingDevice = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
+					onPress={() => router.push('/(connect)/attachToFridge')}
 				>다음</Button>
 			</View>
 		</SafeAreaView>

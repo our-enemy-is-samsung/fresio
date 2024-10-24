@@ -7,8 +7,11 @@ import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
+import {useRouter} from "expo-router";
 
 const PageBluetoothRequired = () => {
+	const router = useRouter();
+
 	return (
 		<SafeAreaView style={{flex: 1}}>
 			<ConnectHeader/>
@@ -40,7 +43,10 @@ const PageBluetoothRequired = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
-				>다음</Button>
+					onPress={() => router.push('/(connect)/findingDevice')}
+				>
+					다음
+				</Button>
 			</View>
 		</SafeAreaView>
 	)
