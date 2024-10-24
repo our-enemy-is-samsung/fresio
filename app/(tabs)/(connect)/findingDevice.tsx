@@ -169,7 +169,7 @@ const PageFindingDevice = () => {
 						style={ButtonStyle.Primary}
 						size={ButtonSize.Small}
 						buttonStyles={{paddingHorizontal: 36}}
-						onPress={() => router.push('/(connect)/wifiList')}
+						onPress={() => router.push('/(connect)/attachToFridge')}
 					>다음</Button>
 				)}
 			</View>

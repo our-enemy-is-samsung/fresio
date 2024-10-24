@@ -25,7 +25,7 @@ const PageAttageToFridge = () => {
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
-					onPress={() => router.push('/(connect)/testingCamera')}
+					onPress={() => router.push('/(connect)/wifiList')}
 				>확인 했습니다</Button>
 			</View>
 		</SafeAreaView>

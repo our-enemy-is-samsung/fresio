@@ -99,7 +99,7 @@ const PageWiFiList = () => {
 						style={ButtonStyle.Primary}
 						size={ButtonSize.Small}
 						buttonStyles={{paddingHorizontal: 36}}
-						onPress={() => router.push('/(connect)/attachToFridge')}
+						onPress={() => router.push('/(connect)/testingCamera')}
 					>
 						다음
 					</Button>
