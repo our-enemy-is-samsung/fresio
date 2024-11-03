@@ -1,42 +1,68 @@
 import TouchableRippleNative from "react-native-paper/src/components/TouchableRipple/TouchableRipple.native";
-import {StyleSheet, Text, useColorScheme, ViewStyle} from "react-native";
+import {StyleSheet, ViewStyle} from "react-native";
 import {FoodLifeTimeType} from "@/feature/food/types/Food";
 import View from "@/components/atoms/View";
 import StyledText from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
-import {Colors} from "@/shared/constants/Color";
 import Button from "@/components/atoms/Button";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
+import {calculateRemainingDays, getLifeTimeColor} from "@/feature/food/utils/time";
 
-const FoodLifeTimeMore = ({style}: {style?: ViewStyle}) => {
+const FoodLifeTimeMore = ({style}: { style?: ViewStyle }) => {
 	return (
-		<Button style={ButtonStyle.Secondary} size={ButtonSize.Small} buttonStyles={style} onPress={() => console.log('asdj')}>
-			<StyledText size={TextSize.BodySmall} color={'grayScale100'}>더보기</StyledText>
+		<Button
+			style={ButtonStyle.Secondary}
+			size={ButtonSize.Small}
+			buttonStyles={style}
+			onPress={() => console.log('더보기 클릭')}
+		>
+			더보기
 		</Button>
-	)
-}
+	);
+};
 
 const FoodLifeTime = ({emoji, lifeTime, name, quantity}: FoodLifeTimeType) => {
-	const colorScheme = useColorScheme() ?? 'light';
+	const remainingDaysText = calculateRemainingDays(lifeTime);
+	const textColor = getLifeTimeColor(lifeTime);
+
 	return (
-		<TouchableRippleNative style={styles.container} onPress={() => console.log('asd')}>
+		<TouchableRippleNative
+			style={styles.container}
+			onPress={() => console.log('아이템 클릭')}
+		>
 			<View style={styles.wrap}>
-				{/* content */}
 				<View style={styles.left}>
-					<Text style={styles.emoji}>{emoji}</Text>
-					<View style={{gap: 2}}>
-						<StyledText size={TextSize.BodySmall} color={'grayScale100'}>{name}</StyledText>
-						<StyledText size={TextSize.LabelLarge} color={'grayScale60'}>13일 남음</StyledText>
+					<StyledText
+						size={TextSize.TitleSmall}
+						color="grayScale100"
+					>
+						{emoji}
+					</StyledText>
+					<View style={styles.contentContainer}>
+						<StyledText
+							size={TextSize.BodySmall}
+							color="grayScale100"
+						>
+							{name}
+						</StyledText>
+						<StyledText
+							size={TextSize.BodySmall}
+							color={textColor}
+						>
+							{remainingDaysText}
+						</StyledText>
 					</View>
 				</View>
-				<Text style={{
-					...styles.quantity,
-					color: Colors[colorScheme].grayScale40,
-				}}>x{quantity}</Text>
+				<StyledText
+					size={TextSize.HeadingSmall}
+					color="grayScale40"
+				>
+					x{quantity}
+				</StyledText>
 			</View>
 		</TouchableRippleNative>
-	)
-}
+	);
+};
 
 FoodLifeTime.More = FoodLifeTimeMore;
 
@@ -55,14 +81,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		gap: 12,
 	},
-	emoji: {
-		fontSize: 24,
-	},
-	quantity: {
-		fontSize: 20,
-
-		color: 'gray',
-	},
+	contentContainer: {
+		gap: 2,
+	}
 });
 
-export default FoodLifeTime
+export default FoodLifeTime;
