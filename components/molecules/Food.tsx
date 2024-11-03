@@ -21,7 +21,11 @@ const FoodLifeTimeMore = ({style}: { style?: ViewStyle }) => {
 	);
 };
 
-const FoodLifeTime = ({emoji, lifeTime, name, quantity}: FoodLifeTimeType) => {
+interface FoodLifeTimeProps  extends  FoodLifeTimeType {
+	bigUI?: boolean;
+}
+
+const FoodLifeTime = ({emoji, lifeTime, name, quantity, bigUI}: FoodLifeTimeProps) => {
 	const remainingDaysText = calculateRemainingDays(lifeTime);
 	const textColor = getLifeTimeColor(lifeTime);
 
@@ -33,14 +37,14 @@ const FoodLifeTime = ({emoji, lifeTime, name, quantity}: FoodLifeTimeType) => {
 			<View style={styles.wrap}>
 				<View style={styles.left}>
 					<StyledText
-						size={TextSize.TitleSmall}
+						size={bigUI ? TextSize.TitleMedium : TextSize.HeadingSmall}
 						color="grayScale100"
 					>
 						{emoji}
 					</StyledText>
 					<View style={styles.contentContainer}>
 						<StyledText
-							size={TextSize.BodySmall}
+							size={bigUI ? TextSize.BodyLarge : TextSize.BodySmall}
 							color="grayScale100"
 						>
 							{name}
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
 		gap: 12,
 	},
 	contentContainer: {
-		gap: 2,
+		gap: 4,
 	}
 });
 
