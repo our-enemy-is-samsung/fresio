@@ -42,12 +42,13 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
 				<Stack
-					initialRouteName="(tabs)/(connect)/bluetoothRequired"
+					initialRouteName="(tabs)/index"
 					screenOptions={{
 						headerShown: false,
 					}}
 				>
 					<Stack.Screen name="(tabs)/index"/>
+					<Stack.Screen name="(tabs)/(food)/index" />
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
