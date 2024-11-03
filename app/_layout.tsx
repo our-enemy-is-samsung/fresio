@@ -47,12 +47,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 						headerShown: false,
 					}}
 				>
-					<Stack.Screen name="(tabs)/(connect)/bluetoothRequired"/>
-					<Stack.Screen name="(tabs)/(connect)/findingDevice"/>
-					<Stack.Screen name="(tabs)/(connect)/wifiList"/>
-					<Stack.Screen name="(tabs)/(connect)/attachToFridge"/>
-					<Stack.Screen name="(tabs)/(connect)/testingCamera"/>
-					<Stack.Screen name="(tabs)/(connect)/finishConnect"/>
+					<Stack.Screen name="(tabs)/index"/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
