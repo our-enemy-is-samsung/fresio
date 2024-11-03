@@ -49,12 +49,12 @@ export const getLifeTimeColor = (targetDate: Date | string): keyof typeof Colors
 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 	if (diffDays < 0) {
-		return 'negative50';  // 빨간색 - 유통기한 지남
-	} else if (diffDays === 0) {
-		return 'warning50';   // 노란색 - 오늘까지
-	} else if (diffDays <= 3) {
-		return 'warning50';   // 노란색 - 임박
+		return 'negative60';  // 빨간색 - 유통기한 지남
+	} else if (diffDays <= 2) {
+		return 'negative60';   // 노란색 - 임박
+	} else if (diffDays <= 5) {
+		return 'warning70';   // 노란색 - 곧 만료
 	} else {
-		return 'brand60'; // 기본 색상
+		return 'grayScale50'; // 기본 색상
 	}
 };
