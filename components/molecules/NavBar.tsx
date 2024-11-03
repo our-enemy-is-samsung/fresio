@@ -34,7 +34,7 @@ function Item({icon, title, selected, onClick}: ItemProps) {
 export default function NavBar({children, testID}: { children: ReactNode, testID?: string }) {
 	const colorScheme = useColorScheme() ?? 'light';
 	return (
-		<View testID={testID} style={styles.container}>
+		<View testID={testID} backgroundColor={'grayScale5'} style={styles.container}>
 			{children}
 		</View>
 	)
