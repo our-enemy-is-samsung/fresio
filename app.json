@@ -8,6 +8,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/b1f2e0bd-6142-487f-89a0-0dcfe0f6bd37"
+    },
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -52,6 +56,9 @@
       "eas": {
         "projectId": "b1f2e0bd-6142-487f-89a0-0dcfe0f6bd37"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
