@@ -18,13 +18,13 @@ function Item({icon, title, selected, onClick}: ItemProps) {
 	// cloneElement를 사용하여 icon의 fill을 변경
 	const modifiedIcon = cloneElement(icon, {
 		size: 25,
-		color: selected ? Colors[colorScheme]['grayScale70'] : Colors[colorScheme]['grayScale40'],
+		color: selected ? Colors[colorScheme]['grayScale70'] : Colors[colorScheme]['grayScale50'],
 	});
 
 	return (
 		<TouchableOpacity style={styles.itemContainer} onPress={onClick} activeOpacity={0.7}>
 			{modifiedIcon}
-			<StyledText size={TextSize.LabelLarge} color={selected ? 'grayScale70' : 'grayScale40'}>
+			<StyledText size={TextSize.LabelLarge} color={selected ? 'grayScale70' : 'grayScale50'}>
 				{title}
 			</StyledText>
 		</TouchableOpacity>
@@ -34,10 +34,7 @@ function Item({icon, title, selected, onClick}: ItemProps) {
 export default function NavBar({children, testID}: { children: ReactNode, testID?: string }) {
 	const colorScheme = useColorScheme() ?? 'light';
 	return (
-		<View testID={testID} style={{
-			...styles.container,
-			borderColor: Colors[colorScheme]['grayScale20'],
-		}}>
+		<View testID={testID} style={styles.container}>
 			{children}
 		</View>
 	)
@@ -51,8 +48,6 @@ const styles = StyleSheet.create({
 
 		position: 'absolute',
 		bottom: 0,
-
-		borderTopWidth: 1,
 
 		display: 'flex',
 		flexDirection: 'row',
