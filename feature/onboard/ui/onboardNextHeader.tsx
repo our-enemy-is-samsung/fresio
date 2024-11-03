@@ -1,19 +1,19 @@
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, TouchableOpacity, View} from "react-native";
 import React from "react";
 import {TouchableRipple} from "react-native-paper";
 import StyledText from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
 
 interface OnboardNextHeaderProps {
-
+	onPress: () => void;
 }
 
-const OnboardNextHeader = ({}: OnboardNextHeaderProps) => {
+const OnboardNextHeader = ({onPress}: OnboardNextHeaderProps) => {
 	return (
 		<View style={styles.container}>
-			<TouchableRipple>
+			<TouchableOpacity onPress={onPress}>
 				<StyledText size={TextSize.HeadingSmall} color={'brand50'}>다음</StyledText>
-			</TouchableRipple>
+			</TouchableOpacity>
 		</View>
 	)
 }
