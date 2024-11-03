@@ -18,7 +18,7 @@ const PageHeader = ({name}: PageHeaderProps) => {
 		<View style={styles.container}>
 			<StyledText size={TextSize.TitleSmall} color={'grayScale100'} style={{top: -4}}>{name}</StyledText>
 			<TouchableRippleNative style={styles.touchable} onPress={() => console.log('asd')}>
-				<Feather name="settings" size={24} color="black" />
+				<Feather name="settings" size={22} color="black" />
 			</TouchableRippleNative>
 		</View>
 	)
@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+
+		backgroundColor: 'transparent',
 	},
 	touchable: {
 		padding: 8,
