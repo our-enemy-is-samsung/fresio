@@ -31,18 +31,6 @@ const PageFood = () => {
 						<FoodLifeTime emoji={'🍠'} name={'고구마'} quantity={2} lifeTime={date} bigUI/>
 						<FoodLifeTime emoji={'🧅'} name={'양파'} quantity={4} lifeTime={new Date()} bigUI/>
 						<FoodLifeTime emoji={'🥑'} name={'아보카도'} quantity={1} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={date} bigUI/>
-						<FoodLifeTime emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🍠'} name={'고구마'} quantity={2} lifeTime={date} bigUI/>
-						<FoodLifeTime emoji={'🧅'} name={'양파'} quantity={4} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🥑'} name={'아보카도'} quantity={1} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={date} bigUI/>
-						<FoodLifeTime emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🍠'} name={'고구마'} quantity={2} lifeTime={date} bigUI/>
-						<FoodLifeTime emoji={'🧅'} name={'양파'} quantity={4} lifeTime={new Date()} bigUI/>
-						<FoodLifeTime emoji={'🥑'} name={'아보카도'} quantity={1} lifeTime={new Date()} bigUI/>
 						<View style={{height: 120}}/>
 					</View>
 				</View>
