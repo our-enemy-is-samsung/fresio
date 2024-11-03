@@ -4,6 +4,7 @@ import PageHeader from "@/components/molecules/PageHeader";
 import StyledText from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import NavBarTemplate from "@/components/template/NavBarTemplate";
 
 const PageFood = () => {
 	const safeAreaInsets = useSafeAreaInsets();
@@ -15,6 +16,7 @@ const PageFood = () => {
 					<StyledText size={TextSize.BodySmall} color={'grayScale40'}>음식 38개</StyledText>
 				</View>
 			</ScrollView>
+			<NavBarTemplate />
 		</View>
 	)
 }
