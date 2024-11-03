@@ -11,10 +11,10 @@ interface ViewProps {
 	isSafeArea?: boolean;
 }
 
-const StyledView: FC<ViewProps> = ({testID, backgroundColor = 'grayScale5', children, style}) => {
+const StyledView: FC<ViewProps> = ({testID, backgroundColor, children, style}) => {
 	const colorScheme = useColorScheme() ?? 'light';
 	const viewStyle: ViewStyle = {
-		backgroundColor: Colors[colorScheme][backgroundColor],
+		backgroundColor: backgroundColor ? Colors[colorScheme][backgroundColor] : 'transparent',
 		...style,
 	};
 
