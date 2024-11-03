@@ -4,8 +4,6 @@ import View from "@/components/atoms/View";
 import StyledText from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
 import Feather from '@expo/vector-icons/Feather';
-import {TouchableRipple} from "react-native-paper";
-import {useNavigation} from "expo-router";
 import TouchableRippleNative from "react-native-paper/src/components/TouchableRipple/TouchableRipple.native";
 
 interface PageHeaderProps {
@@ -13,7 +11,7 @@ interface PageHeaderProps {
 }
 
 const PageHeader = ({name}: PageHeaderProps) => {
-	const navigation = useNavigation();
+
 	return (
 		<View style={styles.container}>
 			<StyledText size={TextSize.TitleSmall} color={'grayScale100'} style={{top: -4}}>{name}</StyledText>
