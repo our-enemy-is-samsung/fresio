@@ -18,10 +18,10 @@ export function getButtonSize(size: ButtonSize) {
 			};
 		case ButtonSize.Small:
 			return {
-				height: 44,
+				height: 36,
 				paddingHorizontal: 14,
 				borderRadius: 10,
-				fontSize: 16,
+				fontSize: 14,
 			};
 		default:
 			return {
