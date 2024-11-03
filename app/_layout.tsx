@@ -2,10 +2,11 @@ import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/n
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {LayoutChangeEvent, useColorScheme} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/shared/constants/Color";
+import * as Updates from 'expo-updates';
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -47,15 +48,31 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 						headerShown: false,
 					}}
 				>
-					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}} />
-					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}} />
+					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}}/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
 	);
 }
 
+async function checkForUpdates() {
+	try {
+		const update = await Updates.checkForUpdateAsync();
+		if (update.isAvailable) {
+			await Updates.fetchUpdateAsync();
+			await Updates.reloadAsync();
+		}
+	} catch (error) {
+		console.error('Error checking for updates:', error);
+	}
+}
+
 export default function RootLayout() {
+	useEffect(() => {
+		checkForUpdates();
+	}, []);
+
 	const [fontsLoaded, fontError] = useFonts({
 		'PretendardBold': require('../assets/fonts/Pretendard-Bold.otf'),
 		'PretendardMedium': require('../assets/fonts/Pretendard-Medium.otf'),
