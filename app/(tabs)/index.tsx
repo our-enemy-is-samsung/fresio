@@ -56,6 +56,26 @@ const HomeScreen = () => {
 								difficulty="보통"
 								onPress={() => console.log('레시피 선택')}
 							/>
+							<View style={{width: 22}}/>
+						</ScrollView>
+					</SectionContainer>
+					<SectionContainer>
+						<SectionTitle title={'🍕 냉장고에 피자가 있어 추천해요'}/>
+						<ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingVertical: 14, paddingHorizontal: 22}}>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
 							<Recipe
 								name="김치찌개가 첨가된 아침찬"
 								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
