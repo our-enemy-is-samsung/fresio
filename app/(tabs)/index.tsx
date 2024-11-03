@@ -8,6 +8,7 @@ import NavBarTemplate from "@/components/template/NavBarTemplate";
 import SectionTitle from "@/feature/home/ui/SectionTitle";
 import FoodLifeTime from "@/components/molecules/Food";
 import SectionContainer from "@/feature/home/ui/SectionContainer";
+import Recipe from "@/components/molecules/Recipe";
 
 const HomeScreen = () => {
 	const date = new Date();
@@ -17,7 +18,8 @@ const HomeScreen = () => {
 	return (
 		<>
 			<ScrollView style={{flex: 1}}>
-				<LinearGradient colors={['rgba(244,144,47,0.34)', '#fff']} locations={[0, 0.85]} style={{paddingTop: safeAreaInsets.top}}>
+				<LinearGradient colors={['rgba(244,144,47,0.34)', '#fff']} locations={[0, 0.85]}
+				                style={{paddingTop: safeAreaInsets.top}}>
 					<PageHeader name={'홈'}/>
 				</LinearGradient>
 				<View>
@@ -32,6 +34,37 @@ const HomeScreen = () => {
 					</SectionContainer>
 					<SectionContainer>
 						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'}/>
+						<ScrollView horizontal showsHorizontalScrollIndicator={false} style={{paddingVertical: 14, paddingHorizontal: 22}}>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
+							<Recipe
+								name="김치찌개가 첨가된 아침찬"
+								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
+								cookTime="40분"
+								difficulty="보통"
+								onPress={() => console.log('레시피 선택')}
+							/>
+							<View style={{width: 22}}/>
+						</ScrollView>
 					</SectionContainer>
 				</View>
 			</ScrollView>
@@ -40,8 +73,6 @@ const HomeScreen = () => {
 	);
 }
 
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})
 
 export default HomeScreen;
