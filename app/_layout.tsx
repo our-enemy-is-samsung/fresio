@@ -1,9 +1,9 @@
-import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
+import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useEffect} from 'react';
-import {useColorScheme} from "react-native";
+import React, {useCallback} from 'react';
+import {LayoutChangeEvent, useColorScheme} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/shared/constants/Color";
 
@@ -15,32 +15,11 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-	const [loaded, error] = useFonts({
-		PretendardBold: require('../assets/fonts/Pretendard-Bold.otf'),
-		PretendardRegular: require('../assets/fonts/Pretendard-Medium.otf'),
-		PretendardSemiBold: require('../assets/fonts/Pretendard-SemiBold.otf'),
-	});
-
-	// Expo Router uses Error Boundaries to catch errors in the navigation tree.
-	useEffect(() => {
-		if (error) throw error;
-	}, [error]);
-
-	useEffect(() => {
-		if (loaded) {
-			SplashScreen.hideAsync();
-		}
-	}, [loaded]);
-
-	if (!loaded) {
-		return null;
-	}
-
-	return <RootLayoutNav/>;
+interface RootLayoutNavProps {
+	onLayout: (event: LayoutChangeEvent) => void;
 }
 
-const MyDefaultTheme = {
+const MyDefaultTheme: Theme = {
 	...DefaultTheme,
 	colors: {
 		...DefaultTheme.colors,
@@ -48,7 +27,7 @@ const MyDefaultTheme = {
 	}
 };
 
-const MyDarkTheme = {
+const MyDarkTheme: Theme = {
 	...DarkTheme,
 	colors: {
 		...DarkTheme.colors,
@@ -56,11 +35,11 @@ const MyDarkTheme = {
 	},
 };
 
-function RootLayoutNav() {
+function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 	const colorScheme = useColorScheme();
 
 	return (
-		<GestureHandlerRootView style={{flex: 1}}>
+		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
 				<Stack
 					initialRouteName="(tabs)/(connect)/bluetoothRequired"
@@ -68,7 +47,6 @@ function RootLayoutNav() {
 						headerShown: false,
 					}}
 				>
-					<Stack.Screen name="(tabs)/index"/>
 					<Stack.Screen name="(tabs)/(connect)/bluetoothRequired"/>
 					<Stack.Screen name="(tabs)/(connect)/findingDevice"/>
 					<Stack.Screen name="(tabs)/(connect)/wifiList"/>
@@ -79,4 +57,29 @@ function RootLayoutNav() {
 			</ThemeProvider>
 		</GestureHandlerRootView>
 	);
+}
+
+export default function RootLayout() {
+	const [fontsLoaded, fontError] = useFonts({
+		'PretendardBold': require('../assets/fonts/Pretendard-Bold.otf'),
+		'PretendardMedium': require('../assets/fonts/Pretendard-Medium.otf'),
+		'PretendardSemiBold': require('../assets/fonts/Pretendard-SemiBold.otf'),
+	});
+
+	useCallback(() => {
+		if (fontError) {
+			console.error('Font loading error:', fontError);
+			throw fontError;
+		}
+	}, [fontError]);
+
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded) {
+			await SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded]);
+
+	if (fontsLoaded) {
+		return <RootLayoutNav onLayout={onLayoutRootView}/>;
+	}
 }

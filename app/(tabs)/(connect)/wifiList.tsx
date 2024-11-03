@@ -1,6 +1,14 @@
 import Text from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
-import {Dimensions, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, useColorScheme} from "react-native";
+import {
+	Dimensions,
+	Platform,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	useColorScheme
+} from "react-native";
 import Animated, {useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming} from 'react-native-reanimated';
 import LottieView from "lottie-react-native";
 import ListLoading from '@/assets/lottie/listLoading.json';
@@ -130,12 +138,15 @@ const WiFiItem = ({ssid, strength, index, selected, onSelect}: {
 	}));
 
 	const getSignalIcon = (strength: number, selected: boolean) => {
-		if (strength >= 80) return <MaterialIcons name="network-wifi" size={24} color={selected ? 'white' : 'black'}/>;
-		if (strength >= 60) return <MaterialIcons name="network-wifi-3-bar" size={24}
+		if (strength >= 80)
+			return <MaterialIcons name="network-wifi" size={22} color={selected ? 'white' : 'black'}/>;
+		if (strength >= 60)
+			return <MaterialIcons name="network-wifi-3-bar" size={22}
 		                                          color={selected ? 'white' : 'black'}/>;
-		if (strength >= 40) return <MaterialIcons name="network-wifi-2-bar" size={24}
+		if (strength >= 40)
+			return <MaterialIcons name="network-wifi-2-bar" size={22}
 		                                          color={selected ? 'white' : 'black'}/>;
-		return <MaterialIcons name="network-wifi-1-bar" size={24} color={selected ? 'white' : 'black'}/>;
+		return <MaterialIcons name="network-wifi-1-bar" size={22} color={selected ? 'white' : 'black'}/>;
 	};
 
 	return (
@@ -151,7 +162,7 @@ const WiFiItem = ({ssid, strength, index, selected, onSelect}: {
 				      backgroundColor={selected ? 'brand50' : 'grayScale5'}>
 					{getSignalIcon(strength, selected)}
 					<Text
-						size={TextSize.BodyLarge}
+						size={TextSize.BodySmall}
 						color={selected ? 'white' : 'grayScale100'}
 					>
 						{ssid}
@@ -181,7 +192,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		paddingBottom: 20,
 
-		gap: 12,
+		gap: 8,
 	},
 	wifiItem: {
 		flexDirection: 'row',
@@ -204,6 +215,7 @@ const styles = StyleSheet.create({
 
 		paddingTop: 12,
 		paddingHorizontal: 20,
+		paddingBottom: Platform.OS === 'ios' ? 0 : 20,
 
 		backgroundColor: 'white',
 	},

@@ -1,6 +1,6 @@
 import Text from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
-import {Dimensions, SafeAreaView, StyleSheet} from "react-native";
+import {Platform, SafeAreaView, StyleSheet} from "react-native";
 import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
@@ -28,7 +28,7 @@ const PageAttageToFridge = () => {
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 36}}
 					onPress={() => router.push('/(connect)/wifiList')}
-				>확인 했습니다</Button>
+				>설치 했어요</Button>
 			</View>
 		</SafeAreaView>
 	)
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 		gap: 12,
 
 		paddingHorizontal: 20,
+		paddingBottom: Platform.OS === 'ios' ? 0 : 20,
 	}
 })
 

@@ -1,6 +1,6 @@
 import Text from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
-import {Dimensions, SafeAreaView, StyleSheet} from "react-native";
+import {Dimensions, Platform, SafeAreaView, StyleSheet} from "react-native";
 import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
@@ -33,8 +33,8 @@ const PageBluetoothRequired = () => {
 			<ConnectHeader/>
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
-					<Text size={TextSize.TitleSmall} color={'grayScale100'}>블루투스 허용</Text>
-					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
+					<Text size={TextSize.HeadingLarge} color={'grayScale100'}>블루투스 허용</Text>
+					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'} style={{lineHeight: 24}}>
 						근처 블루투스 기기를 감지하고 연결하려면 {'\n'}블루투스를 사용해야 합니다
 					</Text>
 				</View>
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
 		gap: 12,
 
 		paddingHorizontal: 20,
+		paddingBottom: Platform.OS === 'ios' ? 0 : 20,
 	}
 })
 

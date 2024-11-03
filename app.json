@@ -2,6 +2,7 @@
   "expo": {
     "name": "fresio",
     "slug": "fresio",
+    "owner": "fresio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,13 +14,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.iamfiro.fresio"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.iamfiro.fresio"
     },
     "web": {
       "bundler": "metro",
@@ -27,10 +30,28 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Pretendard-Bold.otf",
+            "./assets/fonts/Pretendard-Medium.otf",
+            "./assets/fonts/Pretendard-SemiBold.otf"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b1f2e0bd-6142-487f-89a0-0dcfe0f6bd37"
+      }
     }
   }
 }

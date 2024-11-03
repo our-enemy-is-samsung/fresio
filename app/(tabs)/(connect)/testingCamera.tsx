@@ -1,6 +1,6 @@
 import Text from "@/components/atoms/Text";
 import {TextSize} from "@/shared/enums/TextSize";
-import {SafeAreaView, StyleSheet} from "react-native";
+import {Platform, SafeAreaView, StyleSheet} from "react-native";
 import View from "@/components/atoms/View";
 import ConnectHeader from "@/feature/connect/ui/ConnectHeader";
 import Button from "@/components/atoms/Button";
@@ -14,7 +14,7 @@ const PageTestingCamera = () => {
 			<ConnectHeader/>
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
-					<Text size={TextSize.TitleSmall} color={'grayScale100'}>기기 카메라 테스트</Text>
+					<Text size={TextSize.BodyLarge} color={'grayScale100'}>기기 카메라 테스트</Text>
 					<Text size={TextSize.BodyLarge} color={'grayScale60'} textAlign={'center'}>
 						카메라가 제대로 작동하는지 확인해주세요
 					</Text>
@@ -32,7 +32,7 @@ const PageTestingCamera = () => {
 					style={ButtonStyle.Secondary}
 					size={ButtonSize.Small}
 					buttonStyles={{paddingHorizontal: 22}}
-				>제대로 보이지 않습니다</Button>
+				>보이지 않습니다</Button>
 				<Button
 					radius={9999}
 					style={ButtonStyle.Primary}
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
 		gap: 12,
 
 		paddingHorizontal: 20,
+		paddingBottom: Platform.OS === 'ios' ? 0 : 20,
 	}
 })
 

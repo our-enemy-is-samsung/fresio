@@ -83,8 +83,9 @@ const PageFindingDevice = () => {
 					color: color,
 					textAlign,
 					fontWeight,
+					lineHeight: 24,
 				},
-				animatedStyle
+				animatedStyle,
 			]}
 		>
 			{children}
@@ -103,7 +104,7 @@ const PageFindingDevice = () => {
 					) : (
 						<>
 							<AnimatedTextContent
-								size={TextSize.TitleSmall}
+								size={TextSize.HeadingLarge}
 								color={Colors[colorScheme]['grayScale100']}
 								fontWeight={'600'}
 								animatedStyle={titleAnimatedStyle}
@@ -114,10 +115,9 @@ const PageFindingDevice = () => {
 								size={TextSize.BodyLarge}
 								color={Colors[colorScheme]['grayScale60']}
 								textAlign={'center'}
-								fontWeight={'500'}
 								animatedStyle={descAnimatedStyle}
 							>
-								{findingDevice.name}을(를) 등록 하시겠습니까?
+								{findingDevice.name}을(를){'\n'}등록 하시겠습니까?
 							</AnimatedTextContent>
 						</>
 					)}
@@ -180,24 +180,31 @@ const PageFindingDevice = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+
 		paddingTop: 42,
 	},
 	textContainer: {
 		alignItems: 'center',
+
 		gap: 20,
 	},
 	buttonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		gap: 12,
+
 		paddingHorizontal: 20,
+		paddingBottom: Platform.OS === 'ios' ? 0 : 20,
 	},
 	findingDeviceContainer: {
 		flexDirection: 'column',
 		alignItems: 'center',
+
 		gap: 28,
+
 		paddingTop: 36,
 		paddingHorizontal: 22,
+
 	}
 });
 
