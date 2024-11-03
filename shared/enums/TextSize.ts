@@ -4,6 +4,8 @@ export enum TextSize {
     TitleSmall = 23,
     HeadingLarge = 21,
     HeadingSmall = 19,
+    ContentLarge = 16,
+    ContentSmall = 15,
     BodyLarge = 17,
     BodySmall = 14,
     LabelLarge = 12,
