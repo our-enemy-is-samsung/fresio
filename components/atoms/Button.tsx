@@ -5,6 +5,7 @@ import {Colors} from "@/shared/constants/Color";
 import {getButtonColor, getButtonSize} from "@/shared/utils/getButtonStyle";
 import {ButtonSize, ButtonStyle} from "@/shared/types/Button";
 import {TextSize} from "@/shared/enums/TextSize";
+import {TouchableRipple} from "react-native-paper";
 
 interface ButtonProps {
 	style: ButtonStyle;
@@ -20,7 +21,6 @@ interface ButtonProps {
 
 interface ButtonStyleType extends ViewStyle, TextStyle {
 	color: keyof typeof Colors.light & keyof typeof Colors.dark;
-	fontWeight: 'bold';
 }
 
 const StyledButton = ({
@@ -61,18 +61,17 @@ const StyledButton = ({
 	}
 
 	return (
-		<TouchableOpacity
+		<TouchableRipple
 			testID={'button_view'}
 			style={{
 				...buttonStyle,
 			}}
-			activeOpacity={0.7}
 			onPress={onPress}
 			disabled={disabled}
 		>
 			<StyledText color={getButtonColor(style, colorScheme).color} size={TextSize.BodySmall}
 			            style={{fontSize: buttonStyle.fontSize}}>{children}</StyledText>
-		</TouchableOpacity>
+		</TouchableRipple>
 	);
 };
 
