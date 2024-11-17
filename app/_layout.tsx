@@ -50,6 +50,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 				>
 					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}}/>
 					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="(onboard)/connectDevice" options={{animation: 'none'}}/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>

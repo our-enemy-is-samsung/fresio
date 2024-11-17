@@ -40,18 +40,18 @@ export function getButtonColor(style: ButtonStyle, colorScheme: 'light' | 'dark'
 	switch (style) {
 		case ButtonStyle.Primary:
 			return {
-				backgroundColor: Colors[colorScheme]['brand50'],
-				color: 'grayScale5',
+				backgroundColor: Colors[colorScheme]['brand'],
+				color: 'surface',
 			};
 		case ButtonStyle.Secondary:
 			return {
-				backgroundColor: Colors[colorScheme]['grayScale10'],
-				color: 'grayScale60',
+				backgroundColor: Colors[colorScheme]['containerDark'],
+				color: 'contentDim',
 			};
 		default:
 			return {
-				backgroundColor: Colors[colorScheme]['grayScale10'],
-				color: 'grayScale50',
+				backgroundColor: Colors[colorScheme]['containerDark'],
+				color: 'contentDim',
 			}
 	}
 }
