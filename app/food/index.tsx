@@ -1,13 +1,14 @@
-import {ScrollView, StyleSheet} from "react-native";
+import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import NavBarTemplate from "@/components/template/NavBarTemplate";
-import {LinearGradient} from "expo-linear-gradient";
 import React from "react";
 import StyledText from "@/components/shared/Text";
 import PageHeader from "@/components/shared/PageHeader";
 import View from "@/components/shared/View";
 import {TextSize} from "@/enums/TextSize";
 import FoodLifeTime from "@/components/shared/Food";
+import {Colors} from "@/constants/Color";
+import {HomePageStyle} from "@/constants/Home/HomeStyle";
 
 const PageFood = () => {
 	const safeAreaInsets = useSafeAreaInsets();
@@ -16,13 +17,10 @@ const PageFood = () => {
 
 	return (
 		<>
-			<ScrollView style={{flex: 1}}>
-				<LinearGradient colors={['rgba(91,250,85,0.34)', '#fff']} locations={[0, 0.85]}
-				                style={{paddingTop: safeAreaInsets.top}}>
-					<PageHeader name={'냉장고 음식'}/>
-				</LinearGradient>
+			<SafeAreaView style={styles.container}>
+				<PageHeader name={'냉장고 음식'}/>
 				<View style={styles.content}>
-					<View>
+					<ScrollView style={{flex: 1}}>
 						<StyledText size={TextSize.BodyLarge} color={'contentSecondary'} style={styles.foodQuantity}>음식
 							38개</StyledText>
 						<FoodLifeTime emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={date} bigUI/>
@@ -32,9 +30,9 @@ const PageFood = () => {
 						<FoodLifeTime emoji={'🧅'} name={'양파'} quantity={4} lifeTime={new Date()} bigUI/>
 						<FoodLifeTime emoji={'🥑'} name={'아보카도'} quantity={1} lifeTime={new Date()} bigUI/>
 						<View style={{height: 120}}/>
-					</View>
+					</ScrollView>
 				</View>
-			</ScrollView>
+			</SafeAreaView>
 			<NavBarTemplate/>
 		</>
 	)
@@ -42,11 +40,24 @@ const PageFood = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		height: '100%',
+
+		backgroundColor: Colors['success'],
+
+		paddingTop: HomePageStyle.paddingTop,
 	},
+
 	content: {
-		marginTop: 22,
+		height: '100%',
+
+		backgroundColor: Colors['surface'],
+
+		paddingTop: 22,
+
+		borderTopStartRadius: 18,
+		borderTopEndRadius: 18,
 	},
+
 	foodQuantity: {
 		paddingHorizontal: 22,
 		paddingBottom: 10,
