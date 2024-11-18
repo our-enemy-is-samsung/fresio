@@ -13,6 +13,10 @@ export interface IColorToken {
     error: string;
     errorBackground: string;
 
+    // Success Colors
+    "success": string,
+    "successBackground": string,
+
     // Content Colors
     content: string;
     contentDim: string;
