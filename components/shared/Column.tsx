@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 import View from "@/components/shared/View";
 import {StyleSheet, ViewStyle} from "react-native";
 
-export const Column = ({ children, style }: {children: ReactNode, style: ViewStyle}) => {
+export const Column = ({ children, style }: {children: ReactNode, style?: ViewStyle}) => {
 	return (
 		<View style={{
 			...styles.container,
