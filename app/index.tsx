@@ -6,30 +6,33 @@ import PageHeader from "@/components/shared/PageHeader";
 import {Colors} from "@/constants/Color";
 import SectionContainer from "@/components/home/SectionContainer";
 import SectionTitle from "@/components/home/SectionTitle";
-import FoodLifeTime from "@/components/shared/Food";
+import FoodLifeTime from "@/components/food/Food";
 import Recipe from "@/components/shared/Recipe";
 import View from "@/components/shared/View";
 import {HomePageStyle} from "@/constants/Home/HomeStyle";
+import FoodLifeTimeCard from "@/components/food/FoodLifeTimeCard";
 
 const HomeScreen = () => {
 	const date = new Date();
-	date.setDate(date.getDate() - 3);
+	date.setDate(date.getDate() + 3);
 
-	const safeAreaInsets = useSafeAreaInsets();
 	return (
 		<>
 			<StatusBar barStyle={'light-content'}/>
 			<ScrollView style={styles.container}>
 				<PageHeader name={'홈'}/>
-				<SectionContainer>
-					<SectionTitle title={'유통기한이 임박한 식품'}/>
-					<View style={{paddingVertical: 10}}>
-						<FoodLifeTime emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={date}/>
-						<FoodLifeTime emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()}/>
-						<FoodLifeTime emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()}/>
-						<FoodLifeTime.More/>
-					</View>
-				</SectionContainer>
+				<ScrollView
+					horizontal
+					style={{paddingHorizontal: 22, paddingBottom: 18}}
+					contentContainerStyle={{columnGap: 10}}
+					showsHorizontalScrollIndicator={false}
+				>
+					<FoodLifeTimeCard emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={new Date()} />
+					<FoodLifeTimeCard emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()} />
+					<FoodLifeTimeCard emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()} />
+					<FoodLifeTimeCard emoji={'🍤'} name={'새우튀김'} lifeTime={date} quantity={28} />
+					<View style={{width: 36}}/>
+				</ScrollView>
 				<View style={styles.content}>
 					<SectionContainer>
 						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'}/>

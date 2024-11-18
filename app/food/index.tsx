@@ -6,12 +6,11 @@ import StyledText from "@/components/shared/Text";
 import PageHeader from "@/components/shared/PageHeader";
 import View from "@/components/shared/View";
 import {TextSize} from "@/enums/TextSize";
-import FoodLifeTime from "@/components/shared/Food";
+import FoodLifeTime from "@/components/food/Food";
 import {Colors} from "@/constants/Color";
 import {HomePageStyle} from "@/constants/Home/HomeStyle";
 
 const PageFood = () => {
-	const safeAreaInsets = useSafeAreaInsets();
 	const date = new Date();
 	date.setDate(date.getDate() - 3);
 
