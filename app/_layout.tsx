@@ -1,12 +1,12 @@
-import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
+import {DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useCallback, useEffect} from 'react';
-import {LayoutChangeEvent, useColorScheme} from "react-native";
+import React, {useCallback} from 'react';
+import {LayoutChangeEvent, } from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import {Colors} from "@/shared/constants/Color";
-import * as Updates from 'expo-updates';
+import {Colors} from "@/constants/Color";
+// import * as Updates from 'expo-updates';
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -24,54 +24,45 @@ const MyDefaultTheme: Theme = {
 	...DefaultTheme,
 	colors: {
 		...DefaultTheme.colors,
-		background: Colors['light']['grayScale5'],
+		background: Colors['surface'],
 	}
 };
 
-const MyDarkTheme: Theme = {
-	...DarkTheme,
-	colors: {
-		...DarkTheme.colors,
-		background: Colors['dark']['grayScale5'],
-	},
-};
-
 function RootLayoutNav({onLayout}: RootLayoutNavProps) {
-	const colorScheme = useColorScheme();
-
 	return (
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
-			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
+			<ThemeProvider value={MyDefaultTheme}>
 				<Stack
-					initialRouteName="(tabs)/index"
+					initialRouteName="index"
 					screenOptions={{
 						headerShown: false,
 					}}
 				>
-					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="index" options={{animation: 'none'}}/>
+					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
 				</Stack>
 			</ThemeProvider>
 		</GestureHandlerRootView>
 	);
 }
 
-async function checkForUpdates() {
-	try {
-		const update = await Updates.checkForUpdateAsync();
-		if (update.isAvailable) {
-			await Updates.fetchUpdateAsync();
-			await Updates.reloadAsync();
-		}
-	} catch (error) {
-		console.error('Error checking for updates:', error);
-	}
-}
+// async function checkForUpdates() {
+// 	try {
+// 		const update = await Updates.checkForUpdateAsync();
+// 		if (update.isAvailable) {
+// 			await Updates.fetchUpdateAsync();
+// 			await Updates.reloadAsync();
+// 		}
+// 	} catch (error) {
+// 		console.error('Error checking for updates:', error);
+// 	}
+// }
 
 export default function RootLayout() {
-	useEffect(() => {
-		checkForUpdates();
-	}, []);
+	// useEffect(() => {
+	// 	checkForUpdates();
+	// }, []);
 
 	const [fontsLoaded, fontError] = useFonts({
 		'PretendardBold': require('../assets/fonts/Pretendard-Bold.otf'),
