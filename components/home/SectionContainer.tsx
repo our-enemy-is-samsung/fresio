@@ -1,13 +1,14 @@
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, View, ViewStyle} from "react-native";
 import React from "react";
 
 interface SectionContainerProps {
 	children: React.ReactNode;
+	style?: ViewStyle;
 }
 
-const SectionContainer = ({children}: SectionContainerProps) => {
+const SectionContainer = ({children, style}: SectionContainerProps) => {
 	return (
-		<View style={styles.container}>
+		<View style={{...styles.container, ...style}}>
 			{children}
 		</View>
 	)
