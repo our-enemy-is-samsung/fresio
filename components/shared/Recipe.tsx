@@ -7,6 +7,7 @@ import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import {Row} from "@/components/shared/Row";
 import {Colors} from "@/constants/Color";
+import {Column} from "@/components/shared/Column";
 
 interface RecipeProps {
 	name: string;
@@ -60,16 +61,15 @@ const Recipe = ({
 					)}
 				</View>
 
-				<View style={styles.infoContainer}>
+				<Column>
 					<StyledText
-						size={TextSize.BodySmall}
+						size={TextSize.LabelLarge}
 						color={'contentDim'}
-						style={styles.name}
 					>
 						김치
 					</StyledText>
 					<StyledText
-						size={TextSize.ContentLarge}
+						size={TextSize.ContentSmall}
 						color={'content'}
 						style={styles.name}
 					>
@@ -81,9 +81,9 @@ const Recipe = ({
 							...styles.metaItem,
 							backgroundColor: Colors['errorBackground']
 						}}>
-							<MaterialIcons name="signal-cellular-alt" size={16} color={Colors['error']}/>
+							<MaterialIcons name="signal-cellular-alt" size={14} color={Colors['error']}/>
 							<StyledText
-								size={TextSize.LabelLarge}
+								size={TextSize.LabelSmall}
 								color={'error'}
 							>
 								{difficulty}
@@ -93,16 +93,16 @@ const Recipe = ({
 							...styles.metaItem,
 							backgroundColor: Colors['containerDark']
 						}}>
-							<MaterialIcons name="access-time" size={16} color={Colors.contentDim}/>
+							<MaterialIcons name="access-time" size={14} color={Colors.contentDim}/>
 							<StyledText
-								size={TextSize.LabelLarge}
+								size={TextSize.LabelSmall}
 								color={'contentDim'}
 							>
 								{cookTime}
 							</StyledText>
 						</View>
 					</View>
-				</View>
+				</Column>
 			</Row>
 		</TouchableRipple>
 	);
@@ -112,20 +112,18 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 
-		marginRight: 12,
-
 		borderRadius: 12,
 	},
 	contentWrap: {
 		flex: 1,
 
-		gap: 12,
+		gap: 14,
 	},
 	image: {
-		width: 130,
-		height: 100,
+		width: 100,
+		height: 80,
 
-		borderRadius: 12,
+		borderRadius: 8,
 	},
 	loadingOverlay: {
 		...StyleSheet.absoluteFillObject,
@@ -134,17 +132,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 12,
 	},
-	infoContainer: {
-		paddingTop: 12,
-		gap: 8,
-	},
 	name: {
 		width: '100%',
 		fontWeight: '600',
+
+		marginTop: 2,
+		marginBottom: 8,
 	},
 	metaContainer: {
 		flexDirection: 'row',
-		gap: 12,
+		gap: 6,
 	},
 	metaItem: {
 		flexDirection: 'row',
