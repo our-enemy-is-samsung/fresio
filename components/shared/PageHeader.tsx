@@ -9,7 +9,7 @@ import {Colors} from "@/constants/Color";
 
 interface PageHeaderProps {
 	name: string;
-	style: ViewStyle;
+	style?: ViewStyle;
 }
 
 const PageHeader = ({name, style}: PageHeaderProps) => {
