@@ -21,15 +21,20 @@ const HomeScreen = () => {
 			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']}/>
 			<ScrollView style={styles.container}>
 				<PageHeader name={'홈'}/>
+				<SectionTitle
+					title={'소비기한 임박 제품'}
+					showMoreButton
+					style={{marginTop: 12, marginBottom: 6}}
+					titleColor={'contentDim'}
+				/>
 				<ScrollView
 					horizontal
 					contentContainerStyle={{
-						columnGap: 12,
-						paddingVertical: 14,
-						paddingHorizontal: 14,
+						columnGap: 28,
+						paddingVertical: 10,
+						paddingHorizontal: 22,
 					}}
 					showsHorizontalScrollIndicator={false}
-					style={styles.foodLifeTimeCardContainer}
 				>
 					<FoodLifeTimeCard emoji={'🍌'} name={'장원영'} quantity={2} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={new Date()}/>
@@ -133,10 +138,6 @@ const styles = StyleSheet.create({
 
 		borderTopStartRadius: 18,
 		borderTopEndRadius: 18,
-	},
-
-	foodLifeTimeCardContainer: {
-		backgroundColor: Colors['surfaceDim']
 	},
 
 	section: {

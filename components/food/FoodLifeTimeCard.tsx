@@ -7,20 +7,21 @@ import {TextSize} from "@/enums/TextSize";
 import {Row} from "@/components/shared/Row";
 import {Column} from "@/components/shared/Column";
 import {calculateRemainingDays, getLifeTimeColor} from "@/utils/Food/time";
+import View from "@/components/shared/View";
 
 const FoodLifeTimeCard = ({emoji, lifeTime, name, quantity}: FoodLifeTimeType) => {
 	return (
 		<TouchableOpacity activeOpacity={0.7} style={styles.container}>
-			<Row style={styles.top}>
-				<StyledText style={styles.foodEmoji} size={TextSize.TitleSmall}
-				            color={'content'}>{emoji}</StyledText>
-				<StyledText style={styles.foodQuantity} size={TextSize.BodyLarge}
-				            color={'contentSecondary'}>x{quantity}</StyledText>
+			<View style={styles.iconContainer}>
+				<StyledText size={TextSize.TitleMedium} color={'content'}>{emoji}</StyledText>
+			</View>
+			<Row style={styles.quantityBadge}>
+				<StyledText style={styles.foodQuantity} size={TextSize.LabelLarge}
+				            color={'container'}>x{quantity}</StyledText>
 			</Row>
 			<Column style={styles.bottom}>
-				<StyledText style={styles.remainTime} size={TextSize.BodySmall}
-				            color={getLifeTimeColor(lifeTime)}>{calculateRemainingDays(lifeTime)}</StyledText>
-				<StyledText size={TextSize.BodyLarge} color={'content'}>{name}</StyledText>
+				<StyledText size={TextSize.BodySmall} color={'content'}>{name}</StyledText>
+				<StyledText size={TextSize.BodySmall} color={getLifeTimeColor(lifeTime)}>{calculateRemainingDays(lifeTime)}</StyledText>
 			</Column>
 		</TouchableOpacity>
 	);
@@ -32,34 +33,44 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 
 		backgroundColor: Colors['container'],
-
-		padding: 13,
-
-		borderRadius: 14,
-
-		// 그림자
-		elevation: 1.5,
 	},
-	top: {
-		minWidth: 120,
+	iconContainer: {
+		width: 70,
+		height: 70,
 
-		justifyContent: 'space-between',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+
+		backgroundColor: Colors['containerDark'],
+
+		borderRadius: 9999,
+
+		padding: 10,
 	},
+
+	quantityBadge: {
+		// 요소가 가로 전체를 사용하는 문제가 있어 자식 크기 대로만 먹게 수정
+		alignSelf: 'flex-end',
+
+		backgroundColor: Colors['contentSecondary'],
+
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		marginTop: -16,
+
+		borderRadius: 9999,
+	},
+
 	bottom: {
+		alignItems: 'center',
+
 		marginTop: 10,
 	},
 
 	// 텍스트 관련
 	foodQuantity: {
 		fontWeight: 'bold',
-	},
-	foodEmoji: {
-		marginLeft: -5,
-	},
-	remainTime: {
-		fontWeight: 'bold',
-
-		marginBottom: 4,
 	},
 });
 
