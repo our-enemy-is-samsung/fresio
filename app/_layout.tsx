@@ -40,6 +40,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 				>
 					<Stack.Screen name="index" options={{animation: 'none'}}/>
 					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
 					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
 				</Stack>
 			</ThemeProvider>
