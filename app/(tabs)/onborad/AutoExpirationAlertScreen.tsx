@@ -139,6 +139,10 @@ const styles = StyleSheet.create({
         shadowRadius: 12,
         elevation: 5,
     },
+    emptyBannerContent:{
+        width:'100%',
+        height:'100%',
+    },
     blurBanner: {
         position: 'absolute',
         width: 244,

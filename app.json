@@ -52,6 +52,9 @@
       "eas": {
         "projectId": "b1f2e0bd-6142-487f-89a0-0dcfe0f6bd37"
       }
-    }
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
   }
 }

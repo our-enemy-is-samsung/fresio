@@ -1,6 +1,6 @@
 import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
-import {Stack} from 'expo-router';
+import {Stack, Redirect} from 'expo-router';  // Redirect 추가
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
 import {LayoutChangeEvent, useColorScheme} from "react-native";
@@ -8,11 +8,9 @@ import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/shared/constants/Color";
 
 export {
-	// Catch any errors thrown by the Layout component.
 	ErrorBoundary,
 } from 'expo-router';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 interface RootLayoutNavProps {
@@ -42,15 +40,20 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
 				<Stack
-					initialRouteName="(tabs)/index"
 					screenOptions={{
 						headerShown: false,
 					}}
 				>
+					<Stack.Screen
+						name="onborad/AutoExpirationAlertScreen"
+						options={{animation: 'none'}}
+					/>
 					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}} />
 					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}} />
 				</Stack>
 			</ThemeProvider>
+			{/* AutoExpirationAlertScreen으로 초기 리다이렉션 */}
+			<Redirect href="/onborad/AutoExpirationAlertScreen" />
 		</GestureHandlerRootView>
 	);
 }
