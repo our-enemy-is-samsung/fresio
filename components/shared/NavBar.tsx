@@ -22,7 +22,7 @@ function Item({icon, title, selected, onClick}: ItemProps) {
 	return (
 		<TouchableOpacity style={styles.itemContainer} onPress={onClick} activeOpacity={0.7}>
 			{modifiedIcon}
-			<StyledText size={TextSize.LabelLarge} color={selected ? 'contentDim' : 'contentSecondary'}>
+			<StyledText size={TextSize.LabelLarge} color={'contentDim'}>
 				{title}
 			</StyledText>
 		</TouchableOpacity>
