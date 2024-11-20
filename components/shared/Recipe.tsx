@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		gap: 4,
 
-		paddingHorizontal: 10,
-		paddingVertical: 5,
+		paddingHorizontal: 6,
+		paddingVertical: 3,
 
 		borderRadius: 9999,
 	},
