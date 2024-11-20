@@ -10,6 +10,7 @@ import View from "@/components/shared/View";
 import {HomePageStyle} from "@/constants/Home/HomeStyle";
 import FoodLifeTimeCard from "@/components/food/FoodLifeTimeCard";
 import RecommendCTA from "@/components/home/recommendCTA";
+import RecommendRecipeSwipe from "@/components/home/recommendRecipeSwipe";
 
 const HomeScreen = () => {
 	const date = new Date();
@@ -17,14 +18,14 @@ const HomeScreen = () => {
 
 	return (
 		<>
-			<StatusBar barStyle={'dark-content'}/>
+			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']}/>
 			<ScrollView style={styles.container}>
 				<PageHeader name={'홈'}/>
 				<ScrollView
 					horizontal
 					contentContainerStyle={{
-						columnGap: 10,
-						paddingVertical: 10,
+						columnGap: 12,
+						paddingVertical: 14,
 						paddingHorizontal: 14,
 					}}
 					showsHorizontalScrollIndicator={false}
@@ -36,10 +37,18 @@ const HomeScreen = () => {
 					<FoodLifeTimeCard emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🍤'} name={'새우튀김'} lifeTime={date} quantity={28}/>
 				</ScrollView>
-				<View style={{...styles.section, marginBottom: 12}}>
-					<RecommendCTA/>
-				</View>
 				<View style={styles.content}>
+					<View style={{
+						...styles.section,
+						marginVertical: 42
+					}}>
+						<RecommendRecipeSwipe
+							title={'서늘한 저녁 이 음식은 어떤가요?'}
+						/>
+					</View>
+					<View style={{...styles.section, marginBottom: 12}}>
+						<RecommendCTA/>
+					</View>
 					<SectionContainer>
 						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'} showMoreButton/>
 						<ScrollView
@@ -121,8 +130,6 @@ const styles = StyleSheet.create({
 
 	content: {
 		backgroundColor: Colors['surface'],
-
-		// paddingTop: 22,
 
 		borderTopStartRadius: 18,
 		borderTopEndRadius: 18,

@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
 		padding: 13,
 
 		borderRadius: 14,
+
+		// 그림자
+		elevation: 1.5,
 	},
 	top: {
 		minWidth: 120,
