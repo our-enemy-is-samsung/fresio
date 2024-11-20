@@ -13,8 +13,12 @@ import RecommendCTA from "@/components/home/recommendCTA";
 import RecommendRecipeSwipe from "@/components/home/recommendRecipeSwipe";
 import SearchBarMock from "@/components/home/searchBarMock";
 import SearchBarCategory from "@/components/home/searchBarCategory";
+import {useNavigation} from "expo-router";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {ParamListBase} from "@react-navigation/native";
 
 const HomeScreen = () => {
+	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 	const date = new Date();
 	date.setDate(date.getDate() + 3);
 
@@ -24,10 +28,11 @@ const HomeScreen = () => {
 			<ScrollView style={styles.container}>
 				<PageHeader name={'홈'}/>
 				<SectionTitle
-					title={'소비기한 임박 제품'}
+					title={'소비기한 임박 재료'}
 					showMoreButton
 					style={{marginTop: 12, marginBottom: 6}}
-					titleColor={'contentDim'}
+					titleColor={'content'}
+					onPress={() => navigation.navigate('food/index')}
 				/>
 				{/* 소비기한 임박 제품 리스트*/}
 				<ScrollView
