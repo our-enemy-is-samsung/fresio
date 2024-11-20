@@ -6,6 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Colors } from '../../../shared/constants/Color';
+import GoogleIcon from './onbordComponents/GoogleIcon';
+import OnboardingSwiper from './OnboardingSwiper';
 
 type RootStackParamList = {
     AutoExpirationAlert: undefined;
@@ -81,9 +83,15 @@ const AutoExpirationAlertScreen: React.FC<Props> = ({ navigation }) => {
                     <View style={styles.pageIndicator}>
                         <View style={styles.activeDot} />
                         <View style={styles.inactiveDot} />
+                        <View style={styles.inactiveDot} />
                     </View>
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>눌러서 시작하기</Text>
+                        <View style={styles.buttonContent}>
+                            <View style={styles.iconContainer}>
+                                <GoogleIcon />
+                            </View>
+                            <Text style={styles.buttonText}>구글 계정으로 로그인</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -139,9 +147,9 @@ const styles = StyleSheet.create({
         shadowRadius: 12,
         elevation: 5,
     },
-    emptyBannerContent:{
-        width:'100%',
-        height:'100%',
+    emptyBannerContent: {
+        width: '100%',
+        height: '100%',
     },
     blurBanner: {
         position: 'absolute',
@@ -265,32 +273,49 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     activeDot: {
-        width: 10,
-        height: 10,
+        width: 25,
+        height: 8,
         backgroundColor: Colors.light.black,
-        borderRadius: 5,
+        borderRadius: 33,
         margin: 5,
     },
     inactiveDot: {
-        width: 10,
-        height: 10,
-        backgroundColor: Colors.light.grayScale20,
-        borderRadius: 5,
+        width: 8,
+        height: 8,
+        backgroundColor: Colors.light.grayScale40,
+        borderRadius: 33,
         margin: 5,
     },
     button: {
         backgroundColor: Colors.light.brand50,
-        paddingVertical: 16,
-        borderRadius: 13,
-        alignItems: 'center',
+        borderRadius: 8,
         width: 358,
         height: 59,
+        justifyContent: 'center', // 추가
+    },
+    buttonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
+        width: '100%',
+        height: '100%', // 추가
+    },
+    iconContainer: {
+        position: 'absolute',
+        left: 20, // 왼쪽 여백 추가
+        display: 'flex', // 추가
+        alignItems: 'center', // 추가
+        height: '100%', // 추가
+        justifyContent: 'center', // 추가
     },
     buttonText: {
         color: Colors.light.white,
         fontSize: 19,
-        fontWeight: '500',
+        fontWeight: '600',
+        textAlign: 'center',
         lineHeight: 24,
+        fontFamily: 'Wanted Sans Variable',
+        width: '100%',
     },
 });
 
