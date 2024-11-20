@@ -1,3 +1,3 @@
 export const HomePageStyle = {
-	paddingTop: 14,
+	paddingTop: 20,
 } as const;
