@@ -20,16 +20,15 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const HomeScreen = () => {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-	const insets = useSafeAreaInsets();
 	const date = new Date();
 	date.setDate(date.getDate() + 3);
 
 	return (
 		<>
 			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']}/>
-			<SafeAreaView style={{flex: 1}}>
-				<PageHeader name={'홈'} style={{marginTop: insets.top}}/>
-				<ScrollView style={styles.container}>
+			<SafeAreaView  style={styles.container}>
+				<PageHeader name={'홈'}/>
+				<ScrollView style={{flex: 1}}>
 					<SectionTitle
 						title={'소비기한 임박 재료'}
 						showMoreButton
