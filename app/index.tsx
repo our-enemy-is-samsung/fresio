@@ -3,7 +3,7 @@ import {SafeAreaView, ScrollView, StatusBar, StyleSheet} from "react-native";
 import NavBarTemplate from "@/components/template/NavBarTemplate";
 import PageHeader from "@/components/shared/PageHeader";
 import {Colors} from "@/constants/Color";
-import SectionContainer from "@/components/home/SectionContainer";
+import SectionContainer from "@/components/shared/SectionContainer";
 import SectionTitle from "@/components/home/SectionTitle";
 import Recipe from "@/components/shared/Recipe";
 import View from "@/components/shared/View";
