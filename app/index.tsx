@@ -9,6 +9,7 @@ import Recipe from "@/components/shared/Recipe";
 import View from "@/components/shared/View";
 import {HomePageStyle} from "@/constants/Home/HomeStyle";
 import FoodLifeTimeCard from "@/components/food/FoodLifeTimeCard";
+import RecommendCTA from "@/components/home/recommendCTA";
 
 const HomeScreen = () => {
 	const date = new Date();
@@ -16,22 +17,28 @@ const HomeScreen = () => {
 
 	return (
 		<>
-			<StatusBar barStyle={'light-content'}/>
+			<StatusBar barStyle={'dark-content'}/>
 			<ScrollView style={styles.container}>
 				<PageHeader name={'홈'}/>
 				<ScrollView
 					horizontal
-					style={{paddingHorizontal: 14, paddingBottom: 18}}
-					contentContainerStyle={{columnGap: 10}}
+					contentContainerStyle={{
+						columnGap: 10,
+						paddingVertical: 10,
+						paddingHorizontal: 14,
+					}}
 					showsHorizontalScrollIndicator={false}
+					style={styles.foodLifeTimeCardContainer}
 				>
 					<FoodLifeTimeCard emoji={'🍌'} name={'장원영'} quantity={2} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()}/>
 					<FoodLifeTimeCard emoji={'🍤'} name={'새우튀김'} lifeTime={date} quantity={28}/>
-					<View style={{width: 36}}/>
 				</ScrollView>
+				<View style={{...styles.section, marginBottom: 12}}>
+					<RecommendCTA/>
+				</View>
 				<View style={styles.content}>
 					<SectionContainer>
 						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'} showMoreButton/>
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 
-		backgroundColor: Colors['brand'],
+		backgroundColor: Colors['surface'],
 
 		paddingTop: HomePageStyle.paddingTop
 	},
@@ -119,6 +126,16 @@ const styles = StyleSheet.create({
 
 		borderTopStartRadius: 18,
 		borderTopEndRadius: 18,
+	},
+
+	foodLifeTimeCardContainer: {
+		backgroundColor: Colors['surfaceDim']
+	},
+
+	section: {
+		flex: 1,
+
+		paddingHorizontal: 22,
 	}
 })
 
