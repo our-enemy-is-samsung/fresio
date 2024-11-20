@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, ViewStyle} from "react-native";
 import React from "react";
 import Feather from '@expo/vector-icons/Feather';
 import TouchableRippleNative from "react-native-paper/src/components/TouchableRipple/TouchableRipple.native";
@@ -9,11 +9,12 @@ import {Colors} from "@/constants/Color";
 
 interface PageHeaderProps {
 	name: string;
+	style: ViewStyle;
 }
 
-const PageHeader = ({name}: PageHeaderProps) => {
+const PageHeader = ({name, style}: PageHeaderProps) => {
 	return (
-		<View style={styles.container}>
+		<View style={{...styles.container, ...style}}>
 			<View style={styles.statusContainer}>
 				<StyledText size={TextSize.HeadingLarge} color={'content'} style={{marginRight: 8}}>{name}</StyledText>
 				<View style={styles.status} />
