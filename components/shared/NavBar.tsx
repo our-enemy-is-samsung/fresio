@@ -16,13 +16,13 @@ function Item({icon, title, selected, onClick}: ItemProps) {
 	// cloneElement를 사용하여 icon의 fill을 변경
 	const modifiedIcon = cloneElement(icon, {
 		size: 25,
-		color: selected ? Colors['contentDim'] : Colors['contentSecondary'],
+		color: selected ? Colors['content'] : Colors['contentSecondary'],
 	});
 
 	return (
 		<TouchableOpacity style={styles.itemContainer} onPress={onClick} activeOpacity={0.7}>
 			{modifiedIcon}
-			<StyledText size={TextSize.LabelLarge} color={'contentDim'}>
+			<StyledText size={TextSize.LabelLarge} color={'content'}>
 				{title}
 			</StyledText>
 		</TouchableOpacity>
