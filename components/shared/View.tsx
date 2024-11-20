@@ -10,10 +10,16 @@ interface ViewProps {
 	style?: ViewStyle;
 	isSafeArea?: boolean;
 
-	paddingTop?: number;
-	paddingBottom?: number;
-	paddingLeft?: number;
-	paddingRight?: number;
+	mt?: number;
+	mb?: number;
+	ml?: number;
+	mr?: number;
+
+	// p
+	pt?: number;
+	pb?: number;
+	pl?: number;
+	pr?: number;
 }
 
 const StyledView: FC<ViewProps> = ({
@@ -21,17 +27,25 @@ const StyledView: FC<ViewProps> = ({
 	                                   backgroundColor,
 	                                   children,
 	                                   style,
-	                                   paddingTop,
-	                                   paddingBottom,
-	                                   paddingLeft,
-	                                   paddingRight
+	                                   mt,
+	                                   mb,
+	                                   ml,
+	                                   mr,
+	                                   pt,
+	                                   pb,
+	                                   pl,
+	                                   pr,
                                    }) => {
 	const viewStyle: ViewStyle = {
 		backgroundColor: backgroundColor ? Colors[backgroundColor] : 'transparent',
-		paddingTop,
-		paddingBottom,
-		paddingLeft,
-		paddingRight,
+		marginTop: mt,
+		marginBottom: mb,
+		marginLeft: ml,
+		marginRight: mr,
+		paddingTop: pt,
+		paddingBottom: pb,
+		paddingLeft: pl,
+		paddingRight: pr,
 		...style,
 	};
 
