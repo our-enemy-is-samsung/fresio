@@ -15,6 +15,7 @@ const NavBarTemplate = () => {
 		<NavBar>
 			<NavBar.Item icon={<Feather name="home"/>} title={'홈'} selected={currentRoute === 'index'} onClick={() => navigation.navigate('index')}/>
 			<NavBar.Item icon={<Feather name="grid"/>} title={'냉장고 음식'} selected={currentRoute === 'food/index'} onClick={() => navigation.navigate('food/index')}/>
+			<NavBar.Item icon={<Feather name="clock"/>} title={'타이머'} selected={currentRoute === 'timer/index'} onClick={() => navigation.navigate('timer/index')}/>
 		</NavBar>
 	)
 }
