@@ -9,11 +9,29 @@ interface ViewProps {
 	children?: ReactNode;
 	style?: ViewStyle;
 	isSafeArea?: boolean;
+
+	paddingTop?: number;
+	paddingBottom?: number;
+	paddingLeft?: number;
+	paddingRight?: number;
 }
 
-const StyledView: FC<ViewProps> = ({testID, backgroundColor, children, style}) => {
+const StyledView: FC<ViewProps> = ({
+	                                   testID,
+	                                   backgroundColor,
+	                                   children,
+	                                   style,
+	                                   paddingTop,
+	                                   paddingBottom,
+	                                   paddingLeft,
+	                                   paddingRight
+                                   }) => {
 	const viewStyle: ViewStyle = {
 		backgroundColor: backgroundColor ? Colors[backgroundColor] : 'transparent',
+		paddingTop,
+		paddingBottom,
+		paddingLeft,
+		paddingRight,
 		...style,
 	};
 
