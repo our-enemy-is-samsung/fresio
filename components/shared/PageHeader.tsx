@@ -5,18 +5,23 @@ import TouchableRippleNative from "react-native-paper/src/components/TouchableRi
 import StyledText from "@/components/shared/Text";
 import View from "@/components/shared/View";
 import {TextSize} from "@/enums/TextSize";
+import {Colors} from "@/constants/Color";
+import Logo from "@/assets/images/Logo";
 
 interface PageHeaderProps {
 	name: string;
 }
 
 const PageHeader = ({name}: PageHeaderProps) => {
-
 	return (
 		<View style={styles.container}>
-			<StyledText size={TextSize.TitleSmall} color={'container'} style={{top: -4}}>{name}</StyledText>
+			<View style={styles.statusContainer}>
+				<StyledText size={TextSize.HeadingLarge} color={'content'} style={{marginRight: 8}}>{name}</StyledText>
+				<View style={styles.status} />
+				<StyledText size={TextSize.BodySmall} color={'brandDark'}>연결됨</StyledText>
+			</View>
 			<TouchableRippleNative style={styles.touchable} onPress={() => console.log('asd')}>
-				<Feather name="settings" size={22} color="white" />
+				<Feather name="settings" size={21} color={Colors['content']} />
 			</TouchableRippleNative>
 		</View>
 	)
@@ -30,14 +35,23 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-
-		backgroundColor: 'transparent',
 	},
 	touchable: {
 		padding: 8,
 
-		top: -4,
 		right: -4,
+	},
+	statusContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 6,
+	},
+	status: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+
+		backgroundColor: Colors['brand'],
 	}
 });
 
