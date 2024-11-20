@@ -1,13 +1,13 @@
 import React from "react";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
-import {StyleSheet} from "react-native";
+import {StyleSheet, ViewStyle} from "react-native";
 import {Row} from "@/components/shared/Row";
 
-const SectionTitle = ({title, showMoreButton}: {title: string, showMoreButton?: boolean}) => {
+const SectionTitle = ({title, showMoreButton, style}: {title: string, showMoreButton?: boolean, style: ViewStyle}) => {
 	return (
-		<Row style={styles.container}>
-			<StyledText size={TextSize.BodyLarge} color={'content'}>{title}</StyledText>
+		<Row style={{...styles.container, ...style}}>
+			<StyledText size={TextSize.HeadingSmall} color={'content'}>{title}</StyledText>
 			{showMoreButton && <StyledText size={TextSize.BodySmall} color={'contentDim'} style={{textDecorationLine: 'underline'}}>더보기</StyledText>}
 		</Row>
 	)
