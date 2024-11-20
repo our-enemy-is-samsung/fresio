@@ -6,7 +6,6 @@ import StyledText from "@/components/shared/Text";
 import View from "@/components/shared/View";
 import {TextSize} from "@/enums/TextSize";
 import {Colors} from "@/constants/Color";
-import Logo from "@/assets/images/Logo";
 
 interface PageHeaderProps {
 	name: string;
@@ -29,8 +28,12 @@ const PageHeader = ({name}: PageHeaderProps) => {
 
 const styles = StyleSheet.create({
 	container: {
+		width: '100%',
+
 		paddingHorizontal: 22,
 		paddingVertical: 10,
+
+		backgroundColor: Colors['surface'],
 
 		flexDirection: 'row',
 		justifyContent: 'space-between',
