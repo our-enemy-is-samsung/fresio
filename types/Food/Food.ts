@@ -5,7 +5,7 @@ export interface FoodLifeTimeType {
 	quantity: number;
 }
 
-export enum RecipeDifficultyType {
+export enum RecipeDifficulty {
 	EASY = 'EASY',
 	NORMAL = 'NORMAL',
 	HARD = 'HARD',
