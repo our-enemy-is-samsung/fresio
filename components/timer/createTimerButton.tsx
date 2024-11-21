@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, TouchableOpacity} from "react-native";
 import React from "react";
 import {TouchableRipple} from "react-native-paper";
 import {Row} from "@/components/shared/Row";
@@ -13,21 +13,21 @@ interface CreateTimerButtonProps {
 
 const CreateTimerButton = ({onPress}: CreateTimerButtonProps) => {
 	return (
-		<TouchableRipple
+		<TouchableOpacity
 			style={styles.container}
 			onPress={onPress}
 		>
 			<Row style={{gap: 4}}>
-				<Ionicons name="add" size={20} color={Colors['contentDim']}/>
-				<StyledText size={TextSize.ContentSmall} color={'contentDim'}>타이머 추가하기</StyledText>
+				<Ionicons name="add" size={20} color={Colors['container']}/>
+				<StyledText size={TextSize.ContentSmall} color={'container'}>타이머 추가하기</StyledText>
 			</Row>
-		</TouchableRipple>
+		</TouchableOpacity>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: Colors['containerDark'],
+		backgroundColor: Colors['content'],
 
 		borderRadius: 9999,
 
