@@ -226,6 +226,8 @@ const PageTimerDetail = () => {
 				visible={showEditModal}
 				onClose={() => setShowEditModal(false)}
 				onEdit={handleEdit}
+				initialEmoji={mockTimer.emoji}
+				initialName={mockTimer.name}
 			/>
 		</>
 	);
