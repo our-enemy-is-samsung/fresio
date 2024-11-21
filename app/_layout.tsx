@@ -31,51 +31,52 @@ const MyDefaultTheme: Theme = {
 };
 
 function RootLayoutNav({onLayout}: RootLayoutNavProps) {
-    const {toasts} = useToastStore();
+	const {toasts} = useToastStore();
 
-    return (
-        <GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
-            <ThemeProvider value={MyDefaultTheme}>
-                <Stack
-                    initialRouteName="index"
-                    screenOptions={{
-                        headerShown: false,
-                    }}
-                >
-                    <Stack.Screen name="index" options={{animation: 'none'}}/>
-                    <Stack.Screen name="food/index" options={{animation: 'none'}}/>
-                    <Stack.Screen name="timer/index" options={{animation: 'none'}}/>
-                    <Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
-                    <Stack.Screen name="timer/create"/>
-                </Stack>
-            </ThemeProvider>
-            <View
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    pointerEvents: 'box-none'
-                }}
-            >
-                {toasts.map((toast, index) => (
-                    <View
-                        key={toast.id}
-                        style={{
-                            marginTop: 30 + (index * 30),
-                            marginHorizontal: 10,
-                        }}
-                    >
-                        <Toast
-                            text={toast.text}
-                            duration={toast.duration}
-                            type={toast.type}
-                        />
-                    </View>
-                ))}
-            </View>
-        </GestureHandlerRootView>
-    );
+	return (
+		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
+			<ThemeProvider value={MyDefaultTheme}>
+				<Stack
+					initialRouteName="index"
+					screenOptions={{
+						headerShown: false,
+					}}
+				>
+					<Stack.Screen name="index" options={{animation: 'none'}}/>
+					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/create"/>
+					<Stack.Screen name="timer/detail/[id]"/>
+				</Stack>
+			</ThemeProvider>
+			<View
+				style={{
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					right: 0,
+					pointerEvents: 'box-none'
+				}}
+			>
+				{toasts.map((toast, index) => (
+					<View
+						key={toast.id}
+						style={{
+							marginTop: 30 + (index * 30),
+							marginHorizontal: 10,
+						}}
+					>
+						<Toast
+							text={toast.text}
+							duration={toast.duration}
+							type={toast.type}
+						/>
+					</View>
+				))}
+			</View>
+		</GestureHandlerRootView>
+	);
 }
 
 export default function RootLayout() {

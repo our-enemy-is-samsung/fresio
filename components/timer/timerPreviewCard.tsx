@@ -9,39 +9,35 @@ import View from "@/components/shared/View";
 import getTimerRandomBackgroundColor from "@/utils/timer/getRandomBackgroundColor";
 import {Row} from "@/components/shared/Row";
 import {minNumberToTime} from "@/utils/minNumberToTime";
+import {router, useNavigation} from "expo-router";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {ParamListBase} from "@react-navigation/native";
 
 interface TimerPreviewCardProps {
+	id: string;
 	emoji: string;
 	timerName: string;
 	jobCount: number;
 	duration: number;
 }
 
-const TimerPreviewCard = ({emoji, timerName, duration, jobCount}: TimerPreviewCardProps) => {
+const TimerPreviewCard = ({id, emoji, timerName, duration, jobCount}: TimerPreviewCardProps) => {
 	const size = Dimensions.get('window').width / 2 - 22 - 5;
-
 	return (
 		<TouchableRipple
-			style={{
-				...styles.container,
+			style={[styles.container, {
 				width: size,
 				height: 160,
-				backgroundColor: Colors['surface'],
-			}}
-			onPress={() => {
-			}}
+			}]}
+			onPress={() => router.push(`/timer/detail/${id}`)}
+			rippleColor="rgba(0, 0, 0, .20)"
 			android_ripple={{
-				radius: 22,
+				radius: 12,
 			}}
 			borderless
 		>
-			<>
-				<View
-					style={{
-						...styles.strip,
-						backgroundColor: getTimerRandomBackgroundColor(),
-					}}
-				/>
+			<View style={{flex: 1}}>
+				<View style={{...styles.strip, backgroundColor: getTimerRandomBackgroundColor()}}/>
 				<Column style={styles.content}>
 					<Row style={{gap: 6}}>
 						<Text style={{fontSize: 16}}>{emoji}</Text>
@@ -52,17 +48,21 @@ const TimerPreviewCard = ({emoji, timerName, duration, jobCount}: TimerPreviewCa
 							<StyledText
 								size={TextSize.BodySmall}
 								color={'contentSecondary'}
-							>{jobCount}개 작업</StyledText>
+							>
+								{jobCount}개 작업
+							</StyledText>
 						)}
 						{duration && (
 							<StyledText
 								size={TextSize.HeadingLarge}
 								color={'contentDim'}
-							>{minNumberToTime(duration)}</StyledText>
+							>
+								{minNumberToTime(duration)}
+							</StyledText>
 						)}
 					</Column>
 				</Column>
-			</>
+			</View>
 		</TouchableRipple>
 	)
 }
@@ -74,12 +74,16 @@ const styles = StyleSheet.create({
 		display: 'flex',
 
 		borderWidth: 1,
-		borderColor: Colors['containerDark'],
+		borderColor: Colors['surface'],
+		backgroundColor: Colors.surface
 	},
 
 	strip: {
 		width: '100%',
 		height: 8,
+
+		borderTopRightRadius: 12,
+		borderTopLeftRadius: 12,
 	},
 
 	content: {
@@ -89,18 +93,6 @@ const styles = StyleSheet.create({
 
 		justifyContent: 'space-between',
 	},
-
-	// playButton: {
-	// 	backgroundColor: Colors['content'],
-	//
-	// 	borderRadius: 9999,
-	//
-	// 	display: 'flex',
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	//
-	// 	paddingVertical: 12,
-	// }
-});
+})
 
 export default TimerPreviewCard

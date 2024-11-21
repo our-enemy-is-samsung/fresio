@@ -32,12 +32,14 @@ const PageTime = () => {
 						>
 							<Row style={{flexWrap: 'wrap', gap: 10}}>
 								<TimerPreviewCard
+									id={'1'}
 									emoji={'🍅'}
 									timerName={'토마토 찜'}
 									jobCount={1}
 									duration={10}
 								/>
 								<TimerPreviewCard
+									id={'2'}
 									emoji={'🍆'}
 									timerName={'가지 볶음'}
 									jobCount={2}
