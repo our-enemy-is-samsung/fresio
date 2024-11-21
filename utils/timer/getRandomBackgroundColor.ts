@@ -1,5 +1,14 @@
+import {TimerColor} from "@/enums/TimerColor";
+
 export default function getTimerRandomBackgroundColor(): string {
-	const colors = ['#12B76A', '#F4902F', '#B74D12', '#12B7AD', '#1272B7', '#A134B3'];
+	const colors = [
+		TimerColor.Red,
+		TimerColor.Orange,
+		TimerColor.Green,
+		TimerColor.Mint,
+		TimerColor.Blue,
+		TimerColor.Purple,
+	];
 
 	return colors[Math.floor(Math.random() * colors.length)];
 }
