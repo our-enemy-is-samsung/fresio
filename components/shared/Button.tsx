@@ -56,6 +56,7 @@ const StyledButton = ({
 		buttonStyle = {
 			...buttonStyle,
 			backgroundColor: Colors['containerDarker'],
+			color: 'contentDim',
 			opacity: 0.5,
 		};
 	}
