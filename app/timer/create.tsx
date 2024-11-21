@@ -20,9 +20,11 @@ import {ButtonSize, ButtonStyle} from "@/types/Button";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import TimerStepModal from "@/components/timer/TimerStepCreateModal";
 import TimerStepPreviewNothing from "@/components/timer/TimerStepPreviewNoting";
+import useToastStore from "@/state/toast";
 
 const PageTimerCreate = () => {
 	const inset = useSafeAreaInsets();
+	const {addToast} = useToastStore();
 	const TimerColorList = [
 		TimerColor.Red,
 		TimerColor.Orange,
@@ -64,7 +66,8 @@ const PageTimerCreate = () => {
 	};
 
 	const handleCreateTimer = () => {
-		// Add your timer creation logic here
+		if(timerName.trim().length === 0) return addToast('타이머 이름을 입력해주세요', 'error')
+		if(timerStep.length === 0) return addToast('타이머 단계를 추가해주세요', 'error')
 		if (!isCreateButtonDisabled) {
 			// Process timer creation
 			console.log('Creating timer:', {

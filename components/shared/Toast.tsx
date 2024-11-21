@@ -1,4 +1,4 @@
-import {StyleSheet, StyleSheetProperties} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 import {AnimatePresence, MotiView} from 'moti';
 import {useEffect, useState} from 'react';
 import {Feather} from '@expo/vector-icons';
@@ -6,37 +6,57 @@ import {Colors} from "@/constants/Color";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import {Row} from "@/components/shared/Row";
+import {IColorToken} from "@/types/Color";
 
 type ToastType = 'info' | 'success' | 'error' | 'warn';
+
+interface ToastConfig {
+	bg: keyof IColorToken;
+	color: string;
+	icon: keyof typeof Feather.glyphMap;
+}
 
 interface ToastProps {
 	text: string;
 	type?: ToastType;
 	duration: number;
-	style?: StyleSheetProperties;
+	style?: ViewStyle;
 	onDismiss?: () => void;
 }
 
-const getToastConfig = (type: ToastType) => {
-	const config = {
+function toastTypeToColor(type: ToastType): keyof IColorToken {
+	switch (type) {
+		case 'info':
+			return 'contentDim';
+		case 'success':
+			return 'success';
+		case 'error':
+			return 'error';
+		case 'warn':
+			return 'brandDark';
+	}
+}
+
+const getToastConfig = (type: ToastType): ToastConfig => {
+	const config: Record<ToastType, ToastConfig> = {
 		info: {
-			bg: Colors.containerDark,
-			color: 'contentDim',
+			bg: 'contentDim',
+			color: Colors.containerDark,
 			icon: 'info'
 		},
 		success: {
-			bg: Colors.successBackground,
-			color: 'success',
+			bg: 'success',
+			color: Colors.successBackground,
 			icon: 'check-circle'
 		},
 		error: {
-			bg: Colors.errorBackground,
-			color: 'error',
+			bg: 'error',
+			color: Colors.errorBackground,
 			icon: 'alert-circle'
 		},
 		warn: {
-			bg: Colors.brandContainer,
-			color: 'brandDark',
+			bg: 'brandDark',
+			color: Colors.brandContainer,
 			icon: 'alert-triangle'
 		}
 	};
@@ -57,7 +77,9 @@ export default function Toast({
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setIsVisible(false);
-			setTimeout(onDismiss, 300);
+			if (onDismiss) {
+				setTimeout(onDismiss, 300);
+			}
 		}, duration);
 
 		return () => clearTimeout(timeout);
@@ -82,15 +104,15 @@ export default function Toast({
 					}}
 					style={[
 						styles.container,
-						{backgroundColor: config.bg},
+						{backgroundColor: Colors[config.bg]},
 						style,
 					]}
 				>
 					<Row style={styles.content}>
-						<Feather name={config.icon} size={20} color={Colors[config.color]}/>
+						<Feather name={config.icon} size={20} color={config.color}/>
 						<StyledText
 							size={TextSize.BodySmall}
-							color={config.color}
+							style={{color: config.color}}
 						>
 							{text}
 						</StyledText>

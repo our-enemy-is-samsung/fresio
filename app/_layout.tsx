@@ -3,7 +3,7 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
-import {LayoutChangeEvent,} from "react-native";
+import {LayoutChangeEvent, View,} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/constants/Color";
 import Toast from "@/components/shared/Toast";
@@ -31,50 +31,54 @@ const MyDefaultTheme: Theme = {
 };
 
 function RootLayoutNav({onLayout}: RootLayoutNavProps) {
-	const {toasts} = useToastStore();
-	return (
-		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
-			<ThemeProvider value={MyDefaultTheme}>
-				<Stack
-					initialRouteName="index"
-					screenOptions={{
-						headerShown: false,
-					}}
-				>
-					<Stack.Screen name="index" options={{animation: 'none'}}/>
-					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
+    const {toasts} = useToastStore();
 
-					<Stack.Screen name="timer/create"/>
-				</Stack>
-			</ThemeProvider>
-			{
-				toasts.map((toast) => (
-					<Toast text={toast.text} duration={toast.duration} type={toast.type} key={toast.id}/>
-				))
-			}
-		</GestureHandlerRootView>
-	);
+    return (
+        <GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
+            <ThemeProvider value={MyDefaultTheme}>
+                <Stack
+                    initialRouteName="index"
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen name="index" options={{animation: 'none'}}/>
+                    <Stack.Screen name="food/index" options={{animation: 'none'}}/>
+                    <Stack.Screen name="timer/index" options={{animation: 'none'}}/>
+                    <Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
+                    <Stack.Screen name="timer/create"/>
+                </Stack>
+            </ThemeProvider>
+            <View
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    pointerEvents: 'box-none'
+                }}
+            >
+                {toasts.map((toast, index) => (
+                    <View
+                        key={toast.id}
+                        style={{
+                            marginTop: 30 + (index * 30),
+                            marginHorizontal: 10,
+                        }}
+                    >
+                        <Toast
+                            text={toast.text}
+                            duration={toast.duration}
+                            type={toast.type}
+                        />
+                    </View>
+                ))}
+            </View>
+        </GestureHandlerRootView>
+    );
 }
 
-// async function checkForUpdates() {
-// 	try {
-// 		const update = await Updates.checkForUpdateAsync();
-// 		if (update.isAvailable) {
-// 			await Updates.fetchUpdateAsync();
-// 			await Updates.reloadAsync();
-// 		}
-// 	} catch (error) {
-// 		console.error('Error checking for updates:', error);
-// 	}
-// }
-
 export default function RootLayout() {
-	// useEffect(() => {
-	// 	checkForUpdates();
-	// }, []);
-
 	const [fontsLoaded, fontError] = useFonts({
 		'PretendardBold': require('../assets/fonts/Pretendard-Bold.otf'),
 		'PretendardMedium': require('../assets/fonts/Pretendard-Medium.otf'),
