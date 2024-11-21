@@ -1,6 +1,6 @@
 import {FlatList, Pressable, StyleSheet, TextInput} from "react-native";
 import {Colors} from "@/constants/Color";
-import {useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import View from "@/components/shared/View";
@@ -21,8 +21,13 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import TimerStepModal from "@/components/timer/TimerStepCreateModal";
 import TimerStepPreviewNothing from "@/components/timer/TimerStepPreviewNoting";
 import useToastStore from "@/state/toast";
+import TimerCreatedModal from "@/components/timer/TimerCreatedModal";
+import {useNavigation} from "expo-router";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {ParamListBase} from "@react-navigation/native";
 
 const PageTimerCreate = () => {
+	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 	const inset = useSafeAreaInsets();
 	const {addToast} = useToastStore();
 	const TimerColorList = [
@@ -40,6 +45,7 @@ const PageTimerCreate = () => {
 	const [showEmojiSelector, setShowEmojiSelector] = useState(false);
 	const [timerStep, setTimerStep] = useState<TimerStepType[]>([]);
 	const [showStepModal, setShowStepModal] = useState(false);
+	const [showCreatedModal, setShowCreatedModal] = useState(false);
 
 	const isCreateButtonDisabled = useMemo(() => {
 		// Validate timer name (at least 1 character)
@@ -66,8 +72,8 @@ const PageTimerCreate = () => {
 	};
 
 	const handleCreateTimer = () => {
-		if(timerName.trim().length === 0) return addToast('타이머 이름을 입력해주세요', 'error')
-		if(timerStep.length === 0) return addToast('타이머 단계를 추가해주세요', 'error')
+		if (timerName.trim().length === 0) return addToast('타이머 이름을 입력해주세요', 'error')
+		if (timerStep.length === 0) return addToast('타이머 단계를 추가해주세요', 'error')
 		if (!isCreateButtonDisabled) {
 			// Process timer creation
 			console.log('Creating timer:', {
@@ -76,6 +82,7 @@ const PageTimerCreate = () => {
 				emoji: selectedEmoji,
 				steps: timerStep
 			});
+			 setShowCreatedModal(true);
 		}
 	};
 
@@ -201,6 +208,14 @@ const PageTimerCreate = () => {
 				visible={showStepModal}
 				onClose={() => setShowStepModal(false)}
 				onSubmit={handleAddStep}
+			/>
+			<TimerCreatedModal
+				visible={showCreatedModal}
+				onClose={() => navigation.navigate('timer/index')}
+				name={timerName}
+				emoji={selectedEmoji}
+				color={color}
+				steps={timerStep}
 			/>
 		</>
 	)

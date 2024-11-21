@@ -112,6 +112,7 @@ export default function Toast({
 						<Feather name={config.icon} size={20} color={config.color}/>
 						<StyledText
 							size={TextSize.BodySmall}
+							color={config.bg === 'contentDim' ? 'content' : 'contentDim'}
 							style={{color: config.color}}
 						>
 							{text}
