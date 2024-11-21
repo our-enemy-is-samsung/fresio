@@ -3,9 +3,11 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
-import {LayoutChangeEvent, } from "react-native";
+import {LayoutChangeEvent,} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/constants/Color";
+import Toast from "@/components/shared/Toast";
+import useToastStore from "@/state/toast";
 // import * as Updates from 'expo-updates';
 
 export {
@@ -29,6 +31,7 @@ const MyDefaultTheme: Theme = {
 };
 
 function RootLayoutNav({onLayout}: RootLayoutNavProps) {
+	const {toasts} = useToastStore();
 	return (
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={MyDefaultTheme}>
@@ -43,9 +46,14 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
 					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
 
-					<Stack.Screen name="timer/create" />
+					<Stack.Screen name="timer/create"/>
 				</Stack>
 			</ThemeProvider>
+			{
+				toasts.map((toast) => (
+					<Toast text={toast.text} duration={toast.duration} type={toast.type} key={toast.id}/>
+				))
+			}
 		</GestureHandlerRootView>
 	);
 }
