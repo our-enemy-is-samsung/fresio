@@ -1,4 +1,4 @@
-import {TextStyle, ViewStyle} from 'react-native';
+import {TextStyle, TouchableOpacity, ViewStyle} from 'react-native';
 import {ReactNode} from 'react';
 import {TouchableRipple} from "react-native-paper";
 import {ButtonSize, ButtonStyle} from "@/types/Button";
@@ -31,7 +31,7 @@ const StyledButton = ({
 	                      children,
 	                      align = 'center',
 	                      onPress,
-	                      disabled,
+	                      disabled = false,
 	                      buttonStyles
                       }: ButtonProps) => {
 	
@@ -61,17 +61,16 @@ const StyledButton = ({
 	}
 
 	return (
-		<TouchableRipple
-			testID={'button_view'}
+		<TouchableOpacity
 			style={{
 				...buttonStyle,
 			}}
 			onPress={onPress}
 			disabled={disabled}
 		>
-			<StyledText color={getButtonColor(style).color} size={TextSize.BodySmall}
+			<StyledText color={buttonStyle.color} size={TextSize.BodySmall}
 			            style={{fontSize: buttonStyle.fontSize}}>{children}</StyledText>
-		</TouchableRipple>
+		</TouchableOpacity>
 	);
 };
 
