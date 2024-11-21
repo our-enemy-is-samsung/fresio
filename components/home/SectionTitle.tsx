@@ -13,11 +13,17 @@ interface SectionTitleProps {
 
 	titleColor?: keyof typeof Colors;
 	onPress?: () => void;
+
+	noPadding?: boolean;
 }
 
-const SectionTitle = ({title, showMoreButton, style, titleColor = 'content', onPress}: SectionTitleProps) => {
+const SectionTitle = ({title, showMoreButton, style, titleColor = 'content', onPress, noPadding}: SectionTitleProps) => {
 	return (
-		<Row style={{...styles.container, ...style}}>
+		<Row style={{
+			...styles.container,
+			...style,
+			...(noPadding ? {paddingHorizontal: 0} : {})
+		}}>
 			<StyledText size={TextSize.BodyLarge} color={titleColor}>{title}</StyledText>
 			{showMoreButton && (
 				<TouchableOpacity onPress={onPress} style={styles.button}>
