@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import {SafeAreaView, ScrollView, StatusBar, StyleSheet} from "react-native";
 import NavBarTemplate from "@/components/template/NavBarTemplate";
 import React from "react";
 import PageHeader from "@/components/shared/PageHeader";
@@ -8,15 +8,22 @@ import {HomePageStyle} from "@/constants/Home/HomeStyle";
 import CreateTimerButton from "@/components/timer/createTimerButton";
 import TimerPreviewCard from "@/components/timer/timerPreviewCard";
 import {Row} from "@/components/shared/Row";
+import {useNavigation} from "expo-router";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {ParamListBase} from "@react-navigation/native";
 
 const PageTime = () => {
+	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
 	return (
 		<>
+			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']} />
 			<SafeAreaView style={styles.container}>
 				<PageHeader name={'타이머'} style={{marginTop: 10}}/>
 				<ScrollView style={{flex: 1}}>
 					<View style={styles.section} mt={20}>
 						<CreateTimerButton onPress={() => {
+							navigation.navigate('timer/create')
 						}}/>
 
 						<View style={{height: 20}}/>
