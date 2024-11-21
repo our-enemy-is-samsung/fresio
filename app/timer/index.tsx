@@ -13,7 +13,7 @@ const PageTime = () => {
 	return (
 		<>
 			<SafeAreaView style={styles.container}>
-				<PageHeader name={'타이머'}/>
+				<PageHeader name={'타이머'} style={{marginTop: 10}}/>
 				<ScrollView style={{flex: 1}}>
 					<View style={styles.section} mt={20}>
 						<CreateTimerButton onPress={() => {
@@ -22,14 +22,20 @@ const PageTime = () => {
 						<View style={{height: 20}}/>
 						<ScrollView
 							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={{gap: 12}}
 						>
 							<Row style={{flexWrap: 'wrap', gap: 10}}>
-								<TimerPreviewCard/>
-								<TimerPreviewCard/>
-								<TimerPreviewCard/>
-								<TimerPreviewCard/>
-								<TimerPreviewCard/>
+								<TimerPreviewCard
+									emoji={'🍅'}
+									timerName={'토마토 찜'}
+									jobCount={1}
+									duration={10}
+								/>
+								<TimerPreviewCard
+									emoji={'🍆'}
+									timerName={'가지 볶음'}
+									jobCount={2}
+									duration={20}
+								/>
 							</Row>
 						</ScrollView>
 					</View>
@@ -45,7 +51,7 @@ const styles = StyleSheet.create({
 	container: {
 		height: '100%',
 
-		backgroundColor: Colors['surface'],
+		backgroundColor: Colors['surfaceDim'],
 
 		paddingTop: HomePageStyle.paddingTop,
 	},
