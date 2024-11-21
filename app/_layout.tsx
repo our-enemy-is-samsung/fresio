@@ -48,6 +48,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
 					<Stack.Screen name="timer/create"/>
 					<Stack.Screen name="timer/detail/[id]"/>
+					<Stack.Screen name="food/detail/[id]"/>
 				</Stack>
 			</ThemeProvider>
 			<View
