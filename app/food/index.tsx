@@ -10,12 +10,23 @@ import {Colors} from "@/constants/Color";
 import {HomePageStyle} from "@/constants/Home/HomeStyle";
 import {Row} from "@/components/shared/Row";
 import SortButton from "@/components/food/sortButton";
+import ExpandableFAB from "@/components/food/FoodAddFAB";
 
 const PageFood = () => {
 	const date = new Date();
 	date.setDate(date.getDate() - 3);
 
 	const [sorted, setSorted] = useState<'expired' | 'updateAt'>('expired');
+
+	const handleCameraPress = () => {
+		console.log('Camera button pressed');
+		// 카메라 관련 로직 구현
+	};
+
+	const handleFormPress = () => {
+		console.log('Form button pressed');
+		// 폼 입력 관련 로직 구현
+	};
 
 	return (
 		<>
@@ -42,6 +53,10 @@ const PageFood = () => {
 					<View style={{height: 100}}/>
 				</ScrollView>
 			</SafeAreaView>
+			<ExpandableFAB
+				onCameraPress={handleCameraPress}
+				onFormPress={handleFormPress}
+			/>
 			<NavBarTemplate/>
 		</>
 	)

@@ -20,7 +20,15 @@ const PageHeader = ({name, style}: PageHeaderProps) => {
 				<View style={styles.status} />
 				<StyledText size={TextSize.BodySmall} color={'brandDark'}>연결됨</StyledText>
 			</View>
-			<TouchableRippleNative style={styles.touchable} onPress={() => console.log('asd')}>
+			<TouchableRippleNative
+				style={styles.touchable}
+				onPress={() => console.log('asd')}
+				android_ripple={{
+					radius: 18,
+				}}
+				borderless
+				 rippleColor="rgba(0, 0, 0, .1)"
+			>
 				<Feather name="settings" size={21} color={Colors['content']} />
 			</TouchableRippleNative>
 		</View>
@@ -44,6 +52,8 @@ const styles = StyleSheet.create({
 		padding: 8,
 
 		right: -4,
+
+		borderRadius: 18,
 	},
 	statusContainer: {
 		flexDirection: 'row',
