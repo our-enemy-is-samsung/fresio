@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
 
 	header: {
 		paddingHorizontal: 22,
-		paddingVertical: 5,
+		paddingVertical: 8,
+		marginTop: 2,
 
 		justifyContent: 'space-between',
 		alignItems: 'center',
