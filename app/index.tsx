@@ -16,7 +16,6 @@ import SearchBarCategory from "@/components/home/searchBarCategory";
 import {useNavigation} from "expo-router";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {ParamListBase} from "@react-navigation/native";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const HomeScreen = () => {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -27,7 +26,7 @@ const HomeScreen = () => {
 		<>
 			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']}/>
 			<SafeAreaView  style={styles.container}>
-				<PageHeader name={'홈'}/>
+				<PageHeader name={'홈'} style={{marginTop: 10}}/>
 				<ScrollView style={{flex: 1}}>
 					<SectionTitle
 						title={'소비기한 임박 재료'}

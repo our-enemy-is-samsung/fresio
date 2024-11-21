@@ -20,7 +20,7 @@ const PageFood = () => {
 	return (
 		<>
 			<SafeAreaView style={styles.container}>
-				<PageHeader name={'냉장고 재료'}/>
+				<PageHeader name={'냉장고 재료'} style={{marginTop: 10}}/>
 				<ScrollView style={{flex: 1}}>
 					<Row style={styles.header}>
 						<StyledText size={TextSize.BodyLarge} color={'contentDim'}>재료 38개</StyledText>
