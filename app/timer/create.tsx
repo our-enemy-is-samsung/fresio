@@ -25,6 +25,7 @@ import TimerCreatedModal from "@/components/timer/TimerCreatedModal";
 import {useNavigation} from "expo-router";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {ParamListBase} from "@react-navigation/native";
+import TimerStepEditModal from "@/components/timer/TimerStepEditModal";
 
 const PageTimerCreate = () => {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -46,15 +47,11 @@ const PageTimerCreate = () => {
 	const [timerStep, setTimerStep] = useState<TimerStepType[]>([]);
 	const [showStepModal, setShowStepModal] = useState(false);
 	const [showCreatedModal, setShowCreatedModal] = useState(false);
+	const [editingStep, setEditingStep] = useState<{ index: number, step: TimerStepType } | null>(null);
 
 	const isCreateButtonDisabled = useMemo(() => {
-		// Validate timer name (at least 1 character)
 		const isNameValid = timerName.trim().length > 0;
-
-		// Validate timer steps (at least 1 step)
 		const hasSteps = timerStep.length > 0;
-
-		// Validate each step has valid duration and recipe
 		const areStepsValid = timerStep.every(step => {
 			return step.hours > 0 || step.minutes > 0;
 		});
@@ -71,18 +68,34 @@ const PageTimerCreate = () => {
 		}]);
 	};
 
+	const handleDeleteStep = (index: number) => {
+		setTimerStep(prev => prev.filter((_, i) => i !== index));
+	};
+
+	const handleEditStep = (index: number, hours: number, minutes: number, recipe: string) => {
+		setTimerStep(prev => {
+			const newSteps = [...prev];
+			newSteps[index] = {
+				...newSteps[index],
+				hours,
+				minutes,
+				recipe
+			};
+			return newSteps;
+		});
+	};
+
 	const handleCreateTimer = () => {
 		if (timerName.trim().length === 0) return addToast('타이머 이름을 입력해주세요', 'error')
 		if (timerStep.length === 0) return addToast('타이머 단계를 추가해주세요', 'error')
 		if (!isCreateButtonDisabled) {
-			// Process timer creation
 			console.log('Creating timer:', {
 				name: timerName,
 				color,
 				emoji: selectedEmoji,
 				steps: timerStep
 			});
-			 setShowCreatedModal(true);
+			setShowCreatedModal(true);
 		}
 	};
 
@@ -142,13 +155,15 @@ const PageTimerCreate = () => {
 					gap: 12
 				}}>
 					{timerStep.length > 0 ? (
-						timerStep.map((step) => (
+						timerStep.map((step, index) => (
 							<TimerStepPreview
 								key={step.id}
 								hour={step.hours}
 								minute={step.minutes}
 								titleColor={color}
 								recife={step.recipe}
+								onEdit={() => setEditingStep({index, step})}
+								onDelete={() => handleDeleteStep(index)}
 							/>
 						))
 					) : (
@@ -209,6 +224,7 @@ const PageTimerCreate = () => {
 				onClose={() => setShowStepModal(false)}
 				onSubmit={handleAddStep}
 			/>
+
 			<TimerCreatedModal
 				visible={showCreatedModal}
 				onClose={() => navigation.navigate('timer/index')}
@@ -216,6 +232,20 @@ const PageTimerCreate = () => {
 				emoji={selectedEmoji}
 				color={color}
 				steps={timerStep}
+			/>
+
+			<TimerStepEditModal
+				visible={!!editingStep}
+				onClose={() => setEditingStep(null)}
+				onSubmit={(hours, minutes, recipe) => {
+					if (editingStep) {
+						handleEditStep(editingStep.index, hours, minutes, recipe);
+						setEditingStep(null);
+					}
+				}}
+				initialHours={editingStep?.step.hours ?? 0}
+				initialMinutes={editingStep?.step.minutes ?? 0}
+				initialRecipe={editingStep?.step.recipe}
 			/>
 		</>
 	)
