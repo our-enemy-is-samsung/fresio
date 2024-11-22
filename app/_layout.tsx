@@ -54,6 +54,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen name="timer/detail/[id]"/>
 					<Stack.Screen name="food/detail/[id]"/>
 					<Stack.Screen name="search/index"/>
+					<Stack.Screen name="recipe/[id]" />
 				</Stack>
 			</ThemeProvider>
 			<View
