@@ -15,23 +15,23 @@ interface RecommendRecipeCardProps {
 	cookingTime: number;
 }
 
+export function foodDifficutyToKorean(difficulty: RecipeDifficulty) {
+	switch (difficulty) {
+		case RecipeDifficulty.EASY:
+			return '초보도 가능해요';
+		case RecipeDifficulty.NORMAL:
+			return '조금 어려워요';
+		case RecipeDifficulty.HARD:
+			return '어려울 수 있어요';
+	}
+}
+
 const RecommendRecipeCard = ({
 	                             imageSrc,
 	                             recipeName,
 	                             difficulty,
 	                             cookingTime
                              }: RecommendRecipeCardProps) => {
-	function difficutyToKorean(difficulty: RecipeDifficulty) {
-		switch (difficulty) {
-			case RecipeDifficulty.EASY:
-				return '초보도 가능해요';
-			case RecipeDifficulty.NORMAL:
-				return '조금 어려워요';
-			case RecipeDifficulty.HARD:
-				return '어려울 수 있어요';
-		}
-	}
-
 	return (
 		<Pressable style={styles.container}>
 			{/* 이미지 */}
@@ -60,7 +60,7 @@ const RecommendRecipeCard = ({
 							size={TextSize.HeadingSmall}
 							color={'contentSecondary'}
 						>
-							{difficutyToKorean(difficulty) || '불러올 수 없음'}
+							{foodDifficutyToKorean(difficulty) || '불러올 수 없음'}
 						</StyledText>
 					</View>
 					<View style={styles.detail}>

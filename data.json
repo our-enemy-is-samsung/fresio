@@ -1,77 +1,72 @@
+// Recipe Detail
 {
     "data": {
-        "ingredient": [
+        "name": "김치찌개",
+        "description": "김치찌개는 한국의 전통 음식 중 하나로, 김치와 돼지고기를 주재료로 하는 찌개이다. 김치찌개는 김치와 돼지고기를 주재료로 하며, 두 재료를 함께 끓여내면서 각종 야채나 고기를 넣어 만든다. 김치찌개는 김치와 돼지고기를 주재료로 하며, 두 재료를 함께 끓여내면서 각종 야채나 고기를 넣어 만든다.",
+        "thumbnail": "https://recipe1.ezmember.co.kr/cache/recipe/2022/08/10/f5e0b95c2ca77f31083a04c21ff50a741.jpg",
+        "estimatedTime": 30,
+        servings: 4, // 인분
+        "ingredients": [
             {
-                "id": "1",
-                "name": "토마토",
-                "createdAt": "2021-01-01",
-                "expiredAt": "2021-01-10",
-                "quantity": "1",
-                "thumbnailImage": ""
-            }
-        ]
-    }
-},
-{
-    "data": {
-        id: "1",
-        "name": "토마토",
-        "createdAt": "2021-01-01",
-        "expiredAt": "2021-01-10",
-        "thumbnailImage": "",
-        "ingredientList": [
-            {
-                "id": "1",
-                "createdAt": "2021-01-01",
-                "expiredAt": "2021-01-10",
-                "quantity": "1",
-                "thumbnailImage": ""
+                "name": "김치",
+                "quantity": "200g"
             },
             {
-                "id": "1",
-                "createdAt": "2021-01-01",
-                "expiredAt": "2021-01-10",
-                "quantity": "1",
-                "thumbnailImage": ""
+                "name": "두부",
+                "quantity": "200g"
             },
             {
-                "id": "1",
-                "createdAt": "2021-01-01",
-                "expiredAt": "2021-01-10",
-                "quantity": "1",
-                "thumbnailImage": ""
+                "name": "돼지고기",
+                "quantity": "200g"
             },
             {
-                "id": "1",
-                "createdAt": "2021-01-01",
-                "expiredAt": "2021-01-10",
-                "quantity": "1",
-                "thumbnailImage": ""
+                "name": "양파",
+                "quantity": "200g"
+            },
+            {
+                "name": "대파",
+                "quantity": "200g"
+            },
+            {
+                "name": "고추",
+                "quantity": "200g"
             }
         ],
-        "recommendRecipe": [
+        "steps": [
             {
-                "id": "1",
-                "name": "토마토",
-                "createdAt": "2021-01-01",
-                "thumbnailImage": "",
-                "ingredientList": [
-                    {
-                        "id": "1",
-                        "createdAt": "2021-01-01",
-                        "units": "1",
-                        "quantity": "1",
-                        "thumbnailImage": "",
-                        "recipeStep": [
-                            {
-                                "id": "1",
-                                "description": "토마토를 깨끗이 씻어주세요."
-                                "thumbnailImage": ""
-                            }
-                        ]
-                    },
-                ]
+                "description": "냄비에 물을 붓고 김치를 넣어 끓인다."
+            },
+            {
+                "description": "두부와 돼지고기를 넣고 끓인다."
+            },
+            {
+                "description": "양파와 대파를 넣고 끓인다."
+            },
+            {
+                "description": "고추를 넣고 끓인다."
             }
-        ]
+        ],
+        "timer": {
+            "backgroundColor": "#FF0000",
+            "emoji": "⏰",
+            "steps": [
+                {
+                    "description": "냄비에 물을 붓고 김치를 넣어 끓인다.",
+                    "time": 10
+                },
+                {
+                    "description": "두부와 돼지고기를 넣고 끓인다.",
+                    "time": 10
+                },
+                {
+                    "description": "양파와 대파를 넣고 끓인다.",
+                    "time": 5
+                },
+                {
+                    "description": "고추를 넣고 끓인다.",
+                    "time": 5
+                }
+            ]
+        }
     }
 }

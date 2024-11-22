@@ -5,12 +5,13 @@ import {TextSize} from "@/enums/TextSize";
 import {Colors} from "@/constants/Color";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {TouchableRipple} from "react-native-paper";
+import {router} from "expo-router";
 
 const SearchBarMock = () => {
     return (
         <TouchableRipple
             style={styles.container}
-            onPress={() => {}}
+            onPress={() => router.push('/search')}
             rippleColor="rgba(0, 0, 0, .1)"
             android_ripple={{
                 radius: 300,
