@@ -3,7 +3,9 @@ import {Feather, FontAwesome} from '@expo/vector-icons';
 import {Colors} from "@/constants/Color";
 import React, {ReactNode, useRef, useState} from 'react';
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import {Camera} from 'expo-camera';
+import {useNavigation} from '@react-navigation/native';
+import useToastStore from "@/state/toast";
 
 interface ActionButtonProps {
 	icon: ReactNode;
@@ -37,6 +39,35 @@ const ExpandableFAB = ({
 	const [isExpanded, setIsExpanded] = useState(false);
 	const animation = useRef(new Animated.Value(0)).current;
 	const backdropAnimation = useRef(new Animated.Value(0)).current;
+	const navigation = useNavigation();
+	const {addToast} = useToastStore();
+
+	const requestCameraPermission = async () => {
+		try {
+			const {status} = await Camera.requestCameraPermissionsAsync();
+			if (status === 'granted') {
+				navigation.navigate('food/add/barcode' as never);
+			} else if (status === 'denied') {
+				addToast('바코드 스캔을 위해 카메라 권한이 필요합니다.', 'warn', 3000);
+			}
+		} catch (error) {
+			addToast('카메라 권한을 확인하는 중 오류가 발생했습니다.', 'error', 3000);
+		}
+	};
+
+	const handleBarcodePress = async () => {
+		try {
+			const {status} = await Camera.getCameraPermissionsAsync();
+
+			if (status === 'granted') {
+				navigation.navigate('food/add/barcode' as never);
+			} else {
+				requestCameraPermission();
+			}
+		} catch (error) {
+			addToast('카메라 권한을 확인하는 중 오류가 발생했습니다.', 'error', 3000);
+		}
+	};
 
 	const toggleExpand = () => {
 		const toValue = isExpanded ? 0 : 1;
@@ -64,7 +95,7 @@ const ExpandableFAB = ({
 			transform: [{
 				translateY: animation.interpolate({
 					inputRange: [0, 1],
-					outputRange: [0, -20 * (index + 1)], // 각 버튼의 위치 조정
+					outputRange: [0, -20 * (index + 1)],
 				}),
 			}],
 			opacity: animation.interpolate({
@@ -84,7 +115,6 @@ const ExpandableFAB = ({
 							inputRange: [0, 1],
 							outputRange: [0, 1],
 						}),
-						// backdrop이 투명할 때는 터치 이벤트를 무시
 						pointerEvents: isExpanded ? 'auto' : 'none',
 					}
 				]}
@@ -99,18 +129,18 @@ const ExpandableFAB = ({
 			<Animated.View style={[styles.container, style]}>
 				<Animated.View style={actionButtonStyle(1)}>
 					<ActionButton
-						icon={<FontAwesome6 name="barcode" size={24} color={Colors.container} />}
-						label="사진 촬영"
+						icon={<FontAwesome6 name="barcode" size={24} color={Colors.container}/>}
+						label="바코드 스캔"
 						onPress={() => {
 							toggleExpand();
-							onCameraPress();
+							handleBarcodePress();
 						}}
 					/>
 				</Animated.View>
 
 				<Animated.View style={actionButtonStyle(0)}>
 					<ActionButton
-						icon={<FontAwesome name="pencil-square-o" size={22} color={Colors.container} />}
+						icon={<FontAwesome name="pencil-square-o" size={22} color={Colors.container}/>}
 						label="직접 입력"
 						onPress={() => {
 							toggleExpand();
