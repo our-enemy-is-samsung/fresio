@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { Colors } from '@/shared/constants/Color';
+import {Colors} from "@/constants/Color";
 
 const ThirdSlide: React.FC = () => {
     return (
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginBottom: 8,
         textAlign: 'center',
-        color: Colors.light.grayScale90,
+        color: Colors.contentDim,
         lineHeight: 32,
         letterSpacing: 0.56,
         fontFamily: 'Wanted Sans Variable',
     },
     subtitle: {
         fontSize: 16,
-        color: Colors.light.grayScale60,
+        color: Colors.contentSecondary,
         lineHeight: 22,
         textAlign: 'center',
         fontFamily: 'Wanted Sans Variable',

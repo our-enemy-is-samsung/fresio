@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '@/shared/constants/Color';
 import { useRouter } from 'expo-router';
 import BackIcon from '../onboardComponents/BackIcon';
+import {Colors} from "@/constants/Color";
 
 // null을 제외한 DietType 정의
 type DietType = 'normal' | 'vegan' | 'lowSalt' | 'lactoOvo';
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E3E3F0',
     },
     nextButtonText: {
-        color: Colors.light.white,
+        color: Colors.container,
         textAlign: 'center',
         fontSize: 17,
         fontWeight: '600',

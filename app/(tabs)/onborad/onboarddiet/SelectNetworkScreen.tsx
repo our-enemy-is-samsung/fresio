@@ -16,7 +16,7 @@ import LottieView from "lottie-react-native";
 import BackIcon from "../onboardComponents/BackIcon";
 import RefreshIcon from "../onboardComponents/RefreshIcon"; // RefreshIcon 추가
 import ListLoading from "@/assets/lottie/listLoading.json";
-import { Colors } from "@/shared/constants/Color";
+import {Colors} from "@/constants/Color";
 
 const SelectNetworkScreen = () => {
   const [wifiList, setWifiList] = useState<Array<{ ssid: string; strength: number }>>([]);
@@ -74,20 +74,20 @@ const SelectNetworkScreen = () => {
           onPress={onSelect}
           style={{
             ...styles.wifiItem,
-            backgroundColor: selected ? Colors[colorScheme]["brand50"] : "white",
+            backgroundColor: selected ? Colors["brand"] : "white",
           }}
         >
           <View style={styles.wifiItemContent}>
             <MaterialIcons
               name="network-wifi"
               size={24}
-              color={selected ? "white" : Colors[colorScheme]["grayScale80"]}
+              color={selected ? "white" : Colors["contentDim"]}
             />
             <RNText
               style={{
                 fontSize: 16,
                 fontWeight: "500",
-                color: selected ? "white" : Colors[colorScheme]["grayScale100"],
+                color: selected ? "white" : Colors["content"],
                 flex: 1,
                 textAlign: "left",
               }}
