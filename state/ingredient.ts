@@ -72,7 +72,7 @@ const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [
 		createdAt: "2024-01-01",
 		expiredAt: "2024-01-10",
 		quantity: "3",
-		thumbnailImage: "",
+		thumbnailImage: "https://cdn.sisaweek.com/news/photo/202304/204122_205200_5646.jpg",
 		ingredientList: [
 			{
 				id: "1-1",
@@ -100,6 +100,48 @@ const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [
 							{
 								id: "step-1",
 								description: "토마토를 깨끗이 씻어주세요.",
+								thumbnailImage: ""
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		id: "2",
+		name: "양파",
+		createdAt: "2024-01-02",
+		expiredAt: "2024-01-15",
+		quantity: "2",
+		thumbnailImage: "https://cdn.sisaweek.com/news/photo/202304/204122_205200_5646.jpg",
+		ingredientList: [
+			{
+				id: "2-1",
+				createdAt: "2024-01-02",
+				expiredAt: "2024-01-15",
+				quantity: "1",
+				thumbnailImage: "",
+				name: "양파"
+			}
+		],
+		recommendRecipe: [
+			{
+				id: "recipe-2",
+				name: "양파볶음",
+				createdAt: "2024-01-02",
+				thumbnailImage: "",
+				ingredientList: [
+					{
+						id: "2",
+						createdAt: "2024-01-02",
+						units: "개",
+						quantity: "1",
+						thumbnailImage: "",
+						recipeStep: [
+							{
+								id: "step-1",
+								description: "양파를 깨끗이 씻어주세요.",
 								thumbnailImage: ""
 							}
 						]

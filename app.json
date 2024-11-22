@@ -50,7 +50,8 @@
         {
           "cameraPermission": "바코드 인식을 하려면 카메라에 대한 권한이 필요합니다."
         }
-      ]
+      ],
+      "react-native-wifi-reborn"
     ],
     "experiments": {
       "typedRoutes": true
