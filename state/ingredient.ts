@@ -34,15 +34,24 @@ export interface Ingredient {
 	thumbnailImage: string;
 }
 
+export interface IngredientDetail extends Ingredient {
+	ingredientList: Ingredient[];
+	recommendRecipe: RecommendRecipe[];
+}
+
 // 생성 시 필요한 타입
 export type CreateIngredientInput = Omit<Ingredient, 'id' | 'createdAt'>;
 
 // 업데이트 시 필요한 타입
 export type UpdateIngredientInput = Partial<Omit<Ingredient, 'id' | 'createdAt'>> & { id: string };
 
-export interface IngredientDetail extends Ingredient {
-	ingredientList: Ingredient[];
-	recommendRecipe: RecommendRecipe[];
+// 재료 목록 업데이트 타입
+export interface UpdateIngredientListInput {
+	ingredientId: string;
+	ingredientList: {
+		id: string;
+		quantity: string;
+	}[];
 }
 
 // Mock Data
@@ -159,6 +168,9 @@ interface IngredientService {
 	createIngredient: (ingredient: CreateIngredientInput) => Promise<Ingredient>;
 	updateIngredient: (ingredient: UpdateIngredientInput) => Promise<Ingredient>;
 	deleteIngredient: (id: string) => Promise<void>;
+	updateIngredientList: (data: UpdateIngredientListInput) => Promise<void>;
+	deleteIngredientFromList: (ingredientId: string, listItemId: string) => Promise<void>;
+	addIngredientToList: (ingredientId: string, ingredient: CreateIngredientInput) => Promise<void>;
 }
 
 // API Service Implementation
@@ -181,6 +193,17 @@ const apiIngredientService: IngredientService = {
 	},
 	deleteIngredient: async (id: string) => {
 		await CustomAxios.delete(`/ingredient/${id}`);
+	},
+	updateIngredientList: async (data) => {
+		await CustomAxios.put(`/ingredient/${data.ingredientId}/list`, {
+			ingredientList: data.ingredientList
+		});
+	},
+	deleteIngredientFromList: async (ingredientId, listItemId) => {
+		await CustomAxios.delete(`/ingredient/${ingredientId}/list/${listItemId}`);
+	},
+	addIngredientToList: async (ingredientId, ingredient) => {
+		await CustomAxios.post(`/ingredient/${ingredientId}/list`, ingredient);
 	}
 };
 
@@ -210,7 +233,7 @@ const mockIngredientService: IngredientService = {
 		const updatedIngredient: Ingredient = {
 			...MOCK_INGREDIENTS[index],
 			...ingredient,
-			createdAt: MOCK_INGREDIENTS[index].createdAt // 생성일은 유지
+			createdAt: MOCK_INGREDIENTS[index].createdAt
 		};
 
 		MOCK_INGREDIENTS[index] = updatedIngredient;
@@ -221,7 +244,44 @@ const mockIngredientService: IngredientService = {
 		if (index === -1) throw new Error('Ingredient not found');
 		MOCK_INGREDIENTS.splice(index, 1);
 		return Promise.resolve();
-	}
+	},
+	updateIngredientList: async (data) => {
+		const detail = MOCK_INGREDIENT_DETAILS.find(d => d.id === data.ingredientId);
+		if (!detail) throw new Error('Ingredient not found');
+
+		data.ingredientList.forEach(item => {
+			const listItem = detail.ingredientList.find(i => i.id === item.id);
+			if (listItem) {
+				listItem.quantity = item.quantity;
+			}
+		});
+
+		return Promise.resolve();
+	},
+	deleteIngredientFromList: async (ingredientId, listItemId) => {
+		const detail = MOCK_INGREDIENT_DETAILS.find(d => d.id === ingredientId);
+		if (!detail) throw new Error('Ingredient not found');
+
+		const index = detail.ingredientList.findIndex(i => i.id === listItemId);
+		if (index === -1) throw new Error('List item not found');
+
+		detail.ingredientList.splice(index, 1);
+		return Promise.resolve();
+	},
+	addIngredientToList: async (ingredientId, ingredient) => {
+       const detail = MOCK_INGREDIENT_DETAILS.find(d => d.id === ingredientId);
+       if (!detail) throw new Error('Ingredient not found');
+
+       const newIngredient: Ingredient = {
+           ...ingredient,
+           id: `ingredient_list_${Date.now()}`,
+           createdAt: new Date().toISOString(),
+           thumbnailImage: ""
+       };
+
+       detail.ingredientList.push(newIngredient);
+       return Promise.resolve();
+   }
 };
 
 // Select service based on environment
@@ -238,6 +298,9 @@ interface IngredientStore {
 	addIngredient: (ingredient: CreateIngredientInput) => Promise<void>;
 	updateIngredient: (ingredient: UpdateIngredientInput) => Promise<void>;
 	deleteIngredient: (id: string) => Promise<void>;
+	updateIngredientList: (data: UpdateIngredientListInput) => Promise<void>;
+	deleteIngredientFromList: (ingredientId: string, listItemId: string) => Promise<void>;
+	addIngredientToList: (ingredientId: string, ingredient: CreateIngredientInput) => Promise<void>;
 }
 
 const useIngredientStore = create<IngredientStore>((set, get) => ({
@@ -292,7 +355,10 @@ const useIngredientStore = create<IngredientStore>((set, get) => ({
 			set(state => ({
 				ingredients: state.ingredients.map(i =>
 					i.id === ingredient.id ? updatedIngredient : i
-				)
+				),
+				currentIngredient: state.currentIngredient?.id === ingredient.id
+					? {...state.currentIngredient, ...updatedIngredient}
+					: state.currentIngredient
 			}));
 		} catch (error) {
 			set({error: error instanceof Error ? error.message : '재료 수정에 실패했습니다.'});
@@ -307,7 +373,8 @@ const useIngredientStore = create<IngredientStore>((set, get) => ({
 		try {
 			await ingredientService.deleteIngredient(id);
 			set(state => ({
-				ingredients: state.ingredients.filter(ingredient => ingredient.id !== id)
+				ingredients: state.ingredients.filter(ingredient => ingredient.id !== id),
+				currentIngredient: state.currentIngredient?.id === id ? null : state.currentIngredient
 			}));
 		} catch (error) {
 			set({error: error instanceof Error ? error.message : '재료 삭제에 실패했습니다.'});
@@ -316,6 +383,59 @@ const useIngredientStore = create<IngredientStore>((set, get) => ({
 			set({isLoading: false});
 		}
 	},
+
+	updateIngredientList: async (data) => {
+		set({isLoading: true, error: null});
+		try {
+			await ingredientService.updateIngredientList(data);
+			if (get().currentIngredient?.id === data.ingredientId) {
+				await get().fetchIngredientById(data.ingredientId);
+			}
+		} catch (error) {
+			set({error: error instanceof Error ? error.message : '재료 목록 수정에 실패했습니다.'});
+			throw error;
+		} finally {
+			set({isLoading: false});
+		}
+	},
+
+	deleteIngredientFromList: async (ingredientId, listItemId) => {
+		set({isLoading: true, error: null});
+		try {
+			await ingredientService.deleteIngredientFromList(ingredientId, listItemId);
+			set(state => {
+				if (state.currentIngredient?.id === ingredientId) {
+					return {
+						currentIngredient: {
+							...state.currentIngredient,
+							ingredientList: state.currentIngredient.ingredientList.filter(
+								item => item.id !== listItemId
+							)
+						}
+					};
+				}
+				return state;
+			});
+		} catch (error) {
+			set({error: error instanceof Error ? error.message : '재료 목록 항목 삭제에 실패했습니다.'});
+			throw error;
+		} finally {
+			set({isLoading: false});
+		}
+	},
+
+	addIngredientToList: async (ingredientId, ingredient) => {
+       set({isLoading: true, error: null});
+       try {
+           await ingredientService.addIngredientToList(ingredientId, ingredient);
+           await get().fetchIngredientById(ingredientId);
+       } catch (error) {
+           set({error: error instanceof Error ? error.message : '재료 목록에 추가하는데 실패했습니다.'});
+           throw error;
+       } finally {
+           set({isLoading: false});
+       }
+   }
 }));
 
 export default useIngredientStore;

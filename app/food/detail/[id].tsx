@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StatusBar, StyleSheet} from "react-native";
+import {Alert, SafeAreaView, ScrollView, StatusBar, StyleSheet, TouchableOpacity} from "react-native";
 import React, {useEffect} from "react";
 import {useRoute} from '@react-navigation/native';
 import NavBarTemplate from "@/components/template/NavBarTemplate";
@@ -12,6 +12,11 @@ import Recipe from "@/components/shared/Recipe";
 import useIngredientStore from "@/state/ingredient";
 import IngredientItem from "@/components/timer/details/TimerIngredientItem";
 import {Image} from "expo-image";
+import IngredientFAB from "@/components/food/ingredientFAB";
+import {Column} from "@/components/shared/Column";
+import {MaterialIcons} from "@expo/vector-icons";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import {router} from "expo-router";
 
 interface RouteParams {
 	id: string;
@@ -25,14 +30,14 @@ const PageFoodDetail = () => {
 		currentIngredient,
 		isLoading,
 		error,
-		fetchIngredientById
+		fetchIngredientById,
+		updateIngredientList,
+		deleteIngredientFromList
 	} = useIngredientStore();
 
 	useEffect(() => {
 		fetchIngredientById(id);
 	}, [id]);
-
-	console.log('currentIngredient', currentIngredient);
 
 	// 이모지 매핑
 	const getEmoji = (name: string): string => {
@@ -49,6 +54,46 @@ const PageFoodDetail = () => {
 		return emojiMap[name] || '🥬';
 	};
 
+	// 삭제 처리 함수
+	const handleDelete = async (listItemId: string) => {
+		Alert.alert(
+			"재료 삭제",
+			"정말 이 재료를 삭제하시겠습니까?",
+			[
+				{
+					text: "취소",
+					style: "cancel"
+				},
+				{
+					text: "삭제",
+					style: "destructive",
+					onPress: async () => {
+						try {
+							await deleteIngredientFromList(id, listItemId);
+						} catch (error) {
+							Alert.alert("오류", "재료 삭제 중 오류가 발생했습니다.");
+						}
+					}
+				}
+			]
+		);
+	};
+
+	// 수정 처리 함수
+	const handleEdit = async (listItemId: string, newQuantity: string) => {
+		try {
+			await updateIngredientList({
+				ingredientId: id,
+				ingredientList: [{
+					id: listItemId,
+					quantity: newQuantity
+				}]
+			});
+		} catch (error) {
+			Alert.alert("오류", "재료 수정 중 오류가 발생했습니다.");
+		}
+	};
+
 	// 유틸리티 함수들
 	const getExpiringSoonItems = () => {
 		if (!currentIngredient?.ingredientList) return [];
@@ -58,20 +103,6 @@ const PageFoodDetail = () => {
 			const expireDate = new Date(item.expiredAt);
 			return expireDate > now && expireDate <= threeDaysFromNow;
 		});
-	};
-
-	const calculateRemainingDays = (expiryDate: Date): string => {
-		const now = new Date();
-		const diffTime = expiryDate.getTime() - now.getTime();
-		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-		if (diffDays < 0) {
-			return `${Math.abs(diffDays)}일 지남`;
-		} else if (diffDays === 0) {
-			return "오늘 만료";
-		} else {
-			return `${diffDays}일 남음`;
-		}
 	};
 
 	const getExpiredItems = () => {
@@ -116,12 +147,14 @@ const PageFoodDetail = () => {
 	const expired = getExpiredItems();
 	const totalQuantity = getTotalQuantity();
 
-	console.log(currentIngredient.thumbnailImage)
-
 	return (
 		<>
 			<SafeAreaView style={styles.container}>
 				<StatusBar barStyle="dark-content" backgroundColor={'transparent'}/>
+				{/* Left Arrow */}
+				<TouchableOpacity style={styles.backIcon} onPress={() => router.back()}>
+					<MaterialIcons name="arrow-back-ios" size={24} color={Colors.content}/>
+				</TouchableOpacity>
 				<ScrollView style={{flex: 1}}>
 					<View style={styles.header}>
 						<Image
@@ -166,19 +199,20 @@ const PageFoodDetail = () => {
 						<StyledText size={TextSize.BodyLarge} color="content" style={styles.sectionTitle}>
 							기록된 재료
 						</StyledText>
-						{currentIngredient.ingredientList.map((item) => {
-							return (
+						<Column style={{gap: 10}}>
+							{currentIngredient.ingredientList.map((item) => (
 								<IngredientItem
 									key={item.id}
 									ingredientName={currentIngredient.name}
-									quantity="1"
-									expiredAt="2021-01-10"
-									createdAt="2021-01-01"
-									onEdit={() => console.log('편집')}
-									onDelete={() => console.log('삭제')}
+									quantity={item.quantity}
+									expiredAt={item.expiredAt}
+									createdAt={item.createdAt}
+									onEdit={(newQuantity) => handleEdit(item.id, newQuantity)}
+									onDelete={() => handleDelete(item.id)}
+									isLastItem={currentIngredient.ingredientList.indexOf(item) === currentIngredient.ingredientList.length - 1}
 								/>
-							)
-						})}
+							))}
+						</Column>
 					</View>
 
 					{/* 추천 레시피 */}
@@ -202,6 +236,7 @@ const PageFoodDetail = () => {
 
 					<View style={{height: 100}}/>
 				</ScrollView>
+				<IngredientFAB ingredientId={id} onUpdate={() => fetchIngredientById(id)}/>
 			</SafeAreaView>
 			<NavBarTemplate/>
 		</>
@@ -212,6 +247,12 @@ const styles = StyleSheet.create({
 	container: {
 		height: '100%',
 		backgroundColor: Colors['surface'],
+	},
+	backIcon: {
+		position: 'absolute',
+		top: 40,
+		left: 22,
+		zIndex: 2,
 	},
 	header: {
 		width: '100%',

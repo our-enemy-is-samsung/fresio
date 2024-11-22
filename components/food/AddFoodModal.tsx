@@ -30,6 +30,7 @@ const MOCK_FOODS = [
 interface AddFoodModalProps {
     visible: boolean;
     onClose: () => void;
+    titleName?: string;
     onSubmit: (data: {
         name: string;
         expiryDate: Date;
@@ -37,7 +38,7 @@ interface AddFoodModalProps {
     }) => void;
 }
 
-const AddFoodModal = ({visible, onClose, onSubmit}: AddFoodModalProps) => {
+const AddFoodModal = ({visible, onClose, onSubmit, titleName}: AddFoodModalProps) => {
     const [name, setName] = useState('');
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -107,7 +108,7 @@ const AddFoodModal = ({visible, onClose, onSubmit}: AddFoodModalProps) => {
                 <View style={styles.modalContent}>
                     <Row style={styles.header}>
                         <StyledText size={TextSize.HeadingSmall} color="content">
-                            식품 등록
+                            {titleName ?? '식품 등록'}
                         </StyledText>
                         <TouchableOpacity onPress={onClose}>
                             <Feather name="x" size={24} color={Colors.contentDim}/>
