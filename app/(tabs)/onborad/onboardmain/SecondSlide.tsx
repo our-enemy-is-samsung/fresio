@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import { Colors } from '@/shared/constants/Color';
-import DifficultyIcon from "@/app/(tabs)/onborad/onbordComponents/DifficultyIcon";
-import TimeIcon from "@/app/(tabs)/onborad/onbordComponents/TimeIcon";
+import DifficultyIcon from "@/app/(tabs)/onboard/onboardComponents/DifficultyIcon";
+import TimeIcon from "@/app/(tabs)/onboard/onboardComponents/TimeIcon";
 import { BlurView } from 'expo-blur';
 
 interface CardProps {
@@ -56,24 +56,24 @@ const SecondSlide: React.FC = () => {
         <>
             <View style={styles.headerContainer}>
                 <Text style={styles.title}>사용자 맞춤 레시피 추천</Text>
-                <Text style={styles.subtitle}>아이템들</Text>
+                <Text style={styles.subtitle}>맞춤형 레시피로 더 쉽고 건강한 밥상</Text>
                 <Text style={styles.description}>
-                    위로 올라오는 애니메이션 해주세요 ㄴㄴ 하지마세요
+                    영양가 있는 맞춤형 레시피를 추천해드려요
                 </Text>
             </View>
             <View style={styles.cardsContainer}>
                 <Image
-                    source={require('../../../assets/images/Frame 37.png')}
+                    source={require('../../../../assets/images/Frame 37.png')}
                     style={styles.newImage}
                 />
                 <Card
-                    image={require('../../../assets/images/bibim.png')}
+                    image={require('../../../../assets/images/bibim.png')}
                     title="보양 만점 비빔밥"
                     style={styles.bibimCard}
                     imageStyle={styles.smallCardImage}
                 />
                 <Card
-                    image={require('../../../assets/images/kimchi.png')}
+                    image={require('../../../../assets/images/kimchi.png')}
                     title="김치볶음밥"
                     style={styles.kimchiCard}
                 />
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         position: 'absolute',
         top: -10,
-        left: '40%',
+        left: '42%',
         marginLeft: -100,
         zIndex: 1,
         borderRadius: 16,
@@ -166,12 +166,12 @@ const styles = StyleSheet.create({
     bibimCard: {
         width: 138,
         top: 210,
-        left: 5,
+        left: 25,
         zIndex: 2,
     },
     kimchiCard: {
-        top: 80,
-        right: 10,
+        top: 60,
+        right: 25,
         zIndex: 3,
     },
     recipeImage: {
@@ -228,7 +228,6 @@ const styles = StyleSheet.create({
         gap: 4,
         borderRadius: 6,
         overflow: 'hidden',
-        backgroundColor: 'rgba(230, 249, 238, 0.7)',
     },
     smallCardText: {
         fontSize: 10,
@@ -242,7 +241,13 @@ const styles = StyleSheet.create({
     smallCardStats: {
         flexDirection: 'row',
         gap: 6,
-    }
+    },
+    blurredTitle: {
+        color: Colors.light.grayScale90,
+    },
+    blurredText: {
+        color: Colors.light.grayScale60,
+    },
 });
 
 export default SecondSlide;

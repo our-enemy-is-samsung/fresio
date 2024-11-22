@@ -1,25 +1,66 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, Image, Dimensions, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Colors } from '../../../shared/constants/Color';
-import GoogleIcon from './onbordComponents/GoogleIcon';
-import OnboardingSwiper from './OnboardingSwiper';
+import Swiper from 'react-native-swiper';
+import { useRouter } from 'expo-router';
+import { Colors } from '@/shared/constants/Color';
+import GoogleIcon from '@/app/(tabs)/onboard/onboardComponents/GoogleIcon';
+import SecondSlide from './SecondSlide';
+import ThirdSlide from './ThirdSlide';
 
-type RootStackParamList = {
-    AutoExpirationAlert: undefined;
-};
+const { width } = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<RootStackParamList, 'AutoExpirationAlert'>;
+const AutoExpirationAlertScreen = () => {
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const router = useRouter();
 
-const AutoExpirationAlertScreen: React.FC<Props> = ({ navigation }) => {
-    const BannerContent = () => (
+    const dotWidths = React.useRef([
+        new Animated.Value(25),
+        new Animated.Value(8),
+        new Animated.Value(8),
+    ]).current;
+
+    React.useEffect(() => {
+        dotWidths.forEach((width, index) => {
+            Animated.timing(width, {
+                toValue: index === currentIndex ? 25 : 8,
+                duration: 300,
+                useNativeDriver: false,
+            }).start();
+        });
+    }, [currentIndex]);
+
+    const handleGoogleLogin = () => {
+        router.push('../onbo');
+    };
+
+    const PageIndicator = () => (
+        <View style={styles.pageIndicator}>
+            {[0, 1, 2].map((index) => (
+                <Animated.View
+                    key={index}
+                    style={[
+                        styles.dot,
+                        {
+                            width: dotWidths[index],
+                            backgroundColor:
+                                index === currentIndex
+                                    ? Colors.light.black
+                                    : Colors.light.grayScale40,
+                        }
+                    ]}
+                />
+            ))}
+        </View>
+    );
+
+    const FirstBannerContent = () => (
         <View style={styles.bannerContent}>
             <Image
-                source={require('../../../assets/images/fresio.png')}
+                source={require('../../../../assets/images/fresio.png')}
                 style={styles.bannerIcon}
             />
             <View style={styles.bannerTextContainer}>
@@ -30,7 +71,7 @@ const AutoExpirationAlertScreen: React.FC<Props> = ({ navigation }) => {
         </View>
     );
 
-    const GlassmorphicBanner = Platform.OS === 'ios' ? (
+    const FirstGlassmorphicBanner = Platform.OS === 'ios' ? (
         <>
             <BlurView intensity={15} tint="dark" style={[styles.blurBanner, styles.glassmorphism]}>
                 <View style={styles.emptyBannerContent} />
@@ -39,53 +80,60 @@ const AutoExpirationAlertScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.emptyBannerContent} />
             </BlurView>
             <BlurView intensity={55} tint="dark" style={[styles.thirdBlurOverlay, styles.glassmorphism]}>
-                <BannerContent />
+                <FirstBannerContent />
             </BlurView>
         </>
     ) : (
         <BlurView intensity={50} tint="dark" style={[styles.blurBanner, styles.glassmorphism]}>
-            <BannerContent />
+            <FirstBannerContent />
         </BlurView>
+    );
+
+    const FirstSlide = () => (
+        <View style={styles.slide}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.title}>자동 유통기한 알림</Text>
+                <Text style={styles.subtitle}>
+                    잊기 쉬운 유통기한 관리,{'\n'}
+                    이제는 앱이 자동으로 알려드려요
+                </Text>
+            </View>
+            <View style={styles.containerWrapper}>
+                <View style={styles.contentWrapper} />
+                {FirstGlassmorphicBanner}
+                <LinearGradient
+                    colors={['rgba(255, 255, 255, 0)', Colors.light.grayScale1]}
+                    style={styles.gradient}
+                    locations={[0.0563, 0.9473]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                />
+            </View>
+        </View>
     );
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <StatusBar style="dark" />
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.title}>자동 유통기한 알림</Text>
-                    <Text style={styles.subtitle}>
-                        여기다 쌈뽕한 설명을 적어주세요{'\n'}
-                        저는 몰라용~ 여자가 만졌어요
-                    </Text>
-                </View>
-
-                <View style={styles.containerWrapper}>
-                    <View style={styles.contentWrapper} />
-                    {GlassmorphicBanner}
-                    <LinearGradient
-                        colors={['rgba(255, 255, 255, 0)', Colors.light.grayScale1]}
-                        style={[styles.gradient, styles.leftGradient]}
-                        locations={[0.0563, 0.9473]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                    />
-                    <LinearGradient
-                        colors={['rgba(255, 255, 255, 0)', Colors.light.grayScale1]}
-                        style={[styles.gradient, styles.rightGradient]}
-                        locations={[0.0563, 0.9473]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                    />
-                </View>
-
+                <Swiper
+                    loop={false}
+                    showsPagination={false}
+                    autoplay={false}
+                    onIndexChanged={setCurrentIndex}
+                    scrollEnabled={true}
+                    removeClippedSubviews={false}
+                >
+                    <FirstSlide />
+                    <SecondSlide />
+                    <ThirdSlide />
+                </Swiper>
                 <View style={styles.bottom}>
-                    <View style={styles.pageIndicator}>
-                        <View style={styles.activeDot} />
-                        <View style={styles.inactiveDot} />
-                        <View style={styles.inactiveDot} />
-                    </View>
-                    <TouchableOpacity style={styles.button}>
+                    <PageIndicator />
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleGoogleLogin}
+                    >
                         <View style={styles.buttonContent}>
                             <View style={styles.iconContainer}>
                                 <GoogleIcon />
@@ -106,8 +154,11 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         flex: 1,
+    },
+    slide: {
+        flex: 1,
+        width,
         alignItems: 'center',
-        paddingHorizontal: 20,
     },
     headerContainer: {
         alignItems: 'center',
@@ -119,8 +170,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: 272,
         height: 409,
+        left: '50%',
         top: '50%',
-        transform: [{ translateY: -204.5 }],
+        transform: [
+            { translateX: -136 },
+            { translateY: -204.5 }
+        ],
     },
     contentWrapper: {
         width: 272,
@@ -133,6 +188,12 @@ const styles = StyleSheet.create({
         borderColor: Colors.light.grayScale40,
         backgroundColor: Colors.light.white,
         marginTop: 57,
+    },
+    gradient: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        height: 57,
     },
     glassmorphism: {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -180,18 +241,6 @@ const styles = StyleSheet.create({
         left: -22,
         zIndex: 3,
         overflow: 'hidden',
-    },
-    gradient: {
-        position: 'absolute',
-        bottom: 0,
-        width: 8,
-        height: 57,
-    },
-    leftGradient: {
-        left: 0,
-    },
-    rightGradient: {
-        right: 0,
     },
     title: {
         fontSize: 28,
@@ -265,6 +314,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
         position: 'absolute',
         bottom: 40,
+        paddingHorizontal: 20,
     },
     pageIndicator: {
         flexDirection: 'row',
@@ -272,17 +322,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
-    activeDot: {
-        width: 25,
+    dot: {
         height: 8,
-        backgroundColor: Colors.light.black,
-        borderRadius: 33,
-        margin: 5,
-    },
-    inactiveDot: {
-        width: 8,
-        height: 8,
-        backgroundColor: Colors.light.grayScale40,
         borderRadius: 33,
         margin: 5,
     },
@@ -291,22 +332,22 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 358,
         height: 59,
-        justifyContent: 'center', // 추가
+        justifyContent: 'center',
     },
     buttonContent: {
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
         width: '100%',
-        height: '100%', // 추가
+        height: '100%',
     },
     iconContainer: {
         position: 'absolute',
-        left: 20, // 왼쪽 여백 추가
-        display: 'flex', // 추가
-        alignItems: 'center', // 추가
-        height: '100%', // 추가
-        justifyContent: 'center', // 추가
+        left: 20,
+        display: 'flex',
+        alignItems: 'center',
+        height: '100%',
+        justifyContent: 'center',
     },
     buttonText: {
         color: Colors.light.white,
