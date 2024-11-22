@@ -57,6 +57,7 @@ const PageFood = () => {
     };
 
     const handleIngredientPress = (id: string) => {
+        console.log(`Ingredient ${id} pressed`);
         router.push(`/food/detail/${id}`);
     };
 

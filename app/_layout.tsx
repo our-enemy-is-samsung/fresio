@@ -46,12 +46,6 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					/>
 					<Stack.Screen
 						name="onboard/onboarddiet/SelectDietScreen"
-						options={{
-							headerShown: true,
-							title: '해당되는 식단을 알려주세요',
-							headerBackTitle: '',
-							animation: 'default'
-						}}
 					/>
 					<Stack.Screen name="index" options={{animation: 'none'}}/>
 					<Stack.Screen name="food/index" options={{animation: 'none'}}/>

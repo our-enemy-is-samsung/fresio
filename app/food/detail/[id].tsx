@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet} from "react-native";
+import {SafeAreaView, ScrollView, StatusBar, StyleSheet} from "react-native";
 import React, {useEffect} from "react";
 import {useRoute} from '@react-navigation/native';
 import NavBarTemplate from "@/components/template/NavBarTemplate";
@@ -7,11 +7,11 @@ import View from "@/components/shared/View";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import {Colors} from "@/constants/Color";
-import {HomePageStyle} from "@/constants/Home/HomeStyle";
 import {Row} from "@/components/shared/Row";
 import Recipe from "@/components/shared/Recipe";
 import useIngredientStore from "@/state/ingredient";
 import IngredientItem from "@/components/timer/details/TimerIngredientItem";
+import {Image} from "expo-image";
 
 interface RouteParams {
 	id: string;
@@ -116,11 +116,19 @@ const PageFoodDetail = () => {
 	const expired = getExpiredItems();
 	const totalQuantity = getTotalQuantity();
 
+	console.log(currentIngredient.thumbnailImage)
+
 	return (
 		<>
 			<SafeAreaView style={styles.container}>
-				<PageHeader name={currentIngredient.name} style={{marginTop: 10}}/>
+				<StatusBar barStyle="dark-content" backgroundColor={'transparent'}/>
 				<ScrollView style={{flex: 1}}>
+					<View style={styles.header}>
+						<Image
+							source={{uri: currentIngredient.thumbnailImage}}
+							style={{width: 140, height: 140, borderRadius: 9999, marginTop: 20}}
+						/>
+					</View>
 					{/* 재료 요약 정보 */}
 					<View style={styles.summaryContainer}>
 						<Row style={styles.summaryRow}>
@@ -134,18 +142,18 @@ const PageFoodDetail = () => {
 							</View>
 							<Row style={{gap: 12}}>
 								<View style={styles.statBox}>
-									<StyledText size={TextSize.LabelSmall} color="error">
+									<StyledText size={TextSize.BodySmall} color="error">
 										{expired.length}개
 									</StyledText>
-									<StyledText size={TextSize.LabelSmall} color="contentDim">
+									<StyledText size={TextSize.BodySmall} color="contentDim">
 										소비기한 만료
 									</StyledText>
 								</View>
 								<View style={styles.statBox}>
-									<StyledText size={TextSize.LabelSmall} color="brandDark">
+									<StyledText size={TextSize.BodySmall} color="brandDark">
 										{expiringSoon.length}개
 									</StyledText>
-									<StyledText size={TextSize.LabelSmall} color="contentDim">
+									<StyledText size={TextSize.BodySmall} color="contentDim">
 										소비기한 임박
 									</StyledText>
 								</View>
@@ -156,7 +164,7 @@ const PageFoodDetail = () => {
 					{/* 재료 목록 */}
 					<View style={styles.section}>
 						<StyledText size={TextSize.BodyLarge} color="content" style={styles.sectionTitle}>
-							보관 중인 재료
+							기록된 재료
 						</StyledText>
 						{currentIngredient.ingredientList.map((item) => {
 							return (
@@ -174,7 +182,10 @@ const PageFoodDetail = () => {
 					</View>
 
 					{/* 추천 레시피 */}
-					<View style={styles.section}>
+					<View style={{
+						...styles.section,
+						marginTop: 50,
+					}}>
 						<StyledText size={TextSize.BodyLarge} color="content" style={styles.sectionTitle}>
 							추천 레시피
 						</StyledText>
@@ -201,13 +212,24 @@ const styles = StyleSheet.create({
 	container: {
 		height: '100%',
 		backgroundColor: Colors['surface'],
-		paddingTop: HomePageStyle.paddingTop,
+	},
+	header: {
+		width: '100%',
+		height: 240,
+
+		backgroundColor: Colors.successBackground,
+
+		paddingHorizontal: 22,
+
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	centerContent: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		paddingVertical: 20,
+		marginTop: 40,
 	},
 	summaryContainer: {
 		padding: 22,
