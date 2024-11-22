@@ -6,6 +6,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import {Camera} from 'expo-camera';
 import {useNavigation} from '@react-navigation/native';
 import useToastStore from "@/state/toast";
+import AddFoodModal from "@/components/food/AddFoodModal";
 
 interface ActionButtonProps {
 	icon: ReactNode;
@@ -41,6 +42,13 @@ const ExpandableFAB = ({
 	const backdropAnimation = useRef(new Animated.Value(0)).current;
 	const navigation = useNavigation();
 	const {addToast} = useToastStore();
+
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const handleSubmit = (data: any) => {
+		console.log('Submitted data:', data);
+		// API 호출 등 추가 로직
+	};
 
 	const requestCameraPermission = async () => {
 		try {
@@ -144,7 +152,7 @@ const ExpandableFAB = ({
 						label="직접 입력"
 						onPress={() => {
 							toggleExpand();
-							onFormPress();
+							setModalVisible(true);
 						}}
 					/>
 				</Animated.View>
@@ -173,6 +181,11 @@ const ExpandableFAB = ({
 					</Animated.View>
 				</TouchableOpacity>
 			</Animated.View>
+			<AddFoodModal
+				visible={modalVisible}
+				onClose={() => setModalVisible(false)}
+				onSubmit={handleSubmit}
+			/>
 		</>
 	);
 };

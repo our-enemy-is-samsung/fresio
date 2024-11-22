@@ -1,6 +1,6 @@
 import {FlatList, Pressable, StyleSheet, TextInput} from "react-native";
 import {Colors} from "@/constants/Color";
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import View from "@/components/shared/View";
@@ -19,17 +19,16 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import TimerStepModal from "@/components/timer/TimerStepCreateModal";
 import TimerStepPreviewNothing from "@/components/timer/TimerStepPreviewNoting";
 import useToastStore from "@/state/toast";
-import {useRouter} from "expo-router";
+import {useRouter, useLocalSearchParams} from "expo-router";
 import TimerStepEditModal from "@/components/timer/TimerStepEditModal";
 import useTimerStore from "@/state/timer";
-import {randomEmojiForTimer} from "@/utils/emoji";
-import getTimerRandomBackgroundColor from "@/utils/timer/getRandomBackgroundColor";
 
-const PageTimerCreate = () => {
+const PageTimerEdit = () => {
 	const router = useRouter();
+	const {id} = useLocalSearchParams();
 	const inset = useSafeAreaInsets();
 	const {addToast} = useToastStore();
-	const {addTimer, isLoading} = useTimerStore();
+	const {updateTimer, getTimerById, isLoading} = useTimerStore();
 
 	const TimerColorList = [
 		TimerColor.Red,
@@ -41,14 +40,32 @@ const PageTimerCreate = () => {
 	];
 
 	const [timerName, setTimerName] = useState('');
-	const [color, setColor] = useState<TimerColor | string>(getTimerRandomBackgroundColor());
-	const [selectedEmoji, setSelectedEmoji] = useState(randomEmojiForTimer());
+	const [color, setColor] = useState<TimerColor | string>(TimerColor.Red);
+	const [selectedEmoji, setSelectedEmoji] = useState('');
 	const [timerStep, setTimerStep] = useState<TimerStepType[]>([]);
 	const [showEmojiSelector, setShowEmojiSelector] = useState(false);
 	const [showStepModal, setShowStepModal] = useState(false);
 	const [editingStep, setEditingStep] = useState<{ index: number, step: TimerStepType } | null>(null);
 
-	const isCreateButtonDisabled = useMemo(() => {
+	// 타이머 데이터 로드
+	useEffect(() => {
+		const loadTimer = async () => {
+			if (!id) return;
+			const timer = await getTimerById(id as string);
+			if (timer) {
+				setTimerName(timer.name);
+				setColor(timer.color);
+				setSelectedEmoji(timer.emoji);
+				setTimerStep(timer.steps);
+			} else {
+				addToast('타이머를 찾을 수 없습니다', 'error');
+				router.back();
+			}
+		};
+		loadTimer();
+	}, [id]);
+
+	const isUpdateButtonDisabled = useMemo(() => {
 		const isNameValid = timerName.trim().length > 0;
 		const hasSteps = timerStep.length > 0;
 		const areStepsValid = timerStep.every(step => {
@@ -84,23 +101,25 @@ const PageTimerCreate = () => {
 		});
 	};
 
-	const handleCreateTimer = async () => {
+	const handleUpdateTimer = async () => {
+		if (!id) return;
 		if (timerName.trim().length === 0) return addToast('타이머 이름을 입력해주세요', 'error');
 		if (timerStep.length === 0) return addToast('타이머 단계를 추가해주세요', 'error');
 
-		if (!isCreateButtonDisabled) {
+		if (!isUpdateButtonDisabled) {
 			try {
-				await addTimer({
+				await updateTimer({
+					id: id as string,
 					name: timerName,
 					color: color as TimerColor,
 					emoji: selectedEmoji,
 					steps: timerStep
 				});
-				addToast('타이머가 생성되었습니다', 'success');
+				addToast('타이머가 수정되었습니다', 'success');
 				router.back();
 			} catch (error) {
-				console.log(error)
-				addToast('타이머 생성에 실패했습니다', 'error');
+				console.log(error);
+				addToast('타이머 수정에 실패했습니다', 'error');
 			}
 		}
 	};
@@ -201,11 +220,11 @@ const PageTimerCreate = () => {
 				<Button
 					style={ButtonStyle.Primary}
 					size={ButtonSize.Large}
-					onPress={handleCreateTimer}
+					onPress={handleUpdateTimer}
 					fullWidth
 					disabled={isLoading}
 				>
-					{isLoading ? '생성 중...' : '타이머 생성하기'}
+					{isLoading ? '수정 중...' : '타이머 수정하기'}
 				</Button>
 			</View>
 			<View style={{height: 40}}/>
@@ -220,7 +239,7 @@ const PageTimerCreate = () => {
 				}}
 				data={[1]}
 				renderItem={renderItem}
-				ListHeaderComponent={<PageHeader name={'타이머 생성'}/>}
+				ListHeaderComponent={<PageHeader name={'타이머 수정'}/>}
 				stickyHeaderIndices={[0]}
 			/>
 			<EmojiSelectorModal
@@ -278,4 +297,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default PageTimerCreate;
+export default PageTimerEdit;

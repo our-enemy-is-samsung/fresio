@@ -1,89 +1,67 @@
 import {Pressable, ScrollView, StatusBar, StyleSheet, TouchableOpacity} from "react-native";
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import View from "@/components/shared/View";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {Row} from "@/components/shared/Row";
-import {TimerStepType} from "@/types/Timer/timerStep";
 import TimerStepPreview from "@/components/timer/TimerStepPreview";
 import {TimerColor} from "@/enums/TimerColor";
 import {LinearGradient} from 'expo-linear-gradient';
 import {Column} from "@/components/shared/Column";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import {router} from "expo-router";
+import {router, useFocusEffect, useLocalSearchParams} from "expo-router";
 import {Colors} from "@/constants/Color";
 import {FontAwesome5} from "@expo/vector-icons";
 import SectionTitle from "@/components/home/SectionTitle";
 import TimerDetailDeleteModal from "@/components/timer/details/TimerDetailDeleteModal";
 import TimerDetailEditModal from "@/components/timer/details/TimerDetailEditModal";
+import useTimerStore, {TimerStepType, TimerType} from "@/state/timer";
 
 const PageTimerDetail = () => {
 	const inset = useSafeAreaInsets();
 	const [showEditModal, setShowEditModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const {id} = useLocalSearchParams<{ id: string }>();
 
-	// Mock data
-	const mockTimer = {
-		name: "김치찌개 끓이기",
-		emoji: "🍲",
-		color: TimerColor.Red,
-		author: "김치찌개마스터",
-		createdAt: new Date(),
-		steps: [
-			{
-				id: "step-1",
-				hours: 0,
-				minutes: 30,
-				recipe: "물 끓이기"
-			},
-			{
-				id: "step-2",
-				hours: 1,
-				minutes: 0,
-				recipe: "김치 넣고 끓이기"
-			},
-			{
-				id: "step-3",
-				hours: 0,
-				minutes: 15,
-				recipe: "양념 넣고 마무리"
-			},
-			{
-				id: "step-2",
-				hours: 1,
-				minutes: 0,
-				recipe: "김치 넣고 끓이기"
-			},
-			{
-				id: "step-3",
-				hours: 0,
-				minutes: 15,
-				recipe: "양념 넣고 마무리"
-			},
-			{
-				id: "step-2",
-				hours: 1,
-				minutes: 0,
-				recipe: "김치 넣고 끓이기"
-			},
-			{
-				id: "step-3",
-				hours: 0,
-				minutes: 15,
-				recipe: "양념 넣고 마무리"
-			}
-		] as TimerStepType[]
-	};
+	const {getTimerById, updateTimer, deleteTimer} = useTimerStore();
+	const [timer, setTimer] = useState<TimerType | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useFocusEffect(
+        useCallback(() => {
+            const loadTimer = async () => {
+                if (id) {
+                    setIsLoading(true);
+                    try {
+                        const timerData = await getTimerById(id);
+                        if (timerData) {
+                            setTimer(timerData);
+                        } else {
+                            router.replace('/');
+                        }
+                    } catch (error) {
+                        console.error('Failed to load timer:', error);
+                        router.replace('/');
+                    } finally {
+                        setIsLoading(false);
+                    }
+                }
+            };
+            loadTimer();
+        }, [id, getTimerById])
+    );
 
 	const totalTime = React.useMemo(() => {
-		return mockTimer.steps.reduce((acc: number, step: TimerStepType) => {
+		if (!timer) return 0;
+		return timer.steps.reduce((acc: number, step: TimerStepType) => {
 			return acc + (step.hours * 60) + step.minutes;
 		}, 0);
-	}, [mockTimer.steps]);
+	}, [timer?.steps]);
 
 	const gradientColors = React.useMemo(() => {
-		switch (mockTimer.color) {
+		if (!timer) return ['#F5F5F5', '#FFFFFF'];
+		switch (timer.color) {
 			case TimerColor.Red:
 				return ['#FFE5E5', '#FFFFFF'];
 			case TimerColor.Orange:
@@ -99,17 +77,37 @@ const PageTimerDetail = () => {
 			default:
 				return ['#F5F5F5', '#FFFFFF'];
 		}
-	}, [mockTimer.color]);
+	}, [timer?.color]);
 
-	const handleDelete = () => {
-		// TODO: 삭제 로직 구현
+	const handleDelete = async () => {
+		try {
+			if (timer) {
+				await deleteTimer(timer.id);
+				router.back();
+			}
+		} catch (error) {
+			console.error('Failed to delete timer:', error);
+		}
 		setShowDeleteModal(false);
 	};
 
-	const handleEdit = () => {
-		// TODO: 수정 페이지로 이동하는 로직 구현
+	const handleEdit = async (name: string, emoji: string) => {
+		try {
+			if (timer) {
+				await updateTimer({
+					...timer,
+					name,
+					emoji,
+				});
+				setTimer({...timer, name, emoji});
+			}
+		} catch (error) {
+			console.error('Failed to update timer:', error);
+		}
 		setShowEditModal(false);
 	};
+
+	if (isLoading || !timer) return null;
 
 	return (
 		<>
@@ -138,7 +136,7 @@ const PageTimerDetail = () => {
 									<Row style={styles.actionButtons}>
 										<TouchableOpacity
 											style={styles.iconButton}
-											onPress={() => setShowEditModal(true)}
+											onPress={() => router.push(`/timer/edit/${timer.id}`)}
 										>
 											<MaterialIcons name="edit" size={24} color={Colors.contentDim}/>
 										</TouchableOpacity>
@@ -155,10 +153,10 @@ const PageTimerDetail = () => {
 								<View>
 									<Row style={{width: '100%', justifyContent: 'space-between'}}>
 										<StyledText size={TextSize.TitleSmall} color="content" style={styles.title}>
-											{mockTimer.name}
+											{timer.name}
 										</StyledText>
 										<StyledText size={TextSize.TitleLarge} color="content" style={styles.emoji}>
-											{mockTimer.emoji}
+											{timer.emoji}
 										</StyledText>
 									</Row>
 									<Row style={styles.timeInfo}>
@@ -168,7 +166,7 @@ const PageTimerDetail = () => {
 										<StyledText size={TextSize.BodyLarge} color={'contentSecondary'}
 										            style={styles.centerDot}>·</StyledText>
 										<StyledText size={TextSize.ContentSmall} color="contentDim">
-											{mockTimer.steps.length}단계
+											{timer.steps.length}단계
 										</StyledText>
 									</Row>
 								</View>
@@ -178,27 +176,27 @@ const PageTimerDetail = () => {
 
 					<Column style={styles.infoContainer}>
 						<Row style={styles.infoItem}>
-							<StyledText size={TextSize.BodyLarge} color={'content'} style={{fontWeight: '700'}}>레시피
-								제작</StyledText>
-							<StyledText size={TextSize.BodyLarge} color={'contentDim'}
-							            style={{fontWeight: '700'}}>한유찬</StyledText>
-						</Row>
-						<Row style={styles.infoItem}>
-							<StyledText size={TextSize.BodyLarge} color={'content'}
-							            style={{fontWeight: '700'}}>생성일</StyledText>
-							<StyledText size={TextSize.BodyLarge} color={'contentDim'} style={{fontWeight: '700'}}>2024년
-								11월 22일 </StyledText>
+							<StyledText size={TextSize.BodyLarge} color={'content'} style={{fontWeight: '700'}}>
+								생성일
+							</StyledText>
+							<StyledText size={TextSize.BodyLarge} color={'contentDim'} style={{fontWeight: '700'}}>
+								{new Date(timer.createdAt).toLocaleDateString('ko-KR', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric'
+								})}
+							</StyledText>
 						</Row>
 					</Column>
 
 					<View style={styles.stepsContainer}>
 						<SectionTitle title={'타이머 단계'} noPadding/>
-						{mockTimer.steps.map((step, index) => (
+						{timer.steps.map((step) => (
 							<TimerStepPreview
 								key={step.id}
 								hour={step.hours}
 								minute={step.minutes}
-								titleColor={mockTimer.color}
+								titleColor={timer.color}
 								recife={step.recipe}
 								showActions={false}
 							/>
@@ -206,28 +204,23 @@ const PageTimerDetail = () => {
 					</View>
 				</View>
 			</ScrollView>
+
 			<Row style={styles.buttonContainer}>
 				<Pressable style={styles.playButton}>
 					<MaterialIcons name="play-arrow" size={24} color={Colors.content}/>
 				</Pressable>
-				<Pressable
-					style={styles.shareButton}
-				>
+				<Pressable style={styles.shareButton}>
 					<FontAwesome5 name="chromecast" size={18} color={Colors.container}/>
-					<StyledText size={TextSize.ContentSmall} color={'container'}>프레시오로 타이머 전송하기</StyledText>
+					<StyledText size={TextSize.ContentSmall} color={'container'}>
+						프레시오로 타이머 전송하기
+					</StyledText>
 				</Pressable>
 			</Row>
+
 			<TimerDetailDeleteModal
 				visible={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
 				onDelete={handleDelete}
-			/>
-			<TimerDetailEditModal
-				visible={showEditModal}
-				onClose={() => setShowEditModal(false)}
-				onEdit={handleEdit}
-				initialEmoji={mockTimer.emoji}
-				initialName={mockTimer.name}
 			/>
 		</>
 	);

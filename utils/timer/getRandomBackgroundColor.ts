@@ -1,6 +1,6 @@
 import {TimerColor} from "@/enums/TimerColor";
 
-export default function getTimerRandomBackgroundColor(): string {
+export default function getTimerRandomBackgroundColor(): TimerColor {
 	const colors = [
 		TimerColor.Red,
 		TimerColor.Orange,
