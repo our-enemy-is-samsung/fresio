@@ -1,0 +1,77 @@
+{
+    "data": {
+        "ingredient": [
+            {
+                "id": "1",
+                "name": "토마토",
+                "createdAt": "2021-01-01",
+                "expiredAt": "2021-01-10",
+                "quantity": "1",
+                "thumbnailImage": ""
+            }
+        ]
+    }
+},
+{
+    "data": {
+        id: "1",
+        "name": "토마토",
+        "createdAt": "2021-01-01",
+        "expiredAt": "2021-01-10",
+        "thumbnailImage": "",
+        "ingredientList": [
+            {
+                "id": "1",
+                "createdAt": "2021-01-01",
+                "expiredAt": "2021-01-10",
+                "quantity": "1",
+                "thumbnailImage": ""
+            },
+            {
+                "id": "1",
+                "createdAt": "2021-01-01",
+                "expiredAt": "2021-01-10",
+                "quantity": "1",
+                "thumbnailImage": ""
+            },
+            {
+                "id": "1",
+                "createdAt": "2021-01-01",
+                "expiredAt": "2021-01-10",
+                "quantity": "1",
+                "thumbnailImage": ""
+            },
+            {
+                "id": "1",
+                "createdAt": "2021-01-01",
+                "expiredAt": "2021-01-10",
+                "quantity": "1",
+                "thumbnailImage": ""
+            }
+        ],
+        "recommendRecipe": [
+            {
+                "id": "1",
+                "name": "토마토",
+                "createdAt": "2021-01-01",
+                "thumbnailImage": "",
+                "ingredientList": [
+                    {
+                        "id": "1",
+                        "createdAt": "2021-01-01",
+                        "units": "1",
+                        "quantity": "1",
+                        "thumbnailImage": "",
+                        "recipeStep": [
+                            {
+                                "id": "1",
+                                "description": "토마토를 깨끗이 씻어주세요."
+                                "thumbnailImage": ""
+                            }
+                        ]
+                    },
+                ]
+            }
+        ]
+    }
+}

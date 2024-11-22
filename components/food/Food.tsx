@@ -21,18 +21,19 @@ const FoodLifeTimeMore = ({style}: { style?: ViewStyle }) => {
 	);
 };
 
-interface FoodLifeTimeProps  extends  FoodLifeTimeType {
+interface FoodLifeTimeProps extends FoodLifeTimeType {
 	bigUI?: boolean;
+	onPress?: () => void;
 }
 
-const FoodLifeTime = ({emoji, lifeTime, name, quantity, bigUI}: FoodLifeTimeProps) => {
+const FoodLifeTime = ({emoji, lifeTime, name, quantity, bigUI, onPress}: FoodLifeTimeProps) => {
 	const remainingDaysText = calculateRemainingDays(lifeTime);
 	const textColor = getLifeTimeColor(lifeTime);
 
 	return (
 		<TouchableRippleNative
 			style={styles.container}
-			onPress={() => console.log('아이템 클릭')}
+			onPress={onPress}
 		>
 			<View style={styles.wrap}>
 				<View style={styles.left}>
