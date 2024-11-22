@@ -1,11 +1,14 @@
-import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
+import {DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack, Redirect} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
-import {LayoutChangeEvent, useColorScheme} from "react-native";
+import {LayoutChangeEvent, View,} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import {Colors} from "@/shared/constants/Color";
+import {Colors} from "@/constants/Color";
+import Toast from "@/components/shared/Toast";
+import useToastStore from "@/state/toast";
+// import * as Updates from 'expo-updates';
 
 export {
 	ErrorBoundary,
@@ -21,25 +24,18 @@ const MyDefaultTheme: Theme = {
 	...DefaultTheme,
 	colors: {
 		...DefaultTheme.colors,
-		background: Colors['light']['grayScale5'],
+		background: Colors['surface'],
 	}
 };
 
-const MyDarkTheme: Theme = {
-	...DarkTheme,
-	colors: {
-		...DarkTheme.colors,
-		background: Colors['dark']['grayScale5'],
-	},
-};
-
 function RootLayoutNav({onLayout}: RootLayoutNavProps) {
-	const colorScheme = useColorScheme();
+	const {toasts} = useToastStore();
 
 	return (
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
-			<ThemeProvider value={colorScheme === 'dark' ? MyDarkTheme : MyDefaultTheme}>
+			<ThemeProvider value={MyDefaultTheme}>
 				<Stack
+					initialRouteName="index"
 					screenOptions={{
 						headerShown: false,
 					}}
@@ -59,9 +55,41 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					/>
 					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}} />
 					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}} />
+			<Redirect href="/onborad/onboardmain/AutoExpirationAlertScreen" />
+					<Stack.Screen name="index" options={{animation: 'none'}}/>
+					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/create"/>
+					<Stack.Screen name="timer/detail/[id]"/>
+					<Stack.Screen name="food/detail/[id]"/>
 				</Stack>
 			</ThemeProvider>
-			<Redirect href="/onborad/onboardmain/AutoExpirationAlertScreen" />
+			<View
+				style={{
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					right: 0,
+					pointerEvents: 'box-none'
+				}}
+			>
+				{toasts.map((toast, index) => (
+					<View
+						key={toast.id}
+						style={{
+							marginTop: 30 + (index * 30),
+							marginHorizontal: 10,
+						}}
+					>
+						<Toast
+							text={toast.text}
+							duration={toast.duration}
+							type={toast.type}
+						/>
+					</View>
+				))}
+			</View>
 		</GestureHandlerRootView>
 	);
 }
