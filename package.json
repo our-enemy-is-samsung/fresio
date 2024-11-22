@@ -18,6 +18,9 @@
     "@expo/vector-icons": "^14.0.3",
     "@react-navigation/native": "^6.0.2",
     "expo": "~51.0.28",
+    "expo-barcode-generator": "^3.0.2",
+    "expo-barcode-scanner": "~13.0.1",
+    "expo-camera": "~15.0.16",
     "expo-constants": "~16.0.2",
     "expo-dev-client": "~4.0.28",
     "expo-font": "~12.0.10",
@@ -45,9 +48,7 @@
     "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.19.10",
     "vector-icons": "^0.1.0",
-    "zustand": "^5.0.1",
-    "expo-barcode-scanner": "~13.0.1",
-    "expo-camera": "~15.0.16"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
