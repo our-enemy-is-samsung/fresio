@@ -1,6 +1,6 @@
 import {DarkTheme, DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
-import {Stack, Redirect} from 'expo-router';  // Redirect 추가
+import {Stack, Redirect} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
 import {LayoutChangeEvent, useColorScheme} from "react-native";
@@ -45,15 +45,23 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					}}
 				>
 					<Stack.Screen
-						name="onborad/AutoExpirationAlertScreen"
+						name="onborad/onboardmain/AutoExpirationAlertScreen"
 						options={{animation: 'none'}}
+					/>
+					<Stack.Screen
+						name="onborad/onboarddiet/SelectDietScreen"
+						options={{
+							headerShown: true,
+							title: '해당되는 식단을 알려주세요',
+							headerBackTitle: '',
+							animation: 'default'
+						}}
 					/>
 					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}} />
 					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}} />
 				</Stack>
 			</ThemeProvider>
-			{/* AutoExpirationAlertScreen으로 초기 리다이렉션 */}
-			<Redirect href="/onborad/AutoExpirationAlertScreen" />
+			<Redirect href="/onborad/onboardmain/AutoExpirationAlertScreen" />
 		</GestureHandlerRootView>
 	);
 }

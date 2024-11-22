@@ -7,7 +7,7 @@ import { BlurView } from 'expo-blur';
 import Swiper from 'react-native-swiper';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/shared/constants/Color';
-import GoogleIcon from '@/app/(tabs)/onboard/onboardComponents/GoogleIcon';
+import GoogleIcon from '@/app/(tabs)/onborad/onboardComponents/GoogleIcon';
 import SecondSlide from './SecondSlide';
 import ThirdSlide from './ThirdSlide';
 
@@ -34,7 +34,7 @@ const AutoExpirationAlertScreen = () => {
     }, [currentIndex]);
 
     const handleGoogleLogin = () => {
-        router.push('../onbo');
+        router.push('/onborad/onboarddiet/SelectDietScreen');
     };
 
     const PageIndicator = () => (
@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
         width: 358,
         height: 59,
         justifyContent: 'center',
+        marginBottom:-20
     },
     buttonContent: {
         flexDirection: 'row',

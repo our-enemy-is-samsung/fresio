@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import { Colors } from '@/shared/constants/Color';
-import DifficultyIcon from "@/app/(tabs)/onboard/onboardComponents/DifficultyIcon";
-import TimeIcon from "@/app/(tabs)/onboard/onboardComponents/TimeIcon";
+import DifficultyIcon from "@/app/(tabs)/onborad/onboardComponents/DifficultyIcon";
+import TimeIcon from "@/app/(tabs)/onborad/onboardComponents/TimeIcon";
 import { BlurView } from 'expo-blur';
 
 interface CardProps {
