@@ -35,17 +35,17 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={MyDefaultTheme}>
 				<Stack
-					initialRouteName="index"
+					initialRouteName="onboard/onboardmain/AutoExpirationAlertScreen"
 					screenOptions={{
 						headerShown: false,
 					}}
 				>
 					<Stack.Screen
-						name="onborad/onboardmain/AutoExpirationAlertScreen"
+						name="onboard/onboardmain/AutoExpirationAlertScreen"
 						options={{animation: 'none'}}
 					/>
 					<Stack.Screen
-						name="onborad/onboarddiet/SelectDietScreen"
+						name="onboard/onboarddiet/SelectDietScreen"
 						options={{
 							headerShown: true,
 							title: '해당되는 식단을 알려주세요',
@@ -53,13 +53,9 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 							animation: 'default'
 						}}
 					/>
-					<Stack.Screen name="(tabs)/index" options={{animation: 'none'}} />
-					<Stack.Screen name="(tabs)/(food)/index" options={{animation: 'none'}} />
-			<Redirect href="/onborad/onboardmain/AutoExpirationAlertScreen" />
 					<Stack.Screen name="index" options={{animation: 'none'}}/>
 					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
 					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/connectDevice" options={{animation: 'none'}}/>
 					<Stack.Screen name="timer/create"/>
 					<Stack.Screen name="timer/detail/[id]"/>
 					<Stack.Screen name="food/detail/[id]"/>

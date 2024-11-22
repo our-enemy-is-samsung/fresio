@@ -6,7 +6,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {BlurView} from 'expo-blur';
 import Swiper from 'react-native-swiper';
 import {useRouter} from 'expo-router';
-import GoogleIcon from '@/app/(tabs)/onborad/onboardComponents/GoogleIcon';
+import GoogleIcon from '@/components/onboard/GoogleIcon';
 import SecondSlide from './SecondSlide';
 import ThirdSlide from './ThirdSlide';
 import {Colors} from "@/constants/Color";
@@ -34,7 +34,7 @@ const AutoExpirationAlertScreen = () => {
 	}, [currentIndex]);
 
 	const handleGoogleLogin = () => {
-		router.push('/onborad/onboarddiet/SelectDietScreen');
+		router.push('/onboard/onboarddiet/SelectDietScreen');
 	};
 
 	const PageIndicator = () => (
@@ -60,7 +60,7 @@ const AutoExpirationAlertScreen = () => {
 	const FirstBannerContent = () => (
 		<View style={styles.bannerContent}>
 			<Image
-				source={require('../../../../assets/images/fresio.png')}
+				source={require('@/assets/images/fresio.png')}
 				style={styles.bannerIcon}
 			/>
 			<View style={styles.bannerTextContainer}>

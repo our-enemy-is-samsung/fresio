@@ -13,7 +13,7 @@ const ThirdSlide: React.FC = () => {
                 </Text>
             </View>
             <Image
-                source={require('../../../../assets/images/image.png')}
+                source={require('@/assets/images/image.png')}
                 style={styles.image}
                 resizeMode="contain"
             />

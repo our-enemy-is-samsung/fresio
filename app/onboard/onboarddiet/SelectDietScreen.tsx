@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import BackIcon from '../onboardComponents/BackIcon';
+import BackIcon from '@/components/onboard/BackIcon';
 import {Colors} from "@/constants/Color";
 
 // null을 제외한 DietType 정의
@@ -145,7 +145,7 @@ const SelectDietScreen = () => {
                ]}
                onPress={() => {
                    if (selectedDiet) {
-                       router.push('/onborad/onboarddiet/SelectNetworkScreen');
+                       router.push('/onboard/onboarddiet/SelectNetworkScreen');
                    }
                }}
                disabled={!selectedDiet}

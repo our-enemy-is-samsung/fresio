@@ -1,8 +1,8 @@
 import React from 'react';
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '@/constants/Color';
-import DifficultyIcon from "@/app/(tabs)/onborad/onboardComponents/DifficultyIcon";
-import TimeIcon from "@/app/(tabs)/onborad/onboardComponents/TimeIcon";
+import DifficultyIcon from "@/components/onboard/DifficultyIcon";
+import TimeIcon from "@/components/onboard/TimeIcon";
 import {BlurView} from 'expo-blur';
 
 interface CardProps {
@@ -65,17 +65,17 @@ const SecondSlide: React.FC = () => {
 			</View>
 			<View style={styles.cardsContainer}>
 				<Image
-					source={require('../../../../assets/images/Frame 37.png')}
+					source={require('@/assets/images/Frame 37.png')}
 					style={styles.newImage}
 				/>
 				<Card
-					image={require('../../../../assets/images/bibim.png')}
+					image={require('@/assets/images/bibim.png')}
 					title="보양 만점 비빔밥"
 					style={styles.bibimCard}
 					imageStyle={styles.smallCardImage}
 				/>
 				<Card
-					image={require('../../../../assets/images/kimchi.png')}
+					image={require('@/assets/images/kimchi.png')}
 					title="김치볶음밥"
 					style={styles.kimchiCard}
 				/>

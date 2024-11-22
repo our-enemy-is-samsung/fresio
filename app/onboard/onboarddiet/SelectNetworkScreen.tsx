@@ -13,10 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import LottieView from "lottie-react-native";
-import BackIcon from "../onboardComponents/BackIcon";
-import RefreshIcon from "../onboardComponents/RefreshIcon"; // RefreshIcon 추가
 import ListLoading from "@/assets/lottie/listLoading.json";
 import {Colors} from "@/constants/Color";
+import RefreshIcon from "@/components/onboard/RefreshIcon";
+import BackIcon from "@/components/onboard/BackIcon";
 
 const SelectNetworkScreen = () => {
   const [wifiList, setWifiList] = useState<Array<{ ssid: string; strength: number }>>([]);
