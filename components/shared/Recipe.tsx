@@ -8,8 +8,10 @@ import {TextSize} from "@/enums/TextSize";
 import {Row} from "@/components/shared/Row";
 import {Colors} from "@/constants/Color";
 import {Column} from "@/components/shared/Column";
+import {router} from "expo-router";
 
 interface RecipeProps {
+	id: string;
 	name: string;
 	imageUrl: string;
 	cookTime?: string;
@@ -20,6 +22,7 @@ interface RecipeProps {
 }
 
 const Recipe = ({
+					id,
 	                name,
 	                imageUrl,
 	                cookTime = "30분",
@@ -41,7 +44,9 @@ const Recipe = ({
 	return (
 		<TouchableRipple
 			style={styles.container}
-			onPress={onPress}
+			onPress={() => {
+				router.push(`/recipe/${id}`);
+			}}
 			rippleColor="rgba(0, 0, 0, .1)"
 		>
 			<Row style={styles.contentWrap}>
