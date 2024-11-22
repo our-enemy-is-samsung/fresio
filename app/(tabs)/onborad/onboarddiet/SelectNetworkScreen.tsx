@@ -10,24 +10,39 @@ import {
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import LottieView from "lottie-react-native";
 import BackIcon from "../onboardComponents/BackIcon";
-import RefreshIcon from "../onboardComponents/RefreshIcon"; // RefreshIcon 추가
+import RefreshIcon from "../onboardComponents/RefreshIcon";
 import ListLoading from "@/assets/lottie/listLoading.json";
-import {Colors} from "@/constants/Color";
+import NetworkModal from "../onboardComponents/NetworkModal";  // 모달 컴포넌트 임포트
+import { Colors } from "@/constants/Color";
+
+interface WiFiNetwork {
+  ssid: string;
+  strength: number;
+}
 
 const SelectNetworkScreen = () => {
-  const [wifiList, setWifiList] = useState<Array<{ ssid: string; strength: number }>>([]);
+  const [wifiList, setWifiList] = useState<WiFiNetwork[]>([]);
   const [isScanning, setIsScanning] = useState(true);
   const [selectedSSID, setSelectedSSID] = useState<string | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [password, setPassword] = useState("");
   const colorScheme = useColorScheme() ?? "light";
-
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const refreshNetworks = () => {
+    setIsScanning(true);
+    setWifiList([]);
+    setTimeout(() => {
       setWifiList([
         { ssid: "HOME_WIFI_5G", strength: 90 },
         { ssid: "MyWiFi", strength: 75 },
@@ -42,11 +57,32 @@ const SelectNetworkScreen = () => {
       ]);
       setIsScanning(false);
     }, 2000);
+  };
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    refreshNetworks();
   }, []);
 
-  const WiFiItem = ({ ssid, strength, index, selected, onSelect }: {
+  const handleNetworkSelect = (ssid: string) => {
+    setSelectedSSID(ssid);
+    setIsModalVisible(true);
+  };
+
+  const handleConnect = () => {
+    // Implement your connection logic here
+    console.log(`Connecting to ${selectedSSID} with password: ${password}`);
+    setIsModalVisible(false);
+    setPassword("");
+    // You might want to navigate to the next screen or show a success message
+  };
+
+  const WiFiItem = ({
+    ssid,
+    strength,
+    index,
+    selected,
+    onSelect,
+  }: {
     ssid: string;
     strength: number;
     index: number;
@@ -57,10 +93,14 @@ const SelectNetworkScreen = () => {
     const itemTranslateY = useSharedValue(20);
 
     useEffect(() => {
-      if (itemOpacity.value === 0 && itemTranslateY.value === 20) {
-        itemOpacity.value = withDelay(index * 100, withTiming(1, { duration: 300 }));
-        itemTranslateY.value = withDelay(index * 100, withSpring(0, { damping: 20, stiffness: 90 }));
-      }
+      itemOpacity.value = withDelay(
+        index * 100,
+        withTiming(1, { duration: 300 })
+      );
+      itemTranslateY.value = withDelay(
+        index * 100,
+        withSpring(0, { damping: 20, stiffness: 90 })
+      );
     }, []);
 
     const itemAnimatedStyle = useAnimatedStyle(() => ({
@@ -72,25 +112,22 @@ const SelectNetworkScreen = () => {
       <Animated.View style={itemAnimatedStyle}>
         <TouchableOpacity
           onPress={onSelect}
-          style={{
-            ...styles.wifiItem,
-            backgroundColor: selected ? Colors["brand"] : "white",
-          }}
+          style={[
+            styles.wifiItem,
+            { backgroundColor: selected ? Colors.brand : "white" },
+          ]}
         >
           <View style={styles.wifiItemContent}>
             <MaterialIcons
-              name="network-wifi"
+              name="wifi"
               size={24}
-              color={selected ? "white" : Colors["contentDim"]}
+              color={selected ? "white" : Colors.contentDim}
             />
             <RNText
-              style={{
-                fontSize: 16,
-                fontWeight: "500",
-                color: selected ? "white" : Colors["content"],
-                flex: 1,
-                textAlign: "left",
-              }}
+              style={[
+                styles.wifiItemText,
+                { color: selected ? "white" : Colors.content },
+              ]}
             >
               {ssid}
             </RNText>
@@ -101,24 +138,15 @@ const SelectNetworkScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <BackIcon />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.container}>
-        <RNText
-          style={{
-            fontSize: 28,
-            fontWeight: "600",
-            color: "#141414",
-            textAlign: "center",
-            lineHeight: 32,
-            marginBottom: 50,
-          }}
-        >
+      <View style={styles.content}>
+        <RNText style={styles.titleText}>
           프레시오의 Wi-Fi를 {"\n"}아래에서 선택해주세요
         </RNText>
 
@@ -126,7 +154,7 @@ const SelectNetworkScreen = () => {
           <RNText style={styles.headerText}>Wi-Fi 리스트</RNText>
           <TouchableOpacity
             style={styles.refreshContainer}
-            onPress={() => setIsScanning(true)}
+            onPress={refreshNetworks}
           >
             <RefreshIcon size={16} color="#707085" />
             <RNText style={styles.refreshText}>새로고침</RNText>
@@ -136,11 +164,7 @@ const SelectNetworkScreen = () => {
         {isScanning ? (
           <LottieView
             autoPlay
-            style={{
-              width: Dimensions.get("window").width,
-              height: Dimensions.get("window").width,
-              transform: [{ scale: 1.1 }],
-            }}
+            style={styles.loadingAnimation}
             speed={0.7}
             source={ListLoading}
           />
@@ -152,17 +176,26 @@ const SelectNetworkScreen = () => {
           >
             {wifiList.map((wifi, index) => (
               <WiFiItem
-                key={index}
+                key={wifi.ssid}
                 ssid={wifi.ssid}
                 strength={wifi.strength}
                 index={index}
                 selected={selectedSSID === wifi.ssid}
-                onSelect={() => setSelectedSSID(wifi.ssid)}
+                onSelect={() => handleNetworkSelect(wifi.ssid)}
               />
             ))}
           </ScrollView>
         )}
       </View>
+
+      <NetworkModal 
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        ssid={selectedSSID}
+        password={password}
+        onPasswordChange={setPassword}
+        onConnect={handleConnect}
+      />
     </SafeAreaView>
   );
 };
@@ -171,8 +204,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
+  },
+  content: {
+    flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 20,
   },
   header: {
     flexDirection: "row",
@@ -180,6 +215,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: "#F5F5F5",
+  },
+  titleText: {
+    fontSize: 28,
+    fontWeight: "600",
+    color: "#141414",
+    textAlign: "center",
+    lineHeight: 32,
+    marginVertical: 50,
   },
   titleRow: {
     flexDirection: "row",
@@ -210,12 +253,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     gap: 12,
   },
+  loadingAnimation: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").width,
+    transform: [{ scale: 1.1 }],
+  },
   wifiItem: {
-    display: "flex",
     width: "100%",
     padding: 20,
-    alignItems: "flex-start",
-    gap: 10,
     borderRadius: 13,
     backgroundColor: "#FFF",
     marginBottom: -3,
@@ -225,6 +270,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     width: "100%",
+  },
+  wifiItemText: {
+    fontSize: 16,
+    fontWeight: "500",
+    flex: 1,
+    textAlign: "left",
   },
 });
 
