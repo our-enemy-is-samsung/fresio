@@ -28,7 +28,7 @@ interface Toast {
 	createdAt: number; // 생성 시간을 저장하여 순서 보장
 }
 
-interface ToastStore {
+export interface ToastStore {
 	/** 현재 표시 중인 토스트 목록 */
 	toasts: Toast[];
 	/**

@@ -106,8 +106,8 @@ const HomeScreen = () => {
 							contentContainerStyle={{rowGap: 10}}
 						>
 							<Recipe
-								id={'ajakw'}
-								name="김치찌개가 첨가된 아침찬"
+								id={'1'}
+								name="김치찌개s가 첨가된 아침찬"
 								imageUrl="https://recipe1.ezmember.co.kr/cache/recipe/2015/06/08/fa3cd1800838bf561ea00b7552e9866a.jpg"
 								cookTime="40분"
 								difficulty="보통"

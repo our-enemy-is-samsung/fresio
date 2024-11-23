@@ -1,6 +1,15 @@
-import {SafeAreaView, StyleSheet} from "react-native";
-import React from "react";
+import {
+	ActivityIndicator,
+	Dimensions,
+	Linking,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity
+} from "react-native";
+import React, {useEffect} from "react";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {router, useLocalSearchParams} from "expo-router";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import {Image} from "expo-image";
@@ -8,46 +17,281 @@ import {LinearGradient} from "expo-linear-gradient";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import {Colors} from "@/constants/Color";
 import View from "@/components/shared/View";
+import {Row} from "@/components/shared/Row";
+import {Column} from "@/components/shared/Column";
+import useRecipeStore from "@/state/recipeStore";
+import useToastStore from "@/state/toast";
+import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
+import TimerStepPreview from "@/components/timer/TimerStepPreview";
+import {TimerColor} from "@/enums/TimerColor";
+import YoutubeIframe from "react-native-youtube-iframe";
 
 const PageRecipeDetail = () => {
 	const inset = useSafeAreaInsets();
+	const params = useLocalSearchParams<{ id: string }>();
+	const {recipe, isLoading, error, fetchRecipe} = useRecipeStore();
+	const {addToast} = useToastStore();
+	const toastInstance = useToastStore();
+
+	useEffect(() => {
+		const loadRecipe = async () => {
+			// id가 없거나 빈 문자열인 경우 처리
+			if (!params.id) {
+				addToast('레시피 ID가 필요합니다.', 'error');
+				router.back();
+				return;
+			}
+
+			try {
+				await fetchRecipe(params.id, toastInstance);
+			} catch (error) {
+				if (error instanceof Error) {
+					addToast(error.message, 'error');
+				} else {
+					addToast('레시피를 불러오는데 실패했습니다.', 'error');
+				}
+				router.back();
+			}
+		};
+
+		loadRecipe();
+	}, [params.id]);
+
+	const handleCoupangLink = async (ingredientName: string) => {
+		try {
+			const coupangAppUrl = `coupang://search?q=${encodeURIComponent(ingredientName)}`;
+			const coupangWebUrl = `https://www.coupang.com/np/search?component=&q=${encodeURIComponent(ingredientName)}`;
+
+			const canOpenURL = await Linking.canOpenURL(coupangAppUrl);
+
+			if (canOpenURL) {
+				await Linking.openURL(coupangAppUrl);
+				addToast('쿠팡 앱으로 이동합니다.', 'info');
+			} else {
+				await Linking.openURL(coupangWebUrl);
+				addToast('쿠팡 웹사이트로 이동합니다.', 'info');
+			}
+		} catch (error) {
+			addToast('쿠팡 링크 연결에 실패했습니다.', 'error');
+			console.error('딥링크 에러:', error);
+		}
+	};
+
+	if (isLoading) {
+		return (
+			<SafeAreaView style={{
+				...styles.container,
+				marginTop: inset.top,
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}>
+				<ActivityIndicator size="large" color={Colors.brand}/>
+			</SafeAreaView>
+		);
+	}
+
+	if (error || !recipe) {
+		return (
+			<SafeAreaView style={{
+				...styles.container,
+				marginTop: inset.top,
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}>
+				<StyledText size={TextSize.HeadingSmall} color="error">
+					레시피를 불러올 수 없습니다.
+				</StyledText>
+				<TouchableOpacity
+					style={styles.errorButton}
+					onPress={() => router.back()}
+				>
+					<StyledText size={TextSize.BodySmall} color="brand">
+						돌아가기
+					</StyledText>
+				</TouchableOpacity>
+			</SafeAreaView>
+		);
+	}
+
+	const totalCookingTime = recipe.timer.steps.reduce((acc, step) => acc + step.time, 0);
+
 	return (
-		<SafeAreaView style={{
+		<ScrollView style={{
 			...styles.container,
 			marginTop: inset.top
 		}}>
-			<AntDesign name={'left'} color={Colors.container} size={24} style={styles.backButton}/>
+			<TouchableOpacity
+				style={styles.backButton}
+				onPress={() => router.back()}
+			>
+				<AntDesign name={'left'} color={Colors.container} size={24}/>
+			</TouchableOpacity>
 			<Image
 				style={styles.thumbnail}
-				source={'data:image/webp;base64,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'}
+				source={recipe.thumbnail}
+				contentFit="cover"
 			/>
-			<LinearGradient colors={['rgba(0,0,0,0.5)', 'transparent', 'rgba(0,0,0,0.7)']}
-			                style={styles.thumbnailGradient}/>
-			<StyledText size={TextSize.TitleMedium} color={'container'} style={styles.recipeTitle}>아침유찬
-				스테이크</StyledText>
+			<LinearGradient
+				colors={['rgba(0,0,0,0.5)', 'transparent', 'rgba(0,0,0,0.7)']}
+				style={styles.thumbnailGradient}
+			/>
+			<View style={styles.titleContainer}>
+				<StyledText
+					size={TextSize.TitleMedium}
+					color={'container'}
+				>
+					{recipe.name}
+				</StyledText>
+				<Row style={styles.metaInfo}>
+					<Row style={styles.metaItem}>
+						<AntDesign name="clockcircle" size={16} color={Colors.container}/>
+						<StyledText size={TextSize.BodySmall} color="container">
+							{totalCookingTime}분
+						</StyledText>
+					</Row>
+					<Row style={styles.metaItem}>
+						<AntDesign name="user" size={16} color={Colors.container}/>
+						<StyledText size={TextSize.BodySmall} color="container">
+							{recipe.servings}인분
+						</StyledText>
+					</Row>
+				</Row>
+			</View>
+
 			{/* 레시피 설명 */}
-			<View style={styles.section}>
+			<View style={{
+				...styles.section,
+				paddingVertical: 32,
+				gap: 22
+			}}>
 				<StyledText size={TextSize.BodyLarge} color={'content'}>레시피 설명</StyledText>
 				<StyledText size={TextSize.BodyLarge} color={'contentDim'}>
-					야식 먹으면 하루 피로가 싹~ 풀리잖아요~?{'\n'}
-					여러분이 가장 좋아하는 야식은 무엇인가요?{'\n'}
-					만.레가 더 특별한 야식 메뉴를 추천합니다 O(∩_∩)O
+					{recipe.description}
 				</StyledText>
 			</View>
 
+			<View style={styles.divider}/>
+
 			{/* 재료 */}
-			<View style={styles.divider} />
 			<View style={styles.section}>
-				<StyledText size={TextSize.BodyLarge} color={'content'}>레시피 설명</StyledText>
-				<StyledText size={TextSize.BodyLarge} color={'contentDim'}>
-					야식 먹으면 하루 피로가 싹~ 풀리잖아요~?{'\n'}
-					여러분이 가장 좋아하는 야식은 무엇인가요?{'\n'}
-					만.레가 더 특별한 야식 메뉴를 추천합니다 O(∩_∩)O
-				</StyledText>
+				<Row style={styles.sectionHeader}>
+					<StyledText size={TextSize.BodyLarge} color={'content'}>재료</StyledText>
+					<StyledText size={TextSize.BodySmall} color={'contentDim'}>
+						{recipe.servings}인분 기준
+					</StyledText>
+				</Row>
+				<View style={styles.ingredientWrap}>
+					{recipe.ingredients.map((ingredient, index) => (
+						<Row key={`${recipe.id}-ingredient-${index}`} style={styles.ingredientContainer}>
+							<Column>
+								<StyledText size={TextSize.BodyLarge} color={'content'}>
+									{ingredient.name}
+								</StyledText>
+								<StyledText size={TextSize.BodySmall} color={'contentDim'}>
+									{ingredient.quantity}
+								</StyledText>
+							</Column>
+							<TouchableOpacity
+								style={styles.ingredientCoupang}
+								onPress={() => handleCoupangLink(ingredient.name)}
+							>
+								<StyledText size={TextSize.LabelLarge} color={'contentDim'}>
+									구매하기
+								</StyledText>
+							</TouchableOpacity>
+						</Row>
+					))}
+				</View>
 			</View>
-		</SafeAreaView>
-	)
-}
+
+			<View style={styles.divider}/>
+
+			{/* 조리 단계 */}
+			<View style={styles.section}>
+				<StyledText size={TextSize.BodyLarge} color={'content'} style={{marginBottom: 12}}>조리 순서</StyledText>
+				{recipe.steps.map((step, index) => (
+					<View
+						key={`${recipe.id}-step-${index}`}
+						style={styles.stepContainer}
+					>
+						<Row style={styles.stepHeader}>
+							<StyledText size={TextSize.BodySmall} color={'contentDim'}>
+								{index + 1}단계
+							</StyledText>
+							<StyledText size={TextSize.BodySmall} color={'brand'}>
+								{recipe.timer.steps[index].time}분
+							</StyledText>
+						</Row>
+						<StyledText size={TextSize.BodyLarge} color={'content'}>
+							{step.description}
+						</StyledText>
+						{step.thumbnailUrl && (
+							<Image
+								source={step.thumbnailUrl}
+								contentFit="cover"
+								style={styles.stepThumbnail}
+							/>
+						)}
+					</View>
+				))}
+			</View>
+
+			<View style={styles.divider}/>
+
+			<View style={styles.section}>
+				<StyledText size={TextSize.BodyLarge} color={'content'} style={{marginBottom: 12}}>타이머</StyledText>
+				<Column style={styles.timerSteps}>
+					{recipe.timer.steps.map((step, index) => (
+						<TimerStepPreview
+							key={`timer-step-${index}`}
+							titleColor={TimerColor.Orange}
+							hour={Math.floor(step.time / 60)}
+							minute={step.time % 60}
+							recife={step.description}
+							showActions={false}
+						/>
+					))}
+				</Column>
+
+				<Row style={styles.buttonContainer}>
+					<TouchableOpacity
+						style={styles.playButton}
+						onPress={() => {
+							router.push(`/timer/run/${recipe.id}`);
+						}}
+					>
+						<MaterialIcons
+							name="play-arrow"
+							size={24}
+							color={Colors.contentDim}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.shareButton}>
+						<FontAwesome5
+							name="chromecast"
+							size={18}
+							color={Colors.container}
+						/>
+						<StyledText
+							size={TextSize.ContentSmall}
+							color={'container'}
+						>
+							프레시오로 타이머 전송하기
+						</StyledText>
+					</TouchableOpacity>
+				</Row>
+			</View>
+			<View style={styles.divider}/>
+			<View style={styles.section}>
+				<StyledText size={TextSize.BodyLarge} color={'content'} style={{marginBottom: 12}}>추천 컨텐츠</StyledText>
+				<YoutubeIframe
+					videoId={recipe.youtubeId}
+					width={Dimensions.get('window').width - 44}
+					height={220}/>
+			</View>
+		</ScrollView>
+	);
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -57,7 +301,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 20,
 		left: 12,
-		zIndex: 1
+		zIndex: 1,
+		padding: 8,
 	},
 	thumbnail: {
 		width: '100%',
@@ -66,28 +311,104 @@ const styles = StyleSheet.create({
 	thumbnailGradient: {
 		width: '100%',
 		height: 220,
-
 		position: 'absolute',
 		top: 0
 	},
-	recipeTitle: {
+	titleContainer: {
 		position: 'absolute',
-		top: 160,
+		top: 140,
 		left: 20,
-		zIndex: 1
+		right: 20,
+		zIndex: 1,
+		gap: 8,
+	},
+	metaInfo: {
+		gap: 12,
+	},
+	metaItem: {
+		gap: 4,
+		alignItems: 'center',
 	},
 	section: {
 		padding: 22,
-
 		gap: 12,
 	},
+	sectionHeader: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
 
+		marginBottom: 12,
+	},
 	divider: {
 		width: '100%',
 		height: 10,
-
 		backgroundColor: Colors.containerDark
-	}
+	},
+	ingredientWrap: {
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between',
+	},
+	ingredientContainer: {
+		width: Dimensions.get('window').width / 2 - 44,
+		justifyContent: 'space-between',
+		marginBottom: 20,
+	},
+	ingredientCoupang: {
+		paddingHorizontal: 10,
+		paddingVertical: 6,
+		borderRadius: 9999,
+		borderWidth: 1,
+		borderColor: Colors.contentSecondary,
+	},
+	stepContainer: {
+		marginBottom: 16,
+		gap: 4,
+	},
+	stepHeader: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	stepThumbnail: {
+		width: '100%',
+		height: 200,
+		marginTop: 12,
+		borderRadius: 8,
+	},
+	errorButton: {
+		marginTop: 12,
+		paddingHorizontal: 16,
+		paddingVertical: 8,
+		borderRadius: 8,
+		backgroundColor: Colors.brandContainer,
+	},
+	 timerSteps: {
+        gap: 12,
+        marginBottom: 12,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        gap: 10,
+    },
+    playButton: {
+        width: 60,
+        height: 55,
+        backgroundColor: Colors.containerDark,
+        borderRadius: 9999,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    shareButton: {
+        flex: 1,
+        height: 55,
+        backgroundColor: Colors.content,
+        borderRadius: 9999,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+    },
 });
 
-export default PageRecipeDetail
+export default PageRecipeDetail;
