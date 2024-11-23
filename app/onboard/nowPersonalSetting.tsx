@@ -6,11 +6,12 @@ import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import {Colors} from "@/constants/Color";
 import {Image} from "expo-image";
+import {router} from "expo-router";
 
 const NowPersonalSetting = () => {
 	const inset = useSafeAreaInsets();
 	const handlePress = () => {
-
+		router.push('/onboard/ageSelect');
 	}
 	return (
 		<View style={{
@@ -34,7 +35,7 @@ const NowPersonalSetting = () => {
 			<View style={styles.bottom}>
 				<TouchableOpacity
 					style={styles.button}
-					onPress={() => handlePress}
+					onPress={() => handlePress()}
 				>
 					<View style={styles.buttonContent}>
 						<StyledText

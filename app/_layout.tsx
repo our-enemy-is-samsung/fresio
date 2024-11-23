@@ -50,6 +50,12 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen name={'onboard/beforeCamera'} />
 					<Stack.Screen name="onboard/weHaveLocationPermission"/>
 					<Stack.Screen name="onboard/nowPersonalSetting"/>
+					<Stack.Screen name="onboard/ageSelect"/>
+					<Stack.Screen name="onboard/foodCheckPasta" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/foodCheckBibimbap" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/foodCheckRamen" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/foodCheckCutlet" options={{animation: 'none'}}/>
+					<Stack.Screen name="onboard/foodCheckPizza" options={{animation: 'none'}}/>
 
 					<Stack.Screen name="index" options={{animation: 'none'}}/>
 					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
