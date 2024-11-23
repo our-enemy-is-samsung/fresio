@@ -1,5 +1,5 @@
 import {Pressable, ScrollView, StatusBar, StyleSheet, TouchableOpacity} from "react-native";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
 import View from "@/components/shared/View";
@@ -15,7 +15,6 @@ import {Colors} from "@/constants/Color";
 import {FontAwesome5} from "@expo/vector-icons";
 import SectionTitle from "@/components/home/SectionTitle";
 import TimerDetailDeleteModal from "@/components/timer/details/TimerDetailDeleteModal";
-import TimerDetailEditModal from "@/components/timer/details/TimerDetailEditModal";
 import useTimerStore, {TimerStepType, TimerType} from "@/state/timer";
 
 const PageTimerDetail = () => {
