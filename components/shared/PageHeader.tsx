@@ -11,27 +11,30 @@ import {router} from "expo-router";
 interface PageHeaderProps {
 	name: string;
 	style?: ViewStyle;
+	noSettingIcon?: boolean;
 }
 
-const PageHeader = ({name, style}: PageHeaderProps) => {
+const PageHeader = ({name, style, noSettingIcon}: PageHeaderProps) => {
 	return (
 		<View style={{...styles.container, ...style}}>
 			<View style={styles.statusContainer}>
 				<StyledText size={TextSize.HeadingLarge} color={'content'} style={{marginRight: 8}}>{name}</StyledText>
-				<View style={styles.status} />
+				<View style={styles.status}/>
 				<StyledText size={TextSize.BodySmall} color={'brandDark'}>연결됨</StyledText>
 			</View>
-			<TouchableRippleNative
-				style={styles.touchable}
-				onPress={() => router.push('/setting')}
-				android_ripple={{
-					radius: 18,
-				}}
-				borderless
-				 rippleColor="rgba(0, 0, 0, .1)"
-			>
-				<Feather name="settings" size={21} color={Colors['content']} />
-			</TouchableRippleNative>
+			{!noSettingIcon ? (
+				<TouchableRippleNative
+					style={styles.touchable}
+					onPress={() => router.push('/setting')}
+					android_ripple={{
+						radius: 18,
+					}}
+					borderless
+					rippleColor="rgba(0, 0, 0, .1)"
+				>
+					<Feather name="settings" size={21} color={Colors['content']}/>
+				</TouchableRippleNative>
+			): (<View style={{height: 42}}/>)}
 		</View>
 	)
 }

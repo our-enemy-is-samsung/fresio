@@ -60,7 +60,7 @@ const MOCK_INGREDIENTS: Ingredient[] = [
 		id: "1",
 		name: "토마토",
 		createdAt: "2024-01-01",
-		expiredAt: "2024-01-10",
+		expiredAt: "2025-11-30",
 		quantity: "3",
 		thumbnailImage: "",
 	},
@@ -68,10 +68,18 @@ const MOCK_INGREDIENTS: Ingredient[] = [
 		id: "2",
 		name: "양파",
 		createdAt: "2024-01-02",
-		expiredAt: "2024-01-15",
+		expiredAt: "2024-11-24",
 		quantity: "2",
 		thumbnailImage: "",
-	}
+	},
+	{
+		id: "3",
+		name: "토마토",
+		createdAt: "2024-11-22",
+		expiredAt: "2024-11-31",
+		quantity: "3",
+		thumbnailImage: "",
+	},
 ];
 
 const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [

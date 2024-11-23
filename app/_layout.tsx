@@ -56,6 +56,10 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen name="search/index"/>
 					<Stack.Screen name="recipe/[id]" />
 					<Stack.Screen name="setting/index"/>
+					<Stack.Screen name="setting/ageSetting"/>
+					<Stack.Screen name="setting/dietPreferencePage"/>
+					<Stack.Screen name="setting/usernameSettings"/>
+					<Stack.Screen name="setting/deviceVolumn"/>
 				</Stack>
 			</ThemeProvider>
 			<View
