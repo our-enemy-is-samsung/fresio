@@ -95,7 +95,7 @@ const AutoExpirationAlertScreen = () => {
 	}, [currentIndex]);
 
 	const handleGoogleLogin = () => {
-		router.push('/onboard/onboarddiet/Name');
+		router.push('/onboard/beforeCamera');
 	};
 
 	const PageIndicator = () => (
@@ -144,7 +144,8 @@ const AutoExpirationAlertScreen = () => {
 							<StyledText
 								size={TextSize.HeadingSmall}
 								color="surface"
-								style={styles.buttonText}
+								textAlign={'center'}
+								style={{width: '100%'}}
 							>
 								눌러서 시작하기
 							</StyledText>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		backgroundColor: Colors.brand,
-		borderRadius: 16,
+		borderRadius: 22,
 		width: 358,
 		height: 59,
 		justifyContent: 'center',
@@ -227,13 +228,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		height: '100%',
 		justifyContent: 'center',
-	},
-	buttonText: {
-		textAlign: 'center',
-		lineHeight: 24,
-		fontFamily: 'Wanted Sans Variable',
-		fontWeight: '600',
-		width: '100%',
 	},
 });
 

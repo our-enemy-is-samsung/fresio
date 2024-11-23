@@ -47,6 +47,9 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 					<Stack.Screen
 						name="onboard/onboarddiet/SelectDietScreen"
 					/>
+					<Stack.Screen name={'onboard/beforeCamera'} />
+					<Stack.Screen name="onboard/weHaveLocationPermission"/>
+
 					<Stack.Screen name="index" options={{animation: 'none'}}/>
 					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
 					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
