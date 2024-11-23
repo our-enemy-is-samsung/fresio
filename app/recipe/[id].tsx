@@ -257,7 +257,7 @@ const PageRecipeDetail = () => {
 					<TouchableOpacity
 						style={styles.playButton}
 						onPress={() => {
-							router.push(`/timer/run/${recipe.id}`);
+							router.push(`/timer/run/${recipe?.timer.id}`);
 						}}
 					>
 						<MaterialIcons

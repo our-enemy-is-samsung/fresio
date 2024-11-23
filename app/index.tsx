@@ -64,7 +64,7 @@ const HomeScreen = () => {
 						<RecommendCTA/>
 					</View>
 					<SectionContainer>
-						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'} showMoreButton/>
+						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'}/>
 						<ScrollView
 							showsHorizontalScrollIndicator={false}
 							style={{paddingVertical: 18, paddingHorizontal: 22}}

@@ -20,6 +20,7 @@ export interface RecipeTimerStep {
 
 export interface RecipeTimer {
     backgroundColor: string;
+    id: string;
     emoji: string;
     steps: RecipeTimerStep[];
 }
@@ -60,8 +61,10 @@ const MOCK_RECIPE: Recipe = {
         {description: "고추를 넣고 끓인다."}
     ],
     timer: {
+        id: "timer_1",
         backgroundColor: "#FF0000",
         emoji: "⏰",
+
         steps: [
             {description: "냄비에 물을 붓고 김치를 넣어 끓인다.", time: 10},
             {description: "두부와 돼지고기를 넣고 끓인다.", time: 10},
