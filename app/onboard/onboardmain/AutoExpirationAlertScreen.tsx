@@ -34,6 +34,7 @@ const FirstSlide = () => (
 
 const SecondSlide = () => (
 	<View style={styles.slide}>
+		<StatusBar style="dark"/>
 		<View style={styles.headerContainer}>
 			<StyledText size={TextSize.TitleMedium} color="content">
 				사용자 맞춤 레시피 추천

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {PermissionsAndroid, Platform, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useLocalSearchParams, useRouter} from 'expo-router';
@@ -9,12 +9,13 @@ import StyledText from "@/components/shared/Text";
 import useToastStore from "@/state/toast";
 import {Colors} from "@/constants/Color";
 
-const WIFI_PREFIX = 'FRESIO_';
+const WIFI_PREFIX = 'Bl';
 
 const WifiLoadingScreen = () => {
 	const {ssid} = useLocalSearchParams<{ ssid: string }>();
 	const router = useRouter();
 	const {addToast} = useToastStore();
+	const mounted = useRef(true);
 
 	const requestLocationPermission = async () => {
 		try {
@@ -33,58 +34,69 @@ const WifiLoadingScreen = () => {
 				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 					return true;
 				} else {
-					addToast('위치 권한이 거부되었습니다. Wi-Fi 검색이 불가능합니다.', 'error');
+					if (mounted.current) {
+						addToast('위치 권한이 거부되었습니다. Wi-Fi 검색이 불가능합니다.', 'error');
+					}
 					return false;
 				}
 			}
 			return true; // iOS는 앱 설정에서 권한 설정
 		} catch (err) {
-			addToast('권한 요청 중 오류가 발생했습니다.', 'error');
-			console.warn(err);
+			if (mounted.current) {
+				addToast('권한 요청 중 오류가 발생했습니다.', 'error');
+				console.warn(err);
+			}
 			return false;
 		}
 	};
 
 	useEffect(() => {
+		mounted.current = true;
 		let intervalId: NodeJS.Timeout;
 
 		const scanWifi = async () => {
+			if (!mounted.current) return;
+
 			try {
 				const hasPermission = await requestLocationPermission();
 				if (!hasPermission) return;
 
 				if (Platform.OS === 'android') {
 					const wifiList = await WifiManager.loadWifiList();
-					// Bl로 시작하는 WiFi만 필터링
 					const filteredWifiList = wifiList.filter(wifi => wifi.SSID.startsWith(WIFI_PREFIX));
-					console.log('Available Bl WiFi networks:', filteredWifiList);
 
-					if (filteredWifiList.length > 0) {
+					if (mounted.current && filteredWifiList.length > 0) {
+						if (intervalId) {
+							clearInterval(intervalId);
+
+							router.push('/onboard/nowPersonalSetting');
+						}
 						addToast(`${filteredWifiList.length}개의 프레시오 기기가 발견되었습니다.`, 'success');
+
 					}
 				} else {
 					const currentSSID = await WifiManager.getCurrentWifiSSID();
+					if (!mounted.current) return;
+
 					if (currentSSID.startsWith(WIFI_PREFIX)) {
-						console.log('Connected to Bl WiFi:', currentSSID);
 						addToast('프레시오 기기에 연결되어 있습니다.', 'success');
 					} else {
-						console.log('Current SSID (not Bl):', currentSSID);
 						addToast('프레시오 기기에 연결되어 있지 않습니다.', 'warn');
 					}
 				}
 			} catch (error) {
-				console.error('WiFi scanning error:', error);
-				addToast('Wi-Fi 검색 중 오류가 발생했습니다.', 'error');
+				if (mounted.current) {
+					console.error('WiFi scanning error:', error);
+					addToast('Wi-Fi 검색 중 오류가 발생했습니다.', 'error');
+				}
 			}
 		};
 
-		// 초기 스캔 실행
 		scanWifi();
-
-		// 3초마다 스캔 실행
 		intervalId = setInterval(scanWifi, 3000);
 
 		return () => {
+			mounted.current = false;
 			if (intervalId) {
 				clearInterval(intervalId);
 			}
@@ -93,20 +105,34 @@ const WifiLoadingScreen = () => {
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			// router.push('/onboard/onboarddiet/RegisterFoodScreen');
+			if (mounted.current) {
+				// router.push('/onboard/onboarddiet/RegisterFoodScreen');
+			}
 		}, 10000);
 
-		return () => clearTimeout(timer);
+		return () => {
+			clearTimeout(timer);
+		};
 	}, []);
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
 				<View style={styles.titleContainer}>
-					<StyledText size={TextSize.TitleMedium} color={'content'} textAlign={'center'}>프레시오에서{'\n'}기기 Wi-Fi를
-						연결중입니다</StyledText>
-					<StyledText size={TextSize.ContentLarge} color={'contentDim'} style={{marginTop: 20}}>잠시만
-						기다려주세요</StyledText>
+					<StyledText
+						size={TextSize.TitleMedium}
+						color={'content'}
+						textAlign={'center'}
+					>
+						프레시오에서{'\n'}기기 Wi-Fi를 연결중입니다
+					</StyledText>
+					<StyledText
+						size={TextSize.ContentLarge}
+						color={'contentDim'}
+						style={{marginTop: 20}}
+					>
+						잠시만 기다려주세요
+					</StyledText>
 				</View>
 
 				<View style={styles.loadingContainer}>
@@ -160,7 +186,7 @@ const styles = StyleSheet.create({
 		color: '#707085',
 		textAlign: 'center',
 		fontFamily: 'Wanted Sans Variable',
-		fontSize: TextSize.HeadingLarge, // HeadingLarge 사용
+		fontSize: TextSize.HeadingLarge,
 		fontWeight: '600',
 		lineHeight: 28,
 		letterSpacing: 0.42,
