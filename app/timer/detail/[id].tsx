@@ -19,7 +19,6 @@ import useTimerStore, {TimerStepType, TimerType} from "@/state/timer";
 
 const PageTimerDetail = () => {
 	const inset = useSafeAreaInsets();
-	const [showEditModal, setShowEditModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const {id} = useLocalSearchParams<{ id: string }>();
 
@@ -28,28 +27,28 @@ const PageTimerDetail = () => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useFocusEffect(
-        useCallback(() => {
-            const loadTimer = async () => {
-                if (id) {
-                    setIsLoading(true);
-                    try {
-                        const timerData = await getTimerById(id);
-                        if (timerData) {
-                            setTimer(timerData);
-                        } else {
-                            router.replace('/');
-                        }
-                    } catch (error) {
-                        console.error('Failed to load timer:', error);
-                        router.replace('/');
-                    } finally {
-                        setIsLoading(false);
-                    }
-                }
-            };
-            loadTimer();
-        }, [id, getTimerById])
-    );
+		useCallback(() => {
+			const loadTimer = async () => {
+				if (id) {
+					setIsLoading(true);
+					try {
+						const timerData = await getTimerById(id);
+						if (timerData) {
+							setTimer(timerData);
+						} else {
+							router.replace('/timer');
+						}
+					} catch (error) {
+						console.error('Failed to load timer:', error);
+						router.replace('/timer');
+					} finally {
+						setIsLoading(false);
+					}
+				}
+			};
+			loadTimer();
+		}, [id, getTimerById])
+	);
 
 	const totalTime = React.useMemo(() => {
 		if (!timer) return 0;
@@ -90,23 +89,21 @@ const PageTimerDetail = () => {
 		setShowDeleteModal(false);
 	};
 
-	const handleEdit = async (name: string, emoji: string) => {
-		try {
-			if (timer) {
-				await updateTimer({
-					...timer,
-					name,
-					emoji,
-				});
-				setTimer({...timer, name, emoji});
-			}
-		} catch (error) {
-			console.error('Failed to update timer:', error);
-		}
-		setShowEditModal(false);
-	};
+	if (isLoading) {
+		return (
+			<View style={styles.loadingContainer}>
+				<StyledText size={TextSize.BodyLarge} color="contentDim">Loading...</StyledText>
+			</View>
+		);
+	}
 
-	if (isLoading || !timer) return null;
+	if (!timer) {
+		return (
+			<View style={styles.loadingContainer}>
+				<StyledText size={TextSize.BodyLarge} color="contentDim">Timer not found</StyledText>
+			</View>
+		);
+	}
 
 	return (
 		<>
@@ -128,7 +125,10 @@ const PageTimerDetail = () => {
 								alignContent: 'center',
 								marginBottom: 18,
 							}}>
-								<Pressable style={{width: '50%'}} onPress={() => router.back()}>
+								<Pressable
+									style={{width: '50%'}}
+									onPress={() => router.push('/timer')}
+								>
 									<MaterialIcons name="arrow-back-ios" size={24} color="black"/>
 								</Pressable>
 								<Row style={styles.headerActions}>
@@ -163,7 +163,7 @@ const PageTimerDetail = () => {
 											총 {Math.floor(totalTime / 60)}시간 {totalTime % 60}분
 										</StyledText>
 										<StyledText size={TextSize.BodyLarge} color={'contentSecondary'}
-										            style={styles.centerDot}>·</StyledText>
+													style={styles.centerDot}>·</StyledText>
 										<StyledText size={TextSize.ContentSmall} color="contentDim">
 											{timer.steps.length}단계
 										</StyledText>
@@ -205,7 +205,14 @@ const PageTimerDetail = () => {
 			</ScrollView>
 
 			<Row style={styles.buttonContainer}>
-				<Pressable style={styles.playButton}>
+				<Pressable
+					style={styles.playButton}
+					onPress={() => {
+						if (timer?.id) {
+							router.push(`/timer/run/${timer.id}`);
+						}
+					}}
+				>
 					<MaterialIcons name="play-arrow" size={24} color={Colors.content}/>
 				</Pressable>
 				<Pressable style={styles.shareButton}>
@@ -231,6 +238,11 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		flex: 1,
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	header: {
 		paddingBottom: 0,
@@ -283,10 +295,6 @@ const styles = StyleSheet.create({
 	infoItem: {
 		width: '100%',
 		justifyContent: 'space-between',
-	},
-	sectionTitle: {
-		fontWeight: 'bold',
-		marginBottom: 8,
 	},
 	buttonContainer: {
 		padding: 10,
