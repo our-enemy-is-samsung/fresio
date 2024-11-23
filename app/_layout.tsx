@@ -1,15 +1,18 @@
 import {DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
-import {Stack} from 'expo-router';
+import {Stack, Redirect} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, {useCallback} from 'react';
-import {LayoutChangeEvent, View} from "react-native";
+import {LayoutChangeEvent, View,} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/constants/Color";
 import Toast from "@/components/shared/Toast";
 import useToastStore from "@/state/toast";
+// import * as Updates from 'expo-updates';
 
-export {ErrorBoundary} from 'expo-router';
+export {
+	ErrorBoundary,
+} from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,7 +35,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={MyDefaultTheme}>
 				<Stack
-					initialRouteName="onboard/onboardmain/AutoExpirationAlertScreen"
+					initialRouteName="index"
 					screenOptions={{
 						headerShown: false,
 					}}
@@ -42,41 +45,16 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 						options={{animation: 'none'}}
 					/>
 					<Stack.Screen
-						name="onboard/onboardname/Name"
-					/>
-					<Stack.Screen
 						name="onboard/onboarddiet/SelectDietScreen"
 					/>
-					<Stack.Screen
-						name="onboard/onboarddiet/SelectNetworkScreen"
-					/>
-					<Stack.Screen
-						name="index"
-						options={{animation: 'none'}}
-					/>
-					<Stack.Screen
-						name="food/index"
-						options={{animation: 'none'}}
-					/>
-					<Stack.Screen
-						name="timer/index"
-						options={{animation: 'none'}}
-					/>
-					<Stack.Screen
-						name="timer/create"
-					/>
-					<Stack.Screen
-						name="timer/detail/[id]"
-					/>
-					<Stack.Screen
-						name="food/detail/[id]"
-					/>
-					<Stack.Screen
-						name="search/index"
-					/>
-					<Stack.Screen
-						name="recipe/[id]"
-					/>
+					<Stack.Screen name="index" options={{animation: 'none'}}/>
+					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
+					<Stack.Screen name="timer/create"/>
+					<Stack.Screen name="timer/detail/[id]"/>
+					<Stack.Screen name="food/detail/[id]"/>
+					<Stack.Screen name="search/index"/>
+					<Stack.Screen name="recipe/[id]" />
 				</Stack>
 			</ThemeProvider>
 			<View
@@ -116,7 +94,10 @@ export default function RootLayout() {
 	});
 
 	useCallback(() => {
-		if (fontError) throw fontError;
+		if (fontError) {
+			console.error('Font loading error:', fontError);
+			throw fontError;
+		}
 	}, [fontError]);
 
 	const onLayoutRootView = useCallback(async () => {
@@ -125,7 +106,7 @@ export default function RootLayout() {
 		}
 	}, [fontsLoaded]);
 
-	if (!fontsLoaded) return null;
-
-	return <RootLayoutNav onLayout={onLayoutRootView}/>;
+	if (fontsLoaded) {
+		return <RootLayoutNav onLayout={onLayoutRootView}/>;
+	}
 }
