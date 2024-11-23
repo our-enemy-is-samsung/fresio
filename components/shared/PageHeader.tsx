@@ -6,6 +6,7 @@ import StyledText from "@/components/shared/Text";
 import View from "@/components/shared/View";
 import {TextSize} from "@/enums/TextSize";
 import {Colors} from "@/constants/Color";
+import {router} from "expo-router";
 
 interface PageHeaderProps {
 	name: string;
@@ -22,7 +23,7 @@ const PageHeader = ({name, style}: PageHeaderProps) => {
 			</View>
 			<TouchableRippleNative
 				style={styles.touchable}
-				onPress={() => console.log('asd')}
+				onPress={() => router.push('/setting')}
 				android_ripple={{
 					radius: 18,
 				}}
