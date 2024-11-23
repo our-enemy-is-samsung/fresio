@@ -35,7 +35,7 @@ function RootLayoutNav({onLayout}: RootLayoutNavProps) {
 		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
 			<ThemeProvider value={MyDefaultTheme}>
 				<Stack
-					initialRouteName="index"
+					initialRouteName="onboard/onboardmain/AutoExpirationAlertScreen"
 					screenOptions={{
 						headerShown: false,
 					}}

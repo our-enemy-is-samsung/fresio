@@ -141,15 +141,12 @@ const AutoExpirationAlertScreen = () => {
 						onPress={handleGoogleLogin}
 					>
 						<View style={styles.buttonContent}>
-							<View style={styles.iconContainer}>
-								<GoogleIcon/>
-							</View>
 							<StyledText
 								size={TextSize.HeadingSmall}
 								color="surface"
 								style={styles.buttonText}
 							>
-								구글 계정으로 로그인
+								눌러서 시작하기
 							</StyledText>
 						</View>
 					</TouchableOpacity>
