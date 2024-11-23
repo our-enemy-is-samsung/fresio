@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, TextInput, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, TextInput, StyleSheet, SafeAreaView, Image, TouchableOpacity, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import SearchIcon from '../../../components/onboard/SearchIcon';
 import StyledText from "@/components/shared/Text";
@@ -11,12 +11,29 @@ const RegisterFoodScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // 애니메이션 값 추가
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsLoading(false);
+          Animated.parallel([
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 500,
+              useNativeDriver: true,
+            }),
+            Animated.spring(scaleAnim, {
+              toValue: 1,
+              friction: 8,
+              tension: 40,
+              useNativeDriver: true,
+            })
+          ]).start();
           return 100;
         }
         return prev + 1;
@@ -27,105 +44,117 @@ const RegisterFoodScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.titleContainer}>
-          <StyledText
-            size={TextSize.TitleMedium}
-            color="content"
-            textAlign="center"
-            style={styles.header}
-          >
-            기존 냉장고에 있는{'\n'}음식을 등록해주세요
-          </StyledText>
-        </View>
-        <View style={styles.searchContainer}>
-          <SearchIcon style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="예) 사과, 계란, 한닭반킬로"
-            placeholderTextColor="#707085"
-          />
-        </View>
-        <View style={styles.cardContainer}>
-          <View style={styles.card}>
-            <Image
-              source={require('../../../assets/images/onboard/image 10.png')}
-              style={styles.foodImage}
-            />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.titleContainer}>
             <StyledText
-              size={TextSize.BodyLarge}
-              color="content"
-              style={styles.foodName}
+                size={TextSize.TitleMedium}
+                color="content"
+                textAlign="center"
+                style={styles.header}
             >
-              사과
+              기존 냉장고에 있는{'\n'}음식을 등록해주세요
             </StyledText>
           </View>
-          <View style={styles.card}>
-            <Image
-              source={require('../../../assets/images/onboard/image.png')}
-              style={styles.foodImage}
+          <View style={styles.searchContainer}>
+            <SearchIcon style={styles.searchIcon} />
+            <TextInput
+                style={styles.searchInput}
+                placeholder="예) 사과, 계란, 한닭반킬로"
+                placeholderTextColor="#707085"
             />
-            <StyledText
-              size={TextSize.BodyLarge}
-              color="content"
-              style={styles.foodName}
-            >
-              대파
-            </StyledText>
           </View>
-          <View style={styles.card}>
-            <Image
-              source={require('../../../assets/images/onboard/image 10.png')}
-              style={styles.foodImage}
-            />
-            <StyledText
-              size={TextSize.BodyLarge}
-              color="content"
-              style={styles.foodName}
-            >
-              사과
-            </StyledText>
+          <View style={styles.cardContainer}>
+            <View style={styles.card}>
+              <Image
+                  source={require('../../../assets/images/onboard/image 10.png')}
+                  style={styles.foodImage}
+              />
+              <StyledText
+                  size={TextSize.BodyLarge}
+                  color="content"
+                  style={styles.foodName}
+              >
+                사과
+              </StyledText>
+            </View>
+            <View style={styles.card}>
+              <Image
+                  source={require('../../../assets/images/onboard/image.png')}
+                  style={styles.foodImage}
+              />
+              <StyledText
+                  size={TextSize.BodyLarge}
+                  color="content"
+                  style={styles.foodName}
+              >
+                대파
+              </StyledText>
+            </View>
+            <View style={styles.card}>
+              <Image
+                  source={require('../../../assets/images/onboard/image 10.png')}
+                  style={styles.foodImage}
+              />
+              <StyledText
+                  size={TextSize.BodyLarge}
+                  color="content"
+                  style={styles.foodName}
+              >
+                사과
+              </StyledText>
+            </View>
           </View>
         </View>
-      </View>
 
-      {isLoading ? (
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${progress}%` }]} />
-          </View>
-          <View style={styles.textContainer}>
-            <StyledText
-              size={TextSize.BodySmall}
-              color="contentDim"
-              textAlign="center"
-              style={styles.progressText}
+        {isLoading ? (
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBarContainer}>
+                <View style={[styles.progressBar, { width: `${progress}%` }]} />
+              </View>
+              <View style={styles.textContainer}>
+                <StyledText
+                    size={TextSize.BodySmall}
+                    color="contentDim"
+                    textAlign="center"
+                    style={styles.progressText}
+                >
+                  기기 소프트웨어를 다운로드 중...
+                </StyledText>
+                <StyledText
+                    size={TextSize.LabelSmall}
+                    color="contentDim"
+                    textAlign="center"
+                    style={styles.progressPercentage}
+                >
+                  {progress}%
+                </StyledText>
+              </View>
+            </View>
+        ) : (
+            <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ scale: scaleAnim }],
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                }}
             >
-              기기 소프트웨어를 다운로드 중...
-            </StyledText>
-            <StyledText
-              size={TextSize.LabelSmall}
-              color="contentDim"
-              textAlign="center"
-              style={styles.progressPercentage}
-            >
-              {progress}%
-            </StyledText>
-          </View>
-        </View>
-      ) : (
-        <TouchableOpacity style={styles.startButton} onPress={() => router.push('/timer')}>
-          <StyledText
-            size={TextSize.BodyLarge}
-            color="surface"
-            style={styles.startButtonText}
-          >
-            시작하기
-          </StyledText>
-        </TouchableOpacity>
-      )}
-    </SafeAreaView>
+              <TouchableOpacity
+                  style={styles.startButton}
+                  onPress={() => router.push('/')}
+              >
+                <StyledText
+                    size={TextSize.BodyLarge}
+                    color="surface"
+                    style={styles.startButtonText}
+                >
+                  시작하기
+                </StyledText>
+              </TouchableOpacity>
+            </Animated.View>
+        )}
+      </SafeAreaView>
   );
 };
 
@@ -227,8 +256,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 13,
-    alignSelf: 'center',
-    marginBottom: 20,
     backgroundColor: Colors.brand,
   },
   startButtonText: {

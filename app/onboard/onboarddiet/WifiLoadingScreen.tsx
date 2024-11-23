@@ -45,7 +45,7 @@ const WifiLoadingScreen = () => {
               width: 200,
               height: 200,
             }}
-            source={require('../../../assets/lottie/listLoading.json')}
+            source={require('../../../assets/lottie/loading.json')}
           />
         </View>
 

@@ -95,7 +95,7 @@ const AutoExpirationAlertScreen = () => {
 	}, [currentIndex]);
 
 	const handleGoogleLogin = () => {
-		router.push('/onboard/onboarddiet/SelectDietScreen');
+		router.push('/onboard/onboarddiet/Name');
 	};
 
 	const PageIndicator = () => (
