@@ -11,32 +11,40 @@ import {Row} from "@/components/shared/Row";
 import {Image} from 'expo-image';
 import StyledButton from "@/components/shared/Button";
 import {ButtonSize, ButtonStyle} from "@/types/Button";
+import {CustomAxios} from "@/utils/api";
 
-interface ProductInfo {
-  name: string;
-  expiryDate: string;
-  image: string;
+// API 응답 타입 정의
+interface BarcodeApiResponse {
+	data: {
+		entityId: string;
+		product: {
+			name: string;
+			expiryDate: string;
+			image: string;
+		}
+	}
 }
 
-// Mock data for product information
-const MOCK_PRODUCTS: { [key: string]: ProductInfo } = {
-	"8801234567890": {
-		name: "풀무원 두부",
-		expiryDate: "2024-12-31",
-		image: "https://example.com/tofu.jpg"
-	},
-	"8801234567891": {
-		name: "농심 신라면",
-		expiryDate: "2025-06-30",
-		image: "MOCK_PRODUCTS"
+interface ProductInfo {
+	name: string;
+	expiryDate: string;
+	image: string;
+}
+
+// 에러 처리를 위한 커스텀 에러 클래스
+class BarcodeError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'BarcodeError';
 	}
-};
+}
 
 const PageBarcodeRecognitions = () => {
 	const [isScanning, setIsScanning] = useState(true);
 	const [isValidating, setIsValidating] = useState(false);
 	const [productInfo, setProductInfo] = useState<ProductInfo | null>(null);
 	const [modalAnimation] = useState(new Animated.Value(0));
+	const [isAddingIngredient, setIsAddingIngredient] = useState(false);
 	const navigation = useNavigation();
 	const {addToast} = useToastStore();
 
@@ -47,35 +55,82 @@ const PageBarcodeRecognitions = () => {
 		}).start();
 	};
 
-	const handleBarcodeScanned = ({data}: BarcodeScanningResult) => {
+	const validateBarcode = async (barcode: string): Promise<ProductInfo> => {
+		try {
+			const response = await CustomAxios.post<BarcodeApiResponse>('/refrigerator/barcode', {
+				barcode: barcode
+			});
+
+			if (!response.data?.data?.product) {
+				throw new BarcodeError('유효하지 않은 바코드입니다.');
+			}
+
+			return {
+				name: response.data.data.product.name,
+				expiryDate: response.data.data.product.expiryDate,
+				image: response.data.data.product.image
+			};
+		} catch (error) {
+			// 네트워크 오류나 서버 오류 처리
+			if (error instanceof BarcodeError) {
+				throw error;
+			}
+
+			throw new BarcodeError('바코드 검증 중 오류가 발생했습니다.');
+		}
+	};
+
+	const handleBarcodeScanned = async ({data: barcode}: BarcodeScanningResult) => {
 		if (!isScanning) return;
 
-		setIsScanning(false);
-		setIsValidating(true);
-		showModal();
-		addToast('바코드를 인식했습니다.', 'success', 1500);
+		try {
+			setIsScanning(false);
+			setIsValidating(true);
+			showModal();
+			addToast('바코드를 인식했습니다.', 'success', 1500);
 
-		// Simulate barcode validation with setTimeout
-		setTimeout(() => {
-			setIsValidating(false);
-			// Get mock product data
-			const product = MOCK_PRODUCTS[data] || {
-				name: "풀무원 대파양지 육개장 450g",
-				expiryDate: "2024-12-31",
-				image: "https://sitem.ssgcdn.com/09/31/26/item/1000602263109_i1_500.jpg"
-			};
+			const product = await validateBarcode(barcode);
 			setProductInfo(product);
-		}, 3000);
+		} catch (error) {
+			if (error instanceof BarcodeError) {
+				addToast(error.message, 'error', 3000);
+			} else {
+				addToast('알 수 없는 오류가 발생했습니다.', 'error', 3000);
+			}
+			navigation.goBack();
+		} finally {
+			setIsValidating(false);
+		}
 	};
 
 	const handleCancel = () => {
 		navigation.goBack();
 	};
 
-	const handleAddIngredient = () => {
-		// TODO: Add ingredient logic here
-		addToast('재료가 추가되었습니다.', 'success', 1500);
-		navigation.goBack();
+	const handleAddIngredient = async () => {
+		if (!productInfo) return;
+
+		try {
+			setIsAddingIngredient(true);
+
+			// 재료 추가 API 호출
+			await CustomAxios.post('/refrigerator/add', {
+				name: productInfo.name,
+				quantity: "1",
+				icon: "🥛", // 기본 아이콘
+				items: [{
+					name: productInfo.name,
+					quantity: 1
+				}]
+			});
+
+			addToast('재료가 추가되었습니다.', 'success', 1500);
+			navigation.goBack();
+		} catch (error) {
+			addToast('재료 추가에 실패했습니다.', 'error', 3000);
+		} finally {
+			setIsAddingIngredient(false);
+		}
 	};
 
 	const modalTranslateY = modalAnimation.interpolate({
@@ -124,9 +179,6 @@ const PageBarcodeRecognitions = () => {
 				]}
 			>
 				<Column style={styles.modalContent}>
-					<View style={styles.loadingView}>
-						<ActivityIndicator size="large" color={Colors.contentSecondary}/>
-					</View>
 					{isValidating ? (
 						<View style={styles.textView}>
 							<ActivityIndicator size="large" color={Colors.contentSecondary}/>
@@ -160,6 +212,7 @@ const PageBarcodeRecognitions = () => {
 									style={ButtonStyle.Secondary}
 									size={ButtonSize.Large}
 									onPress={handleCancel}
+									disabled={isAddingIngredient}
 								>
 									취소
 								</StyledButton>
@@ -167,9 +220,14 @@ const PageBarcodeRecognitions = () => {
 									style={ButtonStyle.Primary}
 									size={ButtonSize.Large}
 									onPress={handleAddIngredient}
+									disabled={isAddingIngredient}
 									buttonStyles={{flex: 1}}
 								>
-									재료 추가하기
+									{isAddingIngredient ? (
+										<ActivityIndicator color={Colors.surface}/>
+									) : (
+										"재료 추가하기"
+									)}
 								</StyledButton>
 							</Row>
 						</>
@@ -258,14 +316,6 @@ const styles = StyleSheet.create({
 	modalText: {
 		textAlign: 'center',
 	},
-	loadingView: {
-		width: '100%',
-		height: 120,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 16,
-		backgroundColor: Colors.containerDark,
-	},
 	textView: {
 		margin: 'auto',
 		gap: 16,
@@ -274,7 +324,6 @@ const styles = StyleSheet.create({
 	productRow: {
 		padding: 16,
 		gap: 16,
-
 		alignItems: 'center',
 	},
 	productImage: {
@@ -285,7 +334,6 @@ const styles = StyleSheet.create({
 	productInfo: {
 		flex: 1,
 		gap: 8,
-
 		alignItems: 'center',
 	},
 	buttonRow: {

@@ -11,7 +11,7 @@ import {router} from "expo-router";
 const WehaveLocationPermission = () => {
 	const inset = useSafeAreaInsets();
 	const handlePress = () => {
-		router.push('/onboard/onboarddiet/WifiLoadingScreen')
+		router.push('/onboard/deprecated/dsa')
 	}
 	return (
 		<View style={{

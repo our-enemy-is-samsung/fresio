@@ -11,7 +11,7 @@ import {router} from "expo-router";
 const NowPersonalSetting = () => {
 	const inset = useSafeAreaInsets();
 	const handlePress = () => {
-		router.push('/onboard/ageSelect');
+		router.push('/onboard/onboarddiet/SelectDietScreen');
 	}
 	return (
 		<View style={{

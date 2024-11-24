@@ -1,13 +1,14 @@
 import {DefaultTheme, Theme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
-import {Stack, Redirect} from 'expo-router';
+import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, {useCallback} from 'react';
+import React, {useEffect} from 'react';
 import {LayoutChangeEvent, View,} from "react-native";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Colors} from "@/constants/Color";
-import Toast from "@/components/shared/Toast";
 import useToastStore from "@/state/toast";
+import useAuth from "@/state/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import * as Updates from 'expo-updates';
 
 export {
@@ -28,101 +29,118 @@ const MyDefaultTheme: Theme = {
 	}
 };
 
-function RootLayoutNav({onLayout}: RootLayoutNavProps) {
-	const {toasts} = useToastStore();
-
+const AuthFlow = () => {
 	return (
-		<GestureHandlerRootView style={{flex: 1}} onLayout={onLayout}>
-			<ThemeProvider value={MyDefaultTheme}>
-				<Stack
-					initialRouteName="onboard/onboardmain/AutoExpirationAlertScreen"
-					screenOptions={{
-						headerShown: false,
-					}}
-				>
-					<Stack.Screen
-						name="onboard/onboardmain/AutoExpirationAlertScreen"
-						options={{animation: 'none'}}
-					/>
-					<Stack.Screen
-						name="onboard/onboarddiet/SelectDietScreen"
-					/>
-					<Stack.Screen name={'onboard/beforeCamera'} />
-					<Stack.Screen name="onboard/weHaveLocationPermission"/>
-					<Stack.Screen name="onboard/nowPersonalSetting"/>
-					<Stack.Screen name="onboard/ageSelect"/>
-					<Stack.Screen name="onboard/foodCheckPasta" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/foodCheckBibimbap" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/foodCheckRamen" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/foodCheckCutlet" options={{animation: 'none'}}/>
-					<Stack.Screen name="onboard/foodCheckPizza" options={{animation: 'none'}}/>
-
-					<Stack.Screen name="index" options={{animation: 'none'}}/>
-					<Stack.Screen name="food/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
-					<Stack.Screen name="timer/create"/>
-					<Stack.Screen name="timer/detail/[id]"/>
-					<Stack.Screen name="timer/run/[id]"/>
-					<Stack.Screen name="food/detail/[id]"/>
-					<Stack.Screen name="search/index"/>
-					<Stack.Screen name="recipe/[id]" />
-					<Stack.Screen name="setting/index"/>
-					<Stack.Screen name="setting/ageSetting"/>
-					<Stack.Screen name="setting/dietPreferencePage"/>
-					<Stack.Screen name="setting/usernameSettings"/>
-					<Stack.Screen name="setting/deviceVolumn"/>
-				</Stack>
-			</ThemeProvider>
-			<View
-				style={{
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					right: 0,
-					pointerEvents: 'box-none'
-				}}
-			>
-				{toasts.map((toast, index) => (
-					<View
-						key={toast.id}
-						style={{
-							marginTop: 30 + (index * 30),
-							marginHorizontal: 10,
-						}}
-					>
-						<Toast
-							text={toast.text}
-							duration={toast.duration}
-							type={toast.type}
-						/>
-					</View>
-				))}
-			</View>
-		</GestureHandlerRootView>
-	);
+		<Stack
+			initialRouteName="index"
+			screenOptions={{
+				headerShown: false,
+			}}
+		>
+			<Stack.Screen name="index" options={{animation: 'none'}}/>
+			<Stack.Screen name="food/index" options={{animation: 'none'}}/>
+			<Stack.Screen name="timer/index" options={{animation: 'none'}}/>
+			<Stack.Screen name="timer/create"/>
+			<Stack.Screen name="timer/detail/[id]"/>
+			<Stack.Screen name="timer/run/[id]"/>
+			<Stack.Screen name="food/detail/[id]"/>
+			<Stack.Screen name="search/index"/>
+			<Stack.Screen name="recipe/[id]"/>
+			<Stack.Screen name="setting/index"/>
+			<Stack.Screen name="setting/ageSetting"/>
+			<Stack.Screen name="setting/dietPreferencePage"/>
+			<Stack.Screen name="setting/usernameSettings"/>
+			<Stack.Screen name="setting/deviceVolumn"/>
+		</Stack>
+	)
 }
 
+const OnboardFlow = () => {
+	return (
+		<Stack
+			initialRouteName="onboard/onboardmain/AutoExpirationAlertScreen"
+			screenOptions={{
+				headerShown: false,
+			}}
+		>
+			<Stack.Screen
+				name="onboard/onboardmain/AutoExpirationAlertScreen"
+				options={{animation: 'none'}}
+			/>
+			<Stack.Screen
+				name="onboard/onboarddiet/SelectDietScreen"
+			/>
+			<Stack.Screen name={'onboard/beforeCamera'}/>
+			<Stack.Screen name="onboard/weHaveLocationPermission"/>
+			<Stack.Screen name="onboard/nowPersonalSetting"/>
+			<Stack.Screen name="onboard/ageSelect"/>
+			<Stack.Screen name="onboard/foodCheckPasta" options={{animation: 'none'}}/>
+			<Stack.Screen name="onboard/foodCheckBibimbap" options={{animation: 'none'}}/>
+			<Stack.Screen name="onboard/foodCheckRamen" options={{animation: 'none'}}/>
+			<Stack.Screen name="onboard/foodCheckCutlet" options={{animation: 'none'}}/>
+			<Stack.Screen name="onboard/foodCheckPizza" options={{animation: 'none'}}/>
+		</Stack>
+	)
+}
+
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+	// AsyncStorage.clear();
+	const {toasts} = useToastStore();
 	const [fontsLoaded, fontError] = useFonts({
 		'PretendardBold': require('../assets/fonts/Pretendard-Bold.otf'),
 		'PretendardMedium': require('../assets/fonts/Pretendard-Medium.otf'),
 		'PretendardSemiBold': require('../assets/fonts/Pretendard-SemiBold.otf'),
 	});
 
-	useCallback(() => {
-		if (fontError) {
-			console.error('Font loading error:', fontError);
-			throw fontError;
-		}
-	}, [fontError]);
+	const {isAuthenticated, setIsAuthenticated} = useAuth();
 
-	const onLayoutRootView = useCallback(async () => {
-		if (fontsLoaded) {
-			await SplashScreen.hideAsync();
-		}
+	useEffect(() => {
+		const checkAuthStatus = async () => {
+			try {
+				const token = await AsyncStorage.getItem('access_token');
+				setIsAuthenticated(!!token);
+			} catch (error) {
+				console.error('Failed to get token:', error);
+			}
+		};
+
+		checkAuthStatus();
+	}, []);
+
+	useEffect(() => {
+		const hideSplash = async () => {
+			try {
+				// fontsLoaded가 true일 때만 스플래시 화면을 숨깁니다
+				if (fontsLoaded) {
+					await SplashScreen.hideAsync();
+				}
+			} catch (e) {
+				console.warn('Error hiding splash screen:', e);
+			}
+		};
+
+		hideSplash();
 	}, [fontsLoaded]);
 
-	if (fontsLoaded) {
-		return <RootLayoutNav onLayout={onLayoutRootView}/>;
+	// 폰트나 에러 상태를 처리하는 부분
+	if (!fontsLoaded && !fontError) {
+		return null;
 	}
+
+	if (fontError) {
+		console.error('Font loading error:', fontError);
+		return null;
+	}
+
+	return (
+		<View style={{flex: 1}}>
+			<GestureHandlerRootView style={{flex: 1}}>
+				<ThemeProvider value={MyDefaultTheme}>
+					{isAuthenticated ? <AuthFlow/> : <OnboardFlow/>}
+				</ThemeProvider>
+			</GestureHandlerRootView>
+		</View>
+	);
 }

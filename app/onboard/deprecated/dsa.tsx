@@ -99,7 +99,7 @@ const WifiLoadingScreen = () => {
 						const connected = await connectToWifi(filteredWifiList[0].SSID);
 						console.log(connected)
 						if (connected) {
-							router.push('/onboard/nowPersonalSetting');
+							// router.push('/onboard/nowPersonalSetting');
 						}
 					}
 				} else {
@@ -111,7 +111,7 @@ const WifiLoadingScreen = () => {
 							clearInterval(intervalId);
 						}
 						addToast('프레시오 기기에 연결되어 있습니다.', 'success');
-						router.push('/onboard/nowPersonalSetting');
+						// router.push('/onboard/nowPersonalSetting');
 					} else {
 						addToast('프레시오 기기에 연결되어 있지 않습니다.', 'warn');
 					}
@@ -119,7 +119,7 @@ const WifiLoadingScreen = () => {
 			} catch (error) {
 				if (mounted.current) {
 					console.error('WiFi scanning error:', error);
-					addToast('Wi-Fi 검색 중 오류가 발생했습니다.', 'error');
+					// addToast('Wi-Fi 검색 중 오류가 발생했습니다.', 'error');
 				}
 			}
 		};
@@ -133,6 +133,13 @@ const WifiLoadingScreen = () => {
 				clearInterval(intervalId);
 			}
 		};
+	}, []);
+
+	useEffect(() => {
+		setTimeout(() => {
+			addToast('프레시오 기기에 연결되었습니다.', 'success');
+			router.push('/onboard/deprecated/asd');
+		}, 4000)
 	}, []);
 
 

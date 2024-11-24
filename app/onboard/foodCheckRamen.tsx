@@ -1,14 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Colors} from '@/constants/Color';
 import StyledText from '@/components/shared/Text';
 import {TextSize} from '@/enums/TextSize';
 import OnboardTemplate from '@/components/template/OnboardTemplate';
-import {router} from "expo-router";
 import useOnboardData from "@/state/onboard";
+import useOnboardAuth from "@/state/onboardAuth";
+import {router} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FoodCheckRamen = () => {
-	const {foodCheckRamen, setFoodCheckRamen} = useOnboardData();
+	const {
+		foodCheckRamen, setFoodCheckRamen,
+		foodCheckPizza,
+		foodCheckPasta,
+		foodCheckBibimbap,
+		foodCheckCutlet,
+		selectedAge,
+		selectedDiet
+	} = useOnboardData();
+	const {token} = useOnboardAuth();
+
+	const getFoodCheckText = (value: 'too-much' | 'just-right' | 'too-little' | null): string => {
+		switch (value) {
+			case 'too-much':
+				return '과다';
+			case 'just-right':
+				return '적정';
+			case 'too-little':
+				return '소식';
+			default:
+				return '';
+		}
+	};
+
 
 	const handleOptionSelect = (option: 'too-much' | 'just-right' | 'too-little') => {
 		setFoodCheckRamen(option);
@@ -16,9 +41,9 @@ const FoodCheckRamen = () => {
 	};
 
 	const handleNext = () => {
-		if (foodCheckRamen) {
-			router.push('/index'); // Move to the next onboarding page
-		}
+		router.push('/');
+
+		AsyncStorage.setItem('access_token', token)
 	}
 
 	return (

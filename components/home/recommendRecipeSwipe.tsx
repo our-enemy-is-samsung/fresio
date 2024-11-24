@@ -7,6 +7,7 @@ import Swiper from "react-native-swiper";
 import View from "@/components/shared/View";
 import RecommendRecipeCard from "@/components/home/recommendRecipeCard";
 import {RecipeDifficulty} from "@/types/Food/Food";
+import {router} from "expo-router";
 
 interface RecommendRecipeSwipeProps {
 	title: string;
@@ -33,6 +34,13 @@ const RecommendRecipeSwipe = ({title}: RecommendRecipeSwipeProps) => {
 				paginationStyle={styles.pagination}
 				containerStyle={{marginTop: 15}}
 			>
+				<RecommendRecipeCard
+					imageSrc={'https://recipe1.ezmember.co.kr/cache/recipe/2017/05/24/6314bc68ff3e9c45b1110c30739e83071.jpg'}
+					recipeName={'메추리알 소고기 장조림 황금레시피'}
+					difficulty={RecipeDifficulty.EASY}
+					cookingTime={60}
+					onPress={() => router.push('/recipe/2')}
+				/>
 				<RecommendRecipeCard
 					imageSrc={'https://recipe1.ezmember.co.kr/cache/recipe/2017/10/23/6830fe676aff41c41d8dae5f41e09b6e1.jpg'}
 					recipeName={'바나나 버터구이 프렌치 토스트'}

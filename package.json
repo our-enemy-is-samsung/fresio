@@ -21,6 +21,7 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/blur": "^4.4.1",
     "@react-native-community/datetimepicker": "8.0.1",
+    "@react-native-community/netinfo": "^11.4.1",
     "@react-native-community/slider": "^4.5.5",
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-navigation/native": "^6.0.2",
@@ -60,11 +61,11 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "^15.9.0",
     "react-native-swiper": "^1.6.0",
+    "react-native-webview": "13.8.6",
     "react-native-wifi-reborn": "^4.13.0",
     "react-native-youtube-iframe": "^2.3.0",
     "vector-icons": "^0.1.0",
-    "zustand": "^5.0.1",
-    "react-native-webview": "13.8.6"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

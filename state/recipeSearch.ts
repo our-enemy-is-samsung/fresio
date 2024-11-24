@@ -91,7 +91,7 @@ const mockRecipeSearchService: RecipeSearchService = {
 	}
 };
 
-const recipeSearchService: RecipeSearchService = mockRecipeSearchService;
+const recipeSearchService: RecipeSearchService = apiRecipeSearchService;
 
 interface RecipeSearchStore {
     recipes: Recipe[];

@@ -13,6 +13,7 @@ interface RecommendRecipeCardProps {
 	recipeName: string;
 	difficulty: RecipeDifficulty;
 	cookingTime: number;
+	onPress?: () => void;
 }
 
 export function foodDifficutyToKorean(difficulty: RecipeDifficulty) {
@@ -30,10 +31,11 @@ const RecommendRecipeCard = ({
 	                             imageSrc,
 	                             recipeName,
 	                             difficulty,
-	                             cookingTime
+	                             cookingTime,
+	onPress
                              }: RecommendRecipeCardProps) => {
 	return (
-		<Pressable style={styles.container}>
+		<Pressable style={styles.container} onPress={onPress}>
 			{/* 이미지 */}
 			<Image
 				source={imageSrc}

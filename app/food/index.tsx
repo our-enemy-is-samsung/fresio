@@ -102,7 +102,7 @@ const PageFood = () => {
                         sortedIngredients.map((ingredient) => (
                             <FoodLifeTime
                                 key={ingredient.id}
-                                emoji={getEmoji(ingredient.name)}
+                                emoji={ingredient.emoji}
                                 name={ingredient.name}
                                 quantity={Number(ingredient.quantity)}
                                 lifeTime={new Date(ingredient.expiredAt)}

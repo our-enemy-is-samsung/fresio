@@ -31,7 +31,7 @@ export interface Ingredient {
 	createdAt: string;
 	expiredAt: string;
 	quantity: string;
-	thumbnailImage: string;
+	emoji: string;
 }
 
 export interface IngredientDetail extends Ingredient {
@@ -57,29 +57,37 @@ export interface UpdateIngredientListInput {
 // Mock Data
 const MOCK_INGREDIENTS: Ingredient[] = [
 	{
-		id: "1",
-		name: "토마토",
-		createdAt: "2024-01-01",
-		expiredAt: "2025-11-30",
-		quantity: "3",
-		thumbnailImage: "",
-	},
-	{
 		id: "2",
 		name: "양파",
 		createdAt: "2024-01-02",
-		expiredAt: "2024-11-24",
+		expiredAt: "2024-12-24",
 		quantity: "2",
-		thumbnailImage: "",
+		emoji: "🧅",
 	},
 	{
 		id: "3",
-		name: "토마토",
-		createdAt: "2024-11-22",
-		expiredAt: "2024-11-31",
-		quantity: "3",
-		thumbnailImage: "",
+		name: "요구르트",
+		createdAt: "2024-11-31",
+		expiredAt: "2024-12-24",
+		quantity: "2",
+		emoji: "🥛",
 	},
+	// {
+	// 	id: "4",
+	// 	name: "에너지드링크",
+	// 	createdAt: "2024-11-22",
+	// 	expiredAt: "2026-5-28",
+	// 	quantity: "1",
+	// 	emoji: "🥤",
+	// },
+	{
+		id: "5",
+		name: '메추리알',
+		createdAt: '2024-11-24',
+		expiredAt: '2024-12-13',
+		quantity: '1',
+		emoji: '🥚'
+	}
 ];
 
 const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [
@@ -89,14 +97,14 @@ const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [
 		createdAt: "2024-01-01",
 		expiredAt: "2024-01-10",
 		quantity: "3",
-		thumbnailImage: "https://cdn.sisaweek.com/news/photo/202304/204122_205200_5646.jpg",
+		emoji: "🍅",
 		ingredientList: [
 			{
 				id: "1-1",
 				createdAt: "2024-01-01",
 				expiredAt: "2024-01-10",
 				quantity: "1",
-				thumbnailImage: "",
+				emoji: "🍅",
 				name: "토마토"
 			}
 		],
@@ -131,14 +139,56 @@ const MOCK_INGREDIENT_DETAILS: IngredientDetail[] = [
 		createdAt: "2024-01-02",
 		expiredAt: "2024-01-15",
 		quantity: "2",
-		thumbnailImage: "https://cdn.sisaweek.com/news/photo/202304/204122_205200_5646.jpg",
+		emoji: "🧅",
 		ingredientList: [
 			{
 				id: "2-1",
 				createdAt: "2024-01-02",
 				expiredAt: "2024-01-15",
 				quantity: "1",
+				emoji: "🧅",
+				name: "양파"
+			}
+		],
+		recommendRecipe: [
+			{
+				id: "recipe-2",
+				name: "양파볶음",
+				createdAt: "2024-01-02",
 				thumbnailImage: "",
+				ingredientList: [
+					{
+						id: "2",
+						createdAt: "2024-01-02",
+						units: "개",
+						quantity: "1",
+						thumbnailImage: "",
+						recipeStep: [
+							{
+								id: "step-1",
+								description: "양파를 깨끗이 씻어주세요.",
+								thumbnailImage: ""
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		id: "3",
+		name: "메추리알",
+		createdAt: "2024-11-24",
+		expiredAt: "2024-12-13",
+		quantity: "1",
+		emoji: "🥚",
+		ingredientList: [
+			{
+				id: "2-1",
+				createdAt: "2024-01-02",
+				expiredAt: "2024-01-15",
+				quantity: "1",
+				emoji: "🧅",
 				name: "양파"
 			}
 		],
@@ -184,8 +234,8 @@ interface IngredientService {
 // API Service Implementation
 const apiIngredientService: IngredientService = {
 	getIngredients: async () => {
-		const response = await CustomAxios.get<{ data: { ingredient: Ingredient[] } }>('/ingredient/list');
-		return response.data.data.ingredient;
+		const response = await CustomAxios.get<{ data: Ingredient[] }>('/refrigerator/list');
+		return response.data.data;
 	},
 	getIngredientById: async (id: string) => {
 		const response = await CustomAxios.get<{ data: IngredientDetail }>(`/ingredient/detail/${id}`);
@@ -284,7 +334,7 @@ const mockIngredientService: IngredientService = {
            ...ingredient,
            id: `ingredient_list_${Date.now()}`,
            createdAt: new Date().toISOString(),
-           thumbnailImage: ""
+           emoji: '🍅'
        };
 
        detail.ingredientList.push(newIngredient);
@@ -293,7 +343,7 @@ const mockIngredientService: IngredientService = {
 };
 
 // Select service based on environment
-const ingredientService: IngredientService = mockIngredientService;
+const ingredientService: IngredientService = apiIngredientService;
 
 // Zustand Store
 interface IngredientStore {

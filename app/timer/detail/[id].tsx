@@ -16,11 +16,13 @@ import {FontAwesome5} from "@expo/vector-icons";
 import SectionTitle from "@/components/home/SectionTitle";
 import TimerDetailDeleteModal from "@/components/timer/details/TimerDetailDeleteModal";
 import useTimerStore, {TimerStepType, TimerType} from "@/state/timer";
+import useToastStore from "@/state/toast";
 
 const PageTimerDetail = () => {
 	const inset = useSafeAreaInsets();
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const {id} = useLocalSearchParams<{ id: string }>();
+	const {addToast} = useToastStore();
 
 	const {getTimerById, updateTimer, deleteTimer} = useTimerStore();
 	const [timer, setTimer] = useState<TimerType | null>(null);
@@ -215,12 +217,14 @@ const PageTimerDetail = () => {
 				>
 					<MaterialIcons name="play-arrow" size={24} color={Colors.content}/>
 				</Pressable>
-				<Pressable style={styles.shareButton}>
+				<TouchableOpacity style={styles.shareButton} onPress={() => {
+					addToast('프레시오로 타이머를 전송하였습니다.', 'success');
+				}}>
 					<FontAwesome5 name="chromecast" size={18} color={Colors.container}/>
 					<StyledText size={TextSize.ContentSmall} color={'container'}>
 						프레시오로 타이머 전송하기
 					</StyledText>
-				</Pressable>
+				</TouchableOpacity>
 			</Row>
 
 			<TimerDetailDeleteModal

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {SafeAreaView, ScrollView, StatusBar, StyleSheet} from "react-native";
 import NavBarTemplate from "@/components/template/NavBarTemplate";
 import PageHeader from "@/components/shared/PageHeader";
@@ -16,16 +16,22 @@ import SearchBarCategory from "@/components/home/searchBarCategory";
 import {useNavigation} from "expo-router";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {ParamListBase} from "@react-navigation/native";
+import useIngredientStore from "@/state/ingredient";
 
 const HomeScreen = () => {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 	const date = new Date();
 	date.setDate(date.getDate() + 3);
+	const {ingredients, fetchIngredients, isLoading} = useIngredientStore();
+
+	useEffect(() => {
+		fetchIngredients();
+	}, []);
 
 	return (
 		<>
 			<StatusBar barStyle={'dark-content'} backgroundColor={Colors['surface']}/>
-			<SafeAreaView  style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<PageHeader name={'홈'} style={{marginTop: 10}}/>
 				<ScrollView style={{flex: 1}}>
 					<SectionTitle
@@ -45,11 +51,27 @@ const HomeScreen = () => {
 						}}
 						showsHorizontalScrollIndicator={false}
 					>
-						<FoodLifeTimeCard emoji={'🍌'} name={'장원영'} quantity={2} lifeTime={new Date()}/>
-						<FoodLifeTimeCard emoji={'🫑'} name={'파프리카'} quantity={2} lifeTime={new Date()}/>
-						<FoodLifeTimeCard emoji={'🌽'} name={'옥수수'} quantity={4} lifeTime={new Date()}/>
-						<FoodLifeTimeCard emoji={'🍕'} name={'피자'} quantity={1} lifeTime={new Date()}/>
-						<FoodLifeTimeCard emoji={'🍤'} name={'새우튀김'} lifeTime={date} quantity={28}/>
+						{ingredients
+							.sort((a, b) => {
+								const expiredAtA = new Date(a.expiredAt);
+								const expiredAtB = new Date(b.expiredAt);
+								return expiredAtA.getTime() - expiredAtB.getTime();
+							})
+							.map((ingredient) => {
+								const isExpired = new Date(ingredient.expiredAt) < new Date();
+
+								return (
+									<FoodLifeTimeCard
+										key={ingredient.id}
+										emoji={ingredient.emoji}
+										name={ingredient.name}
+										quantity={ingredient.quantity}
+										lifeTime={ingredient.expiredAt}
+										isExpired={isExpired} // 유통기한 지남 여부 전달
+									/>
+								);
+							})
+						}
 					</ScrollView>
 					<View style={styles.section} mt={50}>
 						<SearchBarMock/>
@@ -57,14 +79,14 @@ const HomeScreen = () => {
 					</View>
 					<View style={styles.section} mt={50} mb={12}>
 						<RecommendRecipeSwipe
-							title={'서늘한 저녁 이 음식은 어떤가요?'}
+							title={'서늘한 아침 이 음식은 어떤가요?'}
 						/>
 					</View>
 					<View style={{...styles.section, marginBottom: 32}}>
 						<RecommendCTA/>
 					</View>
 					<SectionContainer>
-						<SectionTitle title={'서늘한 저녁 이 음식은 어떤가요?'}/>
+						<SectionTitle title={'서늘한 아침 이 음식은 어떤가요?'}/>
 						<ScrollView
 							showsHorizontalScrollIndicator={false}
 							style={{paddingVertical: 18, paddingHorizontal: 22}}

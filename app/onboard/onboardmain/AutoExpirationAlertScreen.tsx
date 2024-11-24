@@ -8,6 +8,8 @@ import GoogleIcon from '@/components/onboard/GoogleIcon';
 import {Colors} from "@/constants/Color";
 import StyledText from "@/components/shared/Text";
 import {TextSize} from "@/enums/TextSize";
+import {CustomAxios} from "@/utils/api";
+import useOnboardAuth from "@/state/onboardAuth";
 
 const {width} = Dimensions.get('window');
 
@@ -78,6 +80,7 @@ const ThirdSlide = () => (
 const AutoExpirationAlertScreen = () => {
 	const [currentIndex, setCurrentIndex] = React.useState(0);
 	const router = useRouter();
+	const {setToken} = useOnboardAuth();
 
 	const dotWidths = React.useRef([
 		new Animated.Value(25),
@@ -96,7 +99,11 @@ const AutoExpirationAlertScreen = () => {
 	}, [currentIndex]);
 
 	const handleGoogleLogin = () => {
-		router.push('/onboard/beforeCamera');
+		CustomAxios.post('/auth/login', {deviceId: 'string'}).then((res) => {
+			console.log(res.data.data.access_token);
+			setToken(res.data.data.access_token)
+			router.push('/onboard/beforeCamera');
+		});
 	};
 
 	const PageIndicator = () => (
